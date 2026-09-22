@@ -58,21 +58,21 @@ class _SignedOutAuthScreen extends StatelessWidget {
               left: screenSize.width * 0.25,
               width: 440,
               height: 280,
-              color: const Color(0xFFFF3B30).withOpacity(0.12),
+              color: const Color(0xFFFF3B30).withValues(alpha:0.12),
             ),
             _AmbientGlow(
               bottom: -90,
               left: -60,
               width: 360,
               height: 360,
-              color: const Color(0xFFFFB800).withOpacity(0.18),
+              color: const Color(0xFFFFB800).withValues(alpha:0.18),
             ),
             _AmbientGlow(
               bottom: -80,
               left: screenSize.width * 0.40,
               width: 300,
               height: 240,
-              color: const Color(0xFFFF453A).withOpacity(0.09),
+              color: const Color(0xFFFF453A).withValues(alpha:0.09),
             ),
             SafeArea(
               child: isWide
@@ -189,8 +189,8 @@ class _CenterDivider extends StatelessWidget {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  OnegoAuthScreen.brandRed.withOpacity(0.40),
-                  OnegoAuthScreen.brandRed.withOpacity(0),
+                  OnegoAuthScreen.brandRed.withValues(alpha:0.40),
+                  OnegoAuthScreen.brandRed.withValues(alpha:0),
                 ],
               ),
             ),
@@ -203,7 +203,7 @@ class _CenterDivider extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: OnegoAuthScreen.brandRed.withOpacity(0.6),
+                  color: OnegoAuthScreen.brandRed.withValues(alpha:0.6),
                   blurRadius: 6,
                   spreadRadius: 1,
                 ),
@@ -259,7 +259,16 @@ class _AuthenticationPanel extends StatelessWidget {
               const SizedBox(height: 20),
               const _OrDivider(),
               const SizedBox(height: 20),
-              const _AuthActionCard(title: 'Continue as Guest'),
+              _AuthActionCard(
+                title: 'Continue as Guest',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const OnegoHomeScreen(),
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: 32),
               const _PrivacyFooter(),
             ],
@@ -321,8 +330,8 @@ class _AuthActionCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isPrimary
-                ? OnegoAuthScreen.brandRed.withOpacity(0.25)
-                : Colors.black.withOpacity(0.02),
+                ? OnegoAuthScreen.brandRed.withValues(alpha:0.25)
+                : Colors.black.withValues(alpha:0.02),
             blurRadius: isPrimary ? 14 : 6,
             offset: const Offset(0, 4),
           ),
@@ -411,7 +420,7 @@ class _AmbientGlow extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: RadialGradient(colors: [color, color.withOpacity(0)]),
+            gradient: RadialGradient(colors: [color, color.withValues(alpha:0)]),
           ),
         ),
       ),
