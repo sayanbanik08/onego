@@ -21,6 +21,14 @@ class OnegoAuthScreen extends StatelessWidget {
         final emailList = user?.emailAddresses;
         final email = (emailList != null && emailList.isNotEmpty) ? emailList.first.emailAddress : null;
         final name = user != null ? '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim() : null;
+
+        debugPrint('CLERK_AUTH_DEBUG');
+        debugPrint('signedIn = ${authState.user != null}');
+        debugPrint('sessionExists = ${authState.session != null}');
+        debugPrint('userIdExists = ${user?.id != null}');
+        debugPrint('userId = ${user?.id}');
+        debugPrint('emailExists = ${email != null}');
+
         return OnegoHomeScreen(
           clerkUserId: user?.id,
           clerkEmail: email?.isNotEmpty == true ? email : null,
