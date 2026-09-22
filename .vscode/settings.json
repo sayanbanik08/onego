@@ -1,0 +1,8 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.project.sourcePaths": [
+        "backend/src/main/java"
+    ],
+    "java.project.outputPath": "backend/out"
+}
