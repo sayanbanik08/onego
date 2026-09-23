@@ -1,17 +1,13 @@
-# onego
+# Onego React Native
 
-A new Flutter project.
+Onego has been converted from Flutter/Dart to Expo React Native with TypeScript.
 
-## Getting Started
+## Run
 
-This project is a starting point for a Flutter application.
+```bash
+cd frontend
+npm install
+npx expo start
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The conversion preserves the original splash, authentication entry, landscape dashboard, skill carousel, branded cards, glowing navigation dock, and Onego visual language. Authentication currently keeps the original guest flow; wire your Clerk React Native/Expo credentials into `App.tsx` when ready.

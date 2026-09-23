@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Onego",
+    "slug": "onego",
+    "version": "1.0.0",
+    "orientation": "landscape",
+    "userInterfaceStyle": "light",
+    "scheme": "onego",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.onego.app" },
+    "android": { "package": "com.onego.app" }
+  }
+}
