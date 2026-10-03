@@ -1,0 +1,11 @@
+{
+    "java.project.sourcePaths": [
+        "backend/src/main/java"
+    ],
+
+    "java.project.outputPath": "backend/out",
+
+    "java.project.referencedLibraries": [
+        "backend/lib/**/*.jar"
+    ]
+}
