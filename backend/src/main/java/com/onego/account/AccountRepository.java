@@ -62,24 +62,74 @@ public class AccountRepository {
             String email_id,
             String provider) throws SQLException {
 
-        String sql = """
+        String accountSql = """
                 INSERT INTO Account
                 (search_by_id, clerk_user_id, photo, full_name, email_id, provider)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
-        try (
-                Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
+        String searchSql = """
+                INSERT INTO Search
+                (search_by_id, search_by_id_status)
+                SELECT
+                    search_by_id,
+                    CASE
+                        WHEN account_status = 'PUBLIC' THEN 'ACTIVE'
+                        ELSE 'INACTIVE'
+                    END
+                FROM Account
+                WHERE search_by_id = ?
+                """;
 
-            statement.setInt(1, search_by_id);
-            statement.setString(2, clerk_user_id);
-            statement.setString(3, photo);
-            statement.setString(4, full_name);
-            statement.setString(5, email_id);
-            statement.setString(6, provider);
+        try (Connection connection = DatabaseConnection.getConnection()) {
 
-            statement.executeUpdate();
+            boolean originalAutoCommit = connection.getAutoCommit();
+
+            try (
+                    PreparedStatement accountStatement = connection.prepareStatement(accountSql);
+                    PreparedStatement searchStatement = connection.prepareStatement(searchSql)) {
+
+                connection.setAutoCommit(false);
+
+                // Account create karo.
+                accountStatement.setInt(1, search_by_id);
+                accountStatement.setString(2, clerk_user_id);
+                accountStatement.setString(3, photo);
+                accountStatement.setString(4, full_name);
+                accountStatement.setString(5, email_id);
+                accountStatement.setString(6, provider);
+
+                int accountRows = accountStatement.executeUpdate();
+
+                if (accountRows != 1) {
+                    throw new SQLException("Account was not created");
+                }
+
+                // Account ke actual account_status ke according Search row create karo.
+                searchStatement.setInt(1, search_by_id);
+
+                int searchRows = searchStatement.executeUpdate();
+
+                if (searchRows != 1) {
+                    throw new SQLException("Search row was not created");
+                }
+
+                // Dono successful hone par hi commit.
+                connection.commit();
+
+            } catch (SQLException e) {
+
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackException) {
+                    e.addSuppressed(rollbackException);
+                }
+
+                throw e;
+
+            } finally {
+                connection.setAutoCommit(originalAutoCommit);
+            }
         }
     }
 
