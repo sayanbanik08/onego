@@ -1,9 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import accDetailsGetter from "@/lib/clerkUser";
-import ProfileVisibilityToggle from "@/components/ProfileVisibilityToggle";
-import Image from "next/image";
+import accDetailsGetter from "@/lib/clerkUser";;
+import SettingsMenu from "@/components/SettingsMenu";
+import SearchBox from "@/components/SearchBox";
 
 export default async function Dashboard() {
     const { isAuthenticated, getToken } = await auth();
@@ -56,31 +56,23 @@ export default async function Dashboard() {
 
 
     return (
-        <div className="p-4">
+        <div className="min-h-screen p-4">
 
-            <div className="flex justify-end">
-                <UserButton />
+            {/* Top Bar */}
+            <div className="relative flex items-center justify-between">
+
+                {/* Search - Top Middle */}
+                <div className="absolute left-1/2 -translate-x-1/2">
+                    <SearchBox profilePhoto={accountResult.photo} />
+                </div>
+
+                {/* Right Side */}
+                <div className="ml-auto flex items-center gap-2">
+                    <SettingsMenu accountResult={accountResult} />
+                    <UserButton />
+                </div>
+
             </div>
-
-
-            <div className="mt-4">
-                <p>Search By ID: {accountResult.search_by_id}</p>
-                <p>Email ID: {accountResult.email_id}</p>
-                <p>Full Name: {accountResult.full_name}</p>
-                {accountResult.photo ? (
-                    <Image
-                        src={accountResult.photo}
-                        alt="Profile photo"
-                        width={40}
-                        height={40}
-                        className="rounded-full object-cover"
-                    />
-                ) : (
-                    <p>No photo</p>
-                )}
-            </div>
-
-            <ProfileVisibilityToggle />
 
         </div>
     );

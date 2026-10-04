@@ -108,8 +108,6 @@ export default function ProfileVisibilityToggle() {
 
     return (
         <div className="mt-6">
-            <p className="mb-2 font-medium">Profile Visibility</p>
-
             <button
                 type="button"
                 onClick={handleToggle}
