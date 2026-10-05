@@ -4,6 +4,7 @@ import type {
     SetStateAction,
     PointerEvent as ReactPointerEvent,
 } from "react";
+import { useRef } from "react";
 
 import ElementsMenu from "./ElementsMenu";
 import ElementList from "./ElementList";
@@ -37,6 +38,22 @@ export default function ElementsPanel({
     floatingPosition,
     setFloatingPosition,
 }: ElementsPanelProps) {
+    const panelRef = useRef<HTMLElement | null>(null);
+    const handleFloat = () => {
+        if (!panelRef.current) {
+            return;
+        }
+
+        const rect = panelRef.current.getBoundingClientRect();
+
+        setFloatingPosition({
+            x: rect.left,
+            y: rect.top,
+        });
+
+        setIsElementsFloating(true);
+        setIsMenuOpen(false);
+    };
     const handlePointerDown = (
         event: ReactPointerEvent<HTMLDivElement>
     ) => {
@@ -83,7 +100,10 @@ export default function ElementsPanel({
         <>
             {/* Left Panel */}
             {!isElementsMinimised && !isElementsFloating && (
-                <aside className="w-66 shrink-0 min-h-0 border-r border-gray-800 p-5">
+                <aside
+                    ref={panelRef}
+                    className="w-66 shrink-0 min-h-0 border-r border-gray-800 p-5"
+                >
                     <div
                         className="h-full overflow-y-auto"
                         style={{
@@ -103,12 +123,8 @@ export default function ElementsPanel({
                                 <ElementsMenu
                                     isMenuOpen={isMenuOpen}
                                     setIsMenuOpen={setIsMenuOpen}
-                                    setIsElementsMinimised={
-                                        setIsElementsMinimised
-                                    }
-                                    setIsElementsFloating={
-                                        setIsElementsFloating
-                                    }
+                                    setIsElementsMinimised={setIsElementsMinimised}
+                                    setIsElementsFloating={handleFloat}
                                     isElementsFloating={isElementsFloating}
                                 />
 
@@ -143,7 +159,7 @@ export default function ElementsPanel({
                             isMenuOpen={isMenuOpen}
                             setIsMenuOpen={setIsMenuOpen}
                             setIsElementsMinimised={setIsElementsMinimised}
-                            setIsElementsFloating={setIsElementsFloating}
+                            setIsElementsFloating={() => setIsElementsFloating(false)}
                             isElementsFloating={isElementsFloating}
                         />
                     </div>

@@ -5,7 +5,7 @@ type ElementsMenuProps = {
     isMenuOpen: boolean;
     setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
     setIsElementsMinimised: Dispatch<SetStateAction<boolean>>;
-    setIsElementsFloating: Dispatch<SetStateAction<boolean>>;
+    setIsElementsFloating: () => void;
     isElementsFloating: boolean;
 };
 
@@ -42,7 +42,7 @@ export default function ElementsMenu({
                     <button
                         type="button"
                         onClick={() => {
-                            setIsElementsFloating((prev) => !prev);
+                            setIsElementsFloating();
                             setIsMenuOpen(false);
                         }}
                         className="w-full rounded-md px-3 py-2 text-left text-sm text-gray-300 transition hover:bg-gray-800 hover:text-white"

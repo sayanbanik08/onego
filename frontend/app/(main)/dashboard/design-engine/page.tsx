@@ -17,6 +17,16 @@ export default function DesignEnginePage() {
         y: 80,
     });
 
+    const [isPropertiesMenuOpen, setIsPropertiesMenuOpen] = useState(false);
+    const [isPropertiesMinimised, setIsPropertiesMinimised] = useState(false);
+    const [isPropertiesFloating, setIsPropertiesFloating] = useState(false);
+
+    const [propertiesFloatingPosition, setPropertiesFloatingPosition] =
+        useState({
+            x: 20,
+            y: 80,
+        });
+
     return (
         <main className="relative h-screen overflow-hidden bg-black text-white">
 
@@ -42,7 +52,16 @@ export default function DesignEnginePage() {
                 <DesignCanvas />
 
                 {/* Right Panel */}
-                <PropertiesPanel />
+                <PropertiesPanel
+                    isMenuOpen={isPropertiesMenuOpen}
+                    setIsMenuOpen={setIsPropertiesMenuOpen}
+                    isPropertiesMinimised={isPropertiesMinimised}
+                    setIsPropertiesMinimised={setIsPropertiesMinimised}
+                    isPropertiesFloating={isPropertiesFloating}
+                    setIsPropertiesFloating={setIsPropertiesFloating}
+                    floatingPosition={propertiesFloatingPosition}
+                    setFloatingPosition={setPropertiesFloatingPosition}
+                />
 
             </div>
         </main>
