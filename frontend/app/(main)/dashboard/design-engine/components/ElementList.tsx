@@ -13,7 +13,13 @@ import {
     ClipboardPenLine,
 } from "lucide-react";
 
-export default function ElementList() {
+type ElementListProps = {
+    onAddText: () => void;
+};
+
+export default function ElementList({
+    onAddText,
+}: ElementListProps) {
     return (
         <div className="space-y-2">
 
@@ -75,6 +81,7 @@ export default function ElementList() {
             {/* Text */}
             <button
                 type="button"
+                onClick={onAddText}
                 className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
             >
                 <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 font-semibold">

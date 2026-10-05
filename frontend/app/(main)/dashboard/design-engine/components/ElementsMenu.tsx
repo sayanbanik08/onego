@@ -20,6 +20,7 @@ export default function ElementsMenu({
         <>
             <button
                 type="button"
+                onPointerDown={(event) => event.stopPropagation()}
                 onClick={() => setIsMenuOpen((prev) => !prev)}
                 className="absolute right-0 flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-800 hover:text-white"
             >

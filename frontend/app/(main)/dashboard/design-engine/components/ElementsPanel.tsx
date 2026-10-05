@@ -26,6 +26,7 @@ type ElementsPanelProps = {
             y: number;
         }>
     >;
+    onAddText: () => void;
 };
 
 export default function ElementsPanel({
@@ -37,8 +38,10 @@ export default function ElementsPanel({
     setIsElementsFloating,
     floatingPosition,
     setFloatingPosition,
+    onAddText,
 }: ElementsPanelProps) {
     const panelRef = useRef<HTMLElement | null>(null);
+
     const handleFloat = () => {
         if (!panelRef.current) {
             return;
@@ -54,6 +57,7 @@ export default function ElementsPanel({
         setIsElementsFloating(true);
         setIsMenuOpen(false);
     };
+
     const handlePointerDown = (
         event: ReactPointerEvent<HTMLDivElement>
     ) => {
@@ -113,9 +117,7 @@ export default function ElementsPanel({
                         }}
                     >
                         <div style={{ direction: "ltr" }}>
-
                             <div className="relative mb-4 flex items-center justify-center">
-
                                 <h2 className="text-sm font-semibold text-gray-300">
                                     Elements
                                 </h2>
@@ -123,15 +125,15 @@ export default function ElementsPanel({
                                 <ElementsMenu
                                     isMenuOpen={isMenuOpen}
                                     setIsMenuOpen={setIsMenuOpen}
-                                    setIsElementsMinimised={setIsElementsMinimised}
+                                    setIsElementsMinimised={
+                                        setIsElementsMinimised
+                                    }
                                     setIsElementsFloating={handleFloat}
                                     isElementsFloating={isElementsFloating}
                                 />
-
                             </div>
 
-                            <ElementList />
-
+                            <ElementList onAddText={onAddText} />
                         </div>
                     </div>
                 </aside>
@@ -158,8 +160,12 @@ export default function ElementsPanel({
                         <ElementsMenu
                             isMenuOpen={isMenuOpen}
                             setIsMenuOpen={setIsMenuOpen}
-                            setIsElementsMinimised={setIsElementsMinimised}
-                            setIsElementsFloating={() => setIsElementsFloating(false)}
+                            setIsElementsMinimised={
+                                setIsElementsMinimised
+                            }
+                            setIsElementsFloating={() =>
+                                setIsElementsFloating(false)
+                            }
                             isElementsFloating={isElementsFloating}
                         />
                     </div>
@@ -174,7 +180,7 @@ export default function ElementsPanel({
                         }}
                     >
                         <div style={{ direction: "ltr" }}>
-                            <ElementList />
+                            <ElementList onAddText={onAddText} />
                         </div>
                     </div>
                 </aside>
