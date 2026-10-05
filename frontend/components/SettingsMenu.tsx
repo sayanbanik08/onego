@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import ProfileVisibilityToggle from "@/components/ProfileVisibilityToggle";
 import { useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 type AccountResult = {
     search_by_id: number;
@@ -29,6 +30,7 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isDashboardOpen, setIsDashboardOpen] = useState(false);
     const { signOut } = useClerk();
+    const router = useRouter();
 
     return (
         <>
@@ -82,7 +84,8 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                     setIsProfileOpen(false);
                                     setIsDashboardOpen(false);
                                 }}
-                                className="flex items-center justify-between w-full text-left p-3 rounded-lg hover:bg-gray-100 transition"
+                                className="flex items-center justify-between w-full 
+                                text-left p-3 rounded-lg hover:bg-gray-100 transition"
                             >
                                 <span>Account Setting</span>
 
@@ -111,7 +114,8 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                                         className="h-16 w-16 rounded-full border border-gray-200 object-cover"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-lg font-semibold text-gray-500">
+                                                    <div className="flex h-16 w-16 items-center justify-center 
+                                                    rounded-full bg-gray-100 text-lg font-semibold text-gray-500">
                                                         {accountResult.full_name?.charAt(0)?.toUpperCase() || "U"}
                                                     </div>
                                                 )}
@@ -120,7 +124,8 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                                 <button
                                                     type="button"
                                                     aria-label="Edit profile photo"
-                                                    className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm transition hover:bg-gray-50"
+                                                    className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border 
+                                                    border-gray-200 bg-white shadow-sm transition hover:bg-gray-50"
                                                 >
                                                     <Pencil size={13} />
                                                 </button>
@@ -244,7 +249,8 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                         onClick={() =>
                                             setIsProfileOpen(!isProfileOpen)
                                         }
-                                        className="flex items-center justify-between w-full text-left p-3 rounded-lg hover:bg-gray-100 transition"
+                                        className="flex items-center justify-between w-full 
+                                        text-left p-3 rounded-lg hover:bg-gray-100 transition"
                                     >
                                         <span>Profile Setting</span>
 
@@ -266,7 +272,8 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                                         !isDashboardOpen
                                                     )
                                                 }
-                                                className="flex items-center justify-between w-full text-left p-3 rounded-lg hover:bg-gray-100 transition"
+                                                className="flex items-center justify-between 
+                                                w-full text-left p-3 rounded-lg hover:bg-gray-100 transition"
                                             >
                                                 <span>
                                                     Dashboard Setting
@@ -285,7 +292,14 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                                         Default Template
                                                     </button>
 
-                                                    <button className="block w-full text-left p-3 rounded-lg hover:bg-gray-100 transition">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setIsOpen(false);
+                                                            router.push("/dashboard/custom-template");
+                                                        }}
+                                                        className="block w-full text-left p-3 rounded-lg hover:bg-gray-100 transition"
+                                                    >
                                                         Custom Template
                                                     </button>
                                                 </div>
