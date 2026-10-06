@@ -3,6 +3,10 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import { useRef, useState, useEffect } from "react";
 
 import DemoDashboardHeader from "./DemoDashboardHeader";
+import type { TimelineElement } from "../types/timeline";
+import TimelineRenderer from "./TimelineRenderer";
+import type { CardElement } from "../types/card";
+import CardRenderer from "./CardRenderer";
 
 type TextElement = {
     id: string;
@@ -143,7 +147,7 @@ type ClockElement = {
     eraserPaths?: EraserPath[];
 };
 
-type CanvasElement = TextElement | DrawElement | TableElement | ClockElement;
+type CanvasElement = TextElement | DrawElement | TableElement | ClockElement | TimelineElement | CardElement;
 
 
 export type BackgroundType = "solid" | "gradient" | "image";
@@ -271,14 +275,29 @@ export default function DesignCanvas({
             height: number;
             rotation: number;
             size?: number;
-        }
+        },
+        origin: "center" | "top-left" = "center"
     ) => {
         const scale = (el.size ?? 100) / 100 || 1;
-        const centerX = el.width / 2;
-        const centerY = el.height / 2;
         const rad = (-el.rotation * Math.PI) / 180;
         const cos = Math.cos(rad);
         const sin = Math.sin(rad);
+
+        if (origin === "top-left") {
+            return pts.map((p) => {
+                const relX = p.x - el.x;
+                const relY = p.y - el.y;
+                const unrotX = (relX * cos - relY * sin) / scale;
+                const unrotY = (relX * sin + relY * cos) / scale;
+                return {
+                    x: Math.round(unrotX),
+                    y: Math.round(unrotY),
+                };
+            });
+        }
+
+        const centerX = el.width / 2;
+        const centerY = el.height / 2;
 
         return pts.map((p) => {
             const relX = p.x - el.x;
@@ -387,19 +406,34 @@ export default function DesignCanvas({
                         elW = 300;
                         elH = 190;
                         scale = ((el as ClockElement).size ?? 100) / 100 || 1;
+                    } else if (el.type === "timeline") {
+                        const tl = el as TimelineElement;
+                        const tlCardW = tl.cardWidth ?? 480;
+                        const tlCardMH = tl.cardMinHeight ?? 60;
+                        elW = tl.theme === "horizontal-stepper"
+                            ? Math.max(tlCardW + 60, tl.items.length * (Math.min(tlCardW, 260) + (tl.spacing + 16)) + 40)
+                            : tlCardW + (tl.nodeSize ?? 32) + 32;
+                        elH = tl.theme === "horizontal-stepper"
+                            ? tlCardMH + (tl.nodeSize ?? 32) + 80
+                            : Math.max(220, tl.items.length * ((tl.spacing ?? 24) + tlCardMH + (tl.nodeSize ?? 32) * 0.5) + 40);
+                        scale = ((el as TimelineElement).size ?? 100) / 100 || 1;
                     }
 
                     const eraserRadiusLocal =
                         eraserSettings.size / scale / 2;
 
-                    const localPoints = canvasPointsToElementLocal(points, {
-                        x: el.x,
-                        y: el.y,
-                        width: elW,
-                        height: elH,
-                        rotation: el.rotation,
-                        size: el.type === "draw" || el.type === "table" || el.type === "clock" ? el.size : 100,
-                    });
+                    const localPoints = canvasPointsToElementLocal(
+                        points,
+                        {
+                            x: el.x,
+                            y: el.y,
+                            width: elW,
+                            height: elH,
+                            rotation: el.rotation,
+                            size: el.type === "draw" || el.type === "table" || el.type === "clock" || el.type === "timeline" ? el.size : 100,
+                        },
+                        el.type === "timeline" ? "top-left" : "center"
+                    );
 
                     if (
                         doesStrokeIntersectElement(
@@ -2268,6 +2302,301 @@ export default function DesignCanvas({
                                             {renderClockFace()}
                                         </g>
                                     </svg>
+                                </div>
+                            );
+                        }
+
+                        // ── Timeline Element ──
+                        if (element.type === "timeline") {
+                            const tl = element as TimelineElement;
+                            const tlCardW = tl.cardWidth ?? 480;
+                            const tlCardMH = tl.cardMinHeight ?? 60;
+                            const timelineW =
+                                tl.theme === "horizontal-stepper"
+                                    ? Math.max(tlCardW + 60, tl.items.length * (Math.min(tlCardW, 260) + (tl.spacing + 16)) + 40)
+                                    : tlCardW + (tl.nodeSize ?? 32) + 32;
+                            const timelineH =
+                                tl.theme === "horizontal-stepper"
+                                    ? tlCardMH + (tl.nodeSize ?? 32) + 80
+                                    : Math.max(220, tl.items.length * ((tl.spacing ?? 24) + tlCardMH + (tl.nodeSize ?? 32) * 0.5) + 40);
+                            const scale = (tl.size ?? 100) / 100;
+
+                            const liveTimelineEraserPath =
+                                isEraserMode && isErasing && currentEraserPoints
+                                    ? pointsToSvgPath(
+                                          canvasPointsToElementLocal(
+                                              currentEraserPoints,
+                                              {
+                                                  x: tl.x,
+                                                  y: tl.y,
+                                                  width: timelineW,
+                                                  height: timelineH,
+                                                  rotation: tl.rotation,
+                                                  size: tl.size,
+                                              },
+                                              "top-left"
+                                          )
+                                      )
+                                    : null;
+
+                            const hasTimelineMask =
+                                (tl.eraserPaths && tl.eraserPaths.length > 0) ||
+                                Boolean(liveTimelineEraserPath);
+
+                            return (
+                                <div
+                                    key={tl.id}
+                                    data-element-id={tl.id}
+                                    onPointerDown={(event) =>
+                                        handlePointerDown(event, element)
+                                    }
+                                    className={`absolute select-none ${
+                                        isEraserMode
+                                            ? "pointer-events-none cursor-none"
+                                            : isSelected
+                                            ? "cursor-move outline outline-2 outline-blue-500"
+                                            : "cursor-move"
+                                    }`}
+                                    style={{
+                                        left: tl.x,
+                                        top: tl.y,
+                                        width: timelineW,
+                                        transform: `rotate(${tl.rotation}deg) scale(${scale})`,
+                                        transformOrigin: "top left",
+                                        pointerEvents: isEraserMode ? "none" : "auto",
+                                        opacity:
+                                            tl.opacity !== undefined ? tl.opacity : 1,
+                                        backgroundColor: "transparent",
+                                        mask: hasTimelineMask
+                                            ? `url(#eraser-mask-${tl.id})`
+                                            : undefined,
+                                        WebkitMask: hasTimelineMask
+                                            ? `url(#eraser-mask-${tl.id})`
+                                            : undefined,
+                                    }}
+                                >
+                                    {/* SVG Eraser Mask Defs */}
+                                    <svg
+                                        className="pointer-events-none absolute inset-0 overflow-hidden"
+                                        style={{ width: "100%", height: "100%" }}
+                                    >
+                                        <defs>
+                                            <mask
+                                                id={`eraser-mask-${tl.id}`}
+                                                maskUnits="userSpaceOnUse"
+                                            >
+                                                <rect
+                                                    x="-5000"
+                                                    y="-5000"
+                                                    width="10000"
+                                                    height="10000"
+                                                    fill="white"
+                                                />
+                                                {tl.eraserPaths?.map((ep, idx) => (
+                                                    <path
+                                                        key={idx}
+                                                        d={ep.d}
+                                                        stroke="black"
+                                                        strokeWidth={ep.strokeWidth}
+                                                        strokeOpacity={ep.opacity}
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        fill="none"
+                                                    />
+                                                ))}
+                                                {liveTimelineEraserPath && (
+                                                    <path
+                                                        d={liveTimelineEraserPath}
+                                                        stroke="black"
+                                                        strokeWidth={
+                                                            eraserSettings.size / scale
+                                                        }
+                                                        strokeOpacity={
+                                                            eraserSettings.opacity
+                                                        }
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        fill="none"
+                                                    />
+                                                )}
+                                            </mask>
+                                        </defs>
+                                    </svg>
+
+                                    {/* Delete Button */}
+                                    {isSelected && !isEraserMode && (
+                                        <button
+                                            type="button"
+                                            onPointerDown={(event) =>
+                                                event.stopPropagation()
+                                            }
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                deleteElement(tl.id);
+                                            }}
+                                            className="absolute -right-7 -top-7 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-red-600 text-white shadow-md transition hover:bg-red-700"
+                                            title="Delete timeline"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+
+                                    {/* Timeline Component Body */}
+                                    <TimelineRenderer
+                                        element={tl}
+                                        isSelected={isSelected}
+                                        isEraserMode={isEraserMode}
+                                        onUpdateItem={(itemId, updates) => {
+                                            const nextItems = tl.items.map((it) =>
+                                                it.id === itemId
+                                                    ? { ...it, ...updates }
+                                                    : it
+                                            );
+                                            updateElement(tl.id, {
+                                                items: nextItems,
+                                            });
+                                        }}
+                                    />
+                                </div>
+                            );
+                        }
+
+                        // ── Card Element ──
+                        if (element.type === "card") {
+                            const card = element as CardElement;
+                            const cardW = card.cardWidth ?? 320;
+                            const cardH = card.cardMinHeight ?? 220;
+                            const scale = (card.size ?? 100) / 100;
+
+                            const liveCardEraserPath =
+                                isEraserMode && isErasing && currentEraserPoints
+                                    ? pointsToSvgPath(
+                                          canvasPointsToElementLocal(
+                                              currentEraserPoints,
+                                              {
+                                                  x: card.x,
+                                                  y: card.y,
+                                                  width: cardW,
+                                                  height: cardH,
+                                                  rotation: card.rotation,
+                                                  size: card.size,
+                                              },
+                                              "top-left"
+                                          )
+                                      )
+                                    : null;
+
+                            const hasCardMask =
+                                (card.eraserPaths && card.eraserPaths.length > 0) ||
+                                Boolean(liveCardEraserPath);
+
+                            return (
+                                <div
+                                    key={card.id}
+                                    data-element-id={card.id}
+                                    onPointerDown={(event) =>
+                                        handlePointerDown(event, element)
+                                    }
+                                    className={`absolute select-none ${
+                                        isEraserMode
+                                            ? "pointer-events-none cursor-none"
+                                            : isSelected
+                                            ? "cursor-move outline outline-2 outline-blue-500"
+                                            : "cursor-move"
+                                    }`}
+                                    style={{
+                                        left: card.x,
+                                        top: card.y,
+                                        width: cardW,
+                                        transform: `rotate(${card.rotation}deg) scale(${scale})`,
+                                        transformOrigin: "top left",
+                                        pointerEvents: isEraserMode ? "none" : "auto",
+                                        opacity:
+                                            card.opacity !== undefined ? card.opacity : 1,
+                                        backgroundColor: "transparent",
+                                        mask: hasCardMask
+                                            ? `url(#eraser-mask-${card.id})`
+                                            : undefined,
+                                        WebkitMask: hasCardMask
+                                            ? `url(#eraser-mask-${card.id})`
+                                            : undefined,
+                                    }}
+                                >
+                                    {/* SVG Eraser Mask Defs */}
+                                    <svg
+                                        className="pointer-events-none absolute inset-0 overflow-hidden"
+                                        style={{ width: "100%", height: "100%" }}
+                                    >
+                                        <defs>
+                                            <mask
+                                                id={`eraser-mask-${card.id}`}
+                                                maskUnits="userSpaceOnUse"
+                                            >
+                                                <rect
+                                                    x="-5000"
+                                                    y="-5000"
+                                                    width="10000"
+                                                    height="10000"
+                                                    fill="white"
+                                                />
+                                                {card.eraserPaths?.map((ep, idx) => (
+                                                    <path
+                                                        key={idx}
+                                                        d={ep.d}
+                                                        stroke="black"
+                                                        strokeWidth={ep.strokeWidth}
+                                                        strokeOpacity={ep.opacity}
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        fill="none"
+                                                    />
+                                                ))}
+                                                {liveCardEraserPath && (
+                                                    <path
+                                                        d={liveCardEraserPath}
+                                                        stroke="black"
+                                                        strokeWidth={
+                                                            eraserSettings.size / scale
+                                                        }
+                                                        strokeOpacity={
+                                                            eraserSettings.opacity
+                                                        }
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        fill="none"
+                                                    />
+                                                )}
+                                            </mask>
+                                        </defs>
+                                    </svg>
+
+                                    {/* Delete Button */}
+                                    {isSelected && !isEraserMode && (
+                                        <button
+                                            type="button"
+                                            onPointerDown={(event) =>
+                                                event.stopPropagation()
+                                            }
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                deleteElement(card.id);
+                                            }}
+                                            className="absolute -right-7 -top-7 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-red-600 text-white shadow-md transition hover:bg-red-700 z-50"
+                                            title="Delete card"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+
+                                    {/* Card Component Body */}
+                                    <CardRenderer
+                                        element={card}
+                                        isSelected={isSelected}
+                                        isEraserMode={isEraserMode}
+                                        onUpdate={(updates) =>
+                                            updateElement(card.id, updates as any)
+                                        }
+                                    />
                                 </div>
                             );
                         }

@@ -33,6 +33,8 @@ type ElementsPanelProps = {
     isEraserMode: boolean;
     onAddTable: () => void;
     onAddClock: () => void;
+    onAddTimeline?: () => void;
+    onAddCard?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -53,6 +55,8 @@ export default function ElementsPanel({
     isEraserMode,
     onAddTable,
     onAddClock,
+    onAddTimeline,
+    onAddCard,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementsPanelProps) {
@@ -157,6 +161,8 @@ export default function ElementsPanel({
                                 isEraserMode={isEraserMode}
                                 onAddTable={onAddTable}
                                 onAddClock={onAddClock}
+                                onAddTimeline={onAddTimeline}
+                                onAddCard={onAddCard}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />
@@ -214,6 +220,8 @@ export default function ElementsPanel({
                                 isEraserMode={isEraserMode}
                                 onAddTable={onAddTable}
                                 onAddClock={onAddClock}
+                                onAddTimeline={onAddTimeline}
+                                onAddCard={onAddCard}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />

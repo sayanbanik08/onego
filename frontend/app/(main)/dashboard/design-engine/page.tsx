@@ -7,6 +7,10 @@ import ElementsPanel from "./components/ElementsPanel";
 import DesignCanvas from "./components/DesignCanvas";
 import PropertiesPanel from "./components/PropertiesPanel";
 import LayersPanel from "./components/LayersPanel";
+import type { TimelineElement } from "./types/timeline";
+export type { TimelineElement } from "./types/timeline";
+import type { CardElement } from "./types/card";
+export type { CardElement } from "./types/card";
 
 export type EraserPath = {
     d: string;
@@ -155,7 +159,9 @@ export type CanvasElement =
     | TextElement
     | DrawElement
     | TableElement
-    | ClockElement;
+    | ClockElement
+    | TimelineElement
+    | CardElement;
 
 export type PencilSettings = {
     strokeWidth: number;
@@ -415,6 +421,133 @@ export default function DesignEnginePage() {
         setSelectedElementId(newClockElement.id);
     };
 
+    const addTimelineElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newTimelineElement: TimelineElement = {
+            id: crypto.randomUUID(),
+            type: "timeline",
+            serialNumber: elements.length + 1,
+            x: 120,
+            y: 80,
+            theme: "modern-vertical",
+            items: [
+                {
+                    id: crypto.randomUUID(),
+                    title: "B.Tech in Computer Science",
+                    subtitle: "Institute of Technology",
+                    date: "2020 - 2024",
+                    description: "Graduated with Honors. Specialized in Cloud Computing and Modern Web Architectures.",
+                    tag: "Bachelor's Degree",
+                    icon: "graduation",
+                },
+                {
+                    id: crypto.randomUUID(),
+                    title: "Senior Full-Stack Engineer",
+                    subtitle: "HyperScale Tech Solutions",
+                    date: "2023 - Present",
+                    description: "Architected modern design engine & canvas workspace. Scaled real-time collaboration pipeline.",
+                    tag: "Full-Time",
+                    icon: "briefcase",
+                },
+                {
+                    id: crypto.randomUUID(),
+                    title: "1st Prize - Global AI & Design Hackathon",
+                    subtitle: "International Open Innovate Summit",
+                    date: "Nov 2024",
+                    description: "Built autonomous canvas design agents powered by Gemini AI, winning out of 3,500+ participants.",
+                    tag: "Award",
+                    icon: "trophy",
+                },
+            ],
+            spacing: 24,
+            nodeShape: "circle",
+            nodeSize: 32,
+            cardWidth: 480,
+            cardMinHeight: 60,
+            lineWidth: 2,
+            lineColor: "#334155",
+            animatedLine: false,
+            accentColor: "#3b82f6",
+            cardBg: "#0f172a",
+            cardBorderColor: "#334155",
+            cardBorderWidth: 1,
+            borderRadius: 12,
+            fontFamily: "Inter, sans-serif",
+            titleColor: "#ffffff",
+            titleFontSize: 15,
+            titleFontWeight: 600,
+            subtitleColor: "#94a3b8",
+            subtitleFontSize: 12,
+            dateColor: "#38bdf8",
+            dateFontSize: 11,
+            tagColor: "#3b82f6",
+            tagFontSize: 10,
+            textColor: "#e2e8f0",
+            bodyFontSize: 12,
+            shadow: "md",
+            hoverEffect: "lift",
+            size: 100,
+            rotation: 0,
+            opacity: 1,
+        };
+
+        setElements((prev) => [...prev, newTimelineElement]);
+        setSelectedElementId(newTimelineElement.id);
+    };
+
+    const addCardElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newCardElement: CardElement = {
+            id: crypto.randomUUID(),
+            type: "card",
+            serialNumber: elements.length + 1,
+            x: 140,
+            y: 100,
+            design: "neon-glow",
+            cardWidth: 320,
+            cardMinHeight: 220,
+            cardBg: "#0f0f1a",
+            cardBorderWidth: 1,
+            cardBorderColor: "#334155",
+            borderRadius: 16,
+            shadow: "neon",
+            accentColor: "#387ef0",
+            heading: "Modern Card Component",
+            headingColor: "#ffffff",
+            headingFontSize: 20,
+            headingFontWeight: 700,
+            bodyText: "Create stunning glassmorphic and futuristic card components with customizable typography, colors, and interactive buttons.",
+            bodyColor: "#94a3b8",
+            bodyFontSize: 13,
+            showButton: true,
+            buttonText: "Explore More",
+            buttonBgColor: "#387ef0",
+            buttonTextColor: "#ffffff",
+            buttonBorderRadius: 8,
+            buttonFontSize: 13,
+            buttonPaddingX: 18,
+            buttonPaddingY: 9,
+            buttonLink: "https://example.com",
+            socialHandles: [
+                { id: "1", platform: "github", label: "GitHub", url: "https://github.com" },
+                { id: "2", platform: "twitter", label: "Twitter", url: "https://twitter.com" },
+                { id: "3", platform: "linkedin", label: "LinkedIn", url: "https://linkedin.com" },
+                { id: "4", platform: "discord", label: "Discord", url: "https://discord.com" },
+                { id: "5", platform: "youtube", label: "YouTube", url: "https://youtube.com" },
+                { id: "6", platform: "instagram", label: "Instagram", url: "https://instagram.com" },
+            ],
+            socialMarqueeSpeed: 20,
+            size: 100,
+            rotation: 0,
+            opacity: 1,
+        };
+
+        setElements((prev) => [...prev, newCardElement]);
+        setSelectedElementId(newCardElement.id);
+    };
+
     const selectedElement =
         elements.find((element) => element.id === selectedElementId) ?? null;
 
@@ -517,6 +650,8 @@ export default function DesignEnginePage() {
                     isEraserMode={isEraserMode}
                     onAddTable={addTableElement}
                     onAddClock={addClockElement}
+                    onAddTimeline={addTimelineElement}
+                    onAddCard={addCardElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />

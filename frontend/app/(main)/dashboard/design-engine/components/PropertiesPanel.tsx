@@ -17,6 +17,10 @@ import type {
     PointerEvent as ReactPointerEvent,
 } from "react";
 import { useRef, useState } from "react";
+import type { TimelineElement } from "../types/timeline";
+import TimelineProperties from "./TimelineProperties";
+import type { CardElement } from "../types/card";
+import CardProperties from "./CardProperties";
 
 type TextElement = {
     id: string;
@@ -151,7 +155,7 @@ type ClockElement = {
     eraserPaths?: EraserPath[];
 };
 
-type CanvasElement = TextElement | DrawElement | TableElement | ClockElement;
+type CanvasElement = TextElement | DrawElement | TableElement | ClockElement | TimelineElement | CardElement;
 
 type BackgroundType = "solid" | "gradient" | "image";
 
@@ -2391,6 +2395,20 @@ export default function PropertiesPanel({
         ? tableElementContent
         : selectedElement && selectedElement.type === "clock"
         ? clockElementContent
+        : selectedElement && selectedElement.type === "timeline"
+        ? (
+            <TimelineProperties
+                selectedElement={selectedElement as TimelineElement}
+                updateElement={updateElement as any}
+            />
+        )
+        : selectedElement && selectedElement.type === "card"
+        ? (
+            <CardProperties
+                selectedElement={selectedElement as CardElement}
+                updateElement={updateElement as any}
+            />
+        )
 
         : selectedElement && selectedElement.type === "text" ? (
         <div className="mt-6 space-y-5">
