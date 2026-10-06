@@ -15,10 +15,26 @@ import {
 
 type ElementListProps = {
     onAddText: () => void;
+    onToggleDraw: () => void;
+    isDrawMode: boolean;
+    onToggleEraser: () => void;
+    isEraserMode: boolean;
+    onAddTable: () => void;
+    onAddClock: () => void;
+    onSelectBackground?: () => void;
+    isBackgroundMode?: boolean;
 };
 
 export default function ElementList({
     onAddText,
+    onToggleDraw,
+    isDrawMode,
+    onToggleEraser,
+    isEraserMode,
+    onAddTable,
+    onAddClock,
+    onSelectBackground,
+    isBackgroundMode = false,
 }: ElementListProps) {
     return (
         <div className="space-y-2">
@@ -37,23 +53,51 @@ export default function ElementList({
             {/* Draw */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onToggleDraw}
+                className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm transition ${
+                    isDrawMode
+                        ? "border-blue-500 bg-blue-950/40 text-blue-200 shadow-sm"
+                        : "border-gray-800 text-gray-300 hover:border-gray-500 hover:bg-gray-900"
+                }`}
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 font-semibold">
+                <span
+                    className={`flex h-7 w-7 items-center justify-center rounded-md font-semibold ${
+                        isDrawMode ? "bg-blue-600/30" : "bg-gray-800"
+                    }`}
+                >
                     ✏️
                 </span>
-                <span>Draw</span>
+                <span className="flex-1">Draw</span>
+                {isDrawMode && (
+                    <span className="rounded bg-blue-500/20 px-1.5 py-0.5 text-[10px] font-medium text-blue-400">
+                        Active
+                    </span>
+                )}
             </button>
 
             {/* Eraser */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onToggleEraser}
+                className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm transition ${
+                    isEraserMode
+                        ? "border-rose-500 bg-rose-950/40 text-rose-200 shadow-sm"
+                        : "border-gray-800 text-gray-300 hover:border-gray-500 hover:bg-gray-900"
+                }`}
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span
+                    className={`flex h-7 w-7 items-center justify-center rounded-md ${
+                        isEraserMode ? "bg-rose-600/30 text-rose-300" : "bg-gray-800"
+                    }`}
+                >
                     <Eraser size={17} />
                 </span>
-                <span>Eraser</span>
+                <span className="flex-1">Eraser</span>
+                {isEraserMode && (
+                    <span className="rounded bg-rose-500/20 px-1.5 py-0.5 text-[10px] font-medium text-rose-400">
+                        Active
+                    </span>
+                )}
             </button>
 
             {/* Clickable Element */}
@@ -137,12 +181,30 @@ export default function ElementList({
             {/* Dashboard Background */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onSelectBackground}
+                className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm transition ${
+                    isBackgroundMode
+                        ? "border-purple-500 bg-purple-950/40 text-purple-200 shadow-sm"
+                        : "border-gray-800 text-gray-300 hover:border-gray-500 hover:bg-gray-900"
+                }`}
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span
+                    className={`flex h-7 w-7 items-center justify-center rounded-md font-semibold ${
+                        isBackgroundMode ? "bg-purple-600/30" : "bg-gray-800"
+                    }`}
+                >
                     🎨
                 </span>
-                <span>Dashboard Background</span>
+                <span className="flex-1">Dashboard Background</span>
+                {isBackgroundMode ? (
+                    <span className="rounded bg-purple-500/20 px-1.5 py-0.5 text-[10px] font-medium text-purple-400">
+                        Active
+                    </span>
+                ) : (
+                    <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                        Edit
+                    </span>
+                )}
             </button>
 
             {/* Divider / Line */}
@@ -203,12 +265,16 @@ export default function ElementList({
             {/* Counter */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onAddClock}
+                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm text-gray-300 transition hover:border-gray-500 hover:bg-gray-900 active:scale-[0.99]"
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 text-blue-400">
                     <Clock size={17} />
                 </span>
-                <span>Clock counter</span>
+                <span className="flex-1">Clock counter</span>
+                <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                    + Add
+                </span>
             </button>
 
             {/* Timeline */}
@@ -225,12 +291,16 @@ export default function ElementList({
             {/* Table */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onAddTable}
+                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm text-gray-300 transition hover:border-gray-500 hover:bg-gray-900 active:scale-[0.99]"
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 text-blue-400">
                     <Table size={17} />
                 </span>
-                <span>Table</span>
+                <span className="flex-1">Table</span>
+                <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                    + Add
+                </span>
             </button>
 
             {/* Form */}

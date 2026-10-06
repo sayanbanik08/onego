@@ -27,6 +27,14 @@ type ElementsPanelProps = {
         }>
     >;
     onAddText: () => void;
+    onToggleDraw: () => void;
+    isDrawMode: boolean;
+    onToggleEraser: () => void;
+    isEraserMode: boolean;
+    onAddTable: () => void;
+    onAddClock: () => void;
+    onSelectBackground?: () => void;
+    isBackgroundMode?: boolean;
 };
 
 export default function ElementsPanel({
@@ -39,6 +47,14 @@ export default function ElementsPanel({
     floatingPosition,
     setFloatingPosition,
     onAddText,
+    onToggleDraw,
+    isDrawMode,
+    onToggleEraser,
+    isEraserMode,
+    onAddTable,
+    onAddClock,
+    onSelectBackground,
+    isBackgroundMode = false,
 }: ElementsPanelProps) {
     const panelRef = useRef<HTMLElement | null>(null);
 
@@ -133,7 +149,17 @@ export default function ElementsPanel({
                                 />
                             </div>
 
-                            <ElementList onAddText={onAddText} />
+                            <ElementList
+                                onAddText={onAddText}
+                                onToggleDraw={onToggleDraw}
+                                isDrawMode={isDrawMode}
+                                onToggleEraser={onToggleEraser}
+                                isEraserMode={isEraserMode}
+                                onAddTable={onAddTable}
+                                onAddClock={onAddClock}
+                                onSelectBackground={onSelectBackground}
+                                isBackgroundMode={isBackgroundMode}
+                            />
                         </div>
                     </div>
                 </aside>
@@ -180,7 +206,17 @@ export default function ElementsPanel({
                         }}
                     >
                         <div style={{ direction: "ltr" }}>
-                            <ElementList onAddText={onAddText} />
+                            <ElementList
+                                onAddText={onAddText}
+                                onToggleDraw={onToggleDraw}
+                                isDrawMode={isDrawMode}
+                                onToggleEraser={onToggleEraser}
+                                isEraserMode={isEraserMode}
+                                onAddTable={onAddTable}
+                                onAddClock={onAddClock}
+                                onSelectBackground={onSelectBackground}
+                                isBackgroundMode={isBackgroundMode}
+                            />
                         </div>
                     </div>
                 </aside>
