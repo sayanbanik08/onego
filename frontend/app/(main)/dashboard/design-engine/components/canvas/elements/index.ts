@@ -1,6 +1,8 @@
-export { CanvasTextElement } from "./CanvasTextElement";
-export { CanvasDrawElement } from "./CanvasDrawElement";
-export { CanvasTableElement } from "./CanvasTableElement";
-export { CanvasClockElement } from "./CanvasClockElement";
-export { CanvasTimelineElement } from "./CanvasTimelineElement";
-export { CanvasCardElement } from "./CanvasCardElement";
+export { CanvasTextElement } from "./text";
+export { CanvasDrawElement } from "./draw";
+export { CanvasEraserElement } from "./eraser";
+export { CanvasTableElement } from "./table";
+export { CanvasClockElement } from "./clock";
+export { CanvasTimelineElement } from "./timeline";
+export { CanvasCardElement } from "./card";
+export { CanvasDashboardBackground } from "./dashboard-background";

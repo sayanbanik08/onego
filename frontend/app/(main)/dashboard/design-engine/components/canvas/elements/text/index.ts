@@ -1,0 +1,1 @@
+export { CanvasTextElement } from "./CanvasTextElement";

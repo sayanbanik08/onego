@@ -1,3 +1,4 @@
+export { CanvasClockElement } from "./CanvasClockElement";
 export * from "./clockFaceShared";
 export * from "./AnalogClassicFace";
 export * from "./AnalogSwissFace";

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import DesignEngineHeader from "./components/DesignEngineHeader";
-import ElementsPanel from "./components/ElementsPanel";
-import DesignCanvas from "./components/DesignCanvas";
-import PropertiesPanel from "./components/PropertiesPanel";
-import LayersPanel from "./components/LayersPanel";
+import DesignEngineHeader from "./components/layout/DesignEngineHeader";
+import ElementsPanel from "./components/layout/ElementsPanel";
+import DesignCanvas from "./components/canvas/DesignCanvas";
+import PropertiesPanel from "./components/layout/PropertiesPanel";
+import LayersPanel from "./components/layout/LayersPanel";
 
 // Re-export element types for backward compatibility
 export type {
