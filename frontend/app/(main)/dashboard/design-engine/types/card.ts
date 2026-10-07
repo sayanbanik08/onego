@@ -31,12 +31,7 @@ export type SocialHandleItem = {
     url: string;
     customColor?: string;
 };
-
-export type EraserPath = {
-    d: string;
-    strokeWidth: number;
-    opacity: number;
-};
+import type { EraserPath } from "./common";
 
 export type CardElement = {
     id: string;

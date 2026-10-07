@@ -32,12 +32,7 @@ export type TimelineItem = {
 export type TimelineHoverEffect = "lift" | "scale" | "glow" | "none";
 
 export type TimelineShadow = "none" | "sm" | "md" | "lg" | "neon";
-
-export type EraserPath = {
-    d: string;
-    strokeWidth: number;
-    opacity: number;
-};
+import type { EraserPath } from "./common";
 
 export type TimelineElement = {
     id: string;
