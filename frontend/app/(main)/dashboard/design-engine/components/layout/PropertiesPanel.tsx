@@ -9,6 +9,8 @@ import type { TimelineElement } from "../../types/timeline";
 import TimelineProperties from "../properties/timeline/TimelineProperties";
 import type { CardElement } from "../../types/card";
 import CardProperties from "../properties/card/CardProperties";
+import type { ButtonElement } from "../../types/button";
+import ButtonProperties from "../properties/button/ButtonProperties";
 import type {
     CanvasElement,
     TextElement,
@@ -189,6 +191,15 @@ export default function PropertiesPanel({
             return (
                 <CardProperties
                     selectedElement={selectedElement as CardElement}
+                    updateElement={updateElement as any}
+                />
+            );
+        }
+
+        if (selectedElement?.type === "button") {
+            return (
+                <ButtonProperties
+                    selectedElement={selectedElement as ButtonElement}
                     updateElement={updateElement as any}
                 />
             );

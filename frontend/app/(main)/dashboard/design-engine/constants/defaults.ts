@@ -7,6 +7,7 @@ import type {
     ClockElement,
     TimelineElement,
     CardElement,
+    ButtonElement,
 } from "../types";
 
 export const DEFAULT_PENCIL_SETTINGS: PencilSettings = {
@@ -244,6 +245,43 @@ export function createCardElement(serialNumber: number): CardElement {
             { id: "6", platform: "instagram", label: "Instagram", url: "https://instagram.com" },
         ],
         socialMarqueeSpeed: 20,
+        size: 100,
+        rotation: 0,
+        opacity: 1,
+    };
+}
+
+export function createButtonElement(serialNumber: number): ButtonElement {
+    return {
+        id: crypto.randomUUID(),
+        type: "button",
+        serialNumber,
+        x: 150,
+        y: 120,
+        theme: "button-1",
+        text: "Button",
+        link: "https://example.com",
+        fontSize: 16,
+        borderRadius: 8,
+        borderRadiusUnit: "px",
+        fontFamily: "Inter, sans-serif",
+        paddingX: 24,
+        paddingY: 12,
+        bgColor: "transparent", // VERY IMPORTANT: default transparent as requested!
+        bgImage: "",
+        bgImageFit: "cover",
+        bgImagePosition: "center",
+        bgImageOpacity: 1,
+        textColor: "#2c3e50",
+        borderColor: "#3b82f6",
+        borderWidth: 2,
+        borderStyle: "solid",
+        shadow: "none",
+        shadowColor: "rgba(0, 0, 0, 0.35)",
+        shadowBlur: 12,
+        shadowOffsetX: 0,
+        shadowOffsetY: 4,
+        shadowSpread: 0,
         size: 100,
         rotation: 0,
         opacity: 1,

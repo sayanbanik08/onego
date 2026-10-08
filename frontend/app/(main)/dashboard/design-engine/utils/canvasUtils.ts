@@ -6,6 +6,7 @@ import type {
 } from "../types/elements";
 import type { TimelineElement } from "../types/timeline";
 import type { CardElement } from "../types/card";
+import type { ButtonElement } from "../types/button";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -182,6 +183,44 @@ export function getElementDimensions(el: CanvasElement): {
             width: card.cardWidth ?? 320,
             height: card.cardMinHeight ?? 220,
             scale: (card.size ?? 100) / 100 || 1,
+            origin: "top-left",
+        };
+    }
+
+    if (el.type === "button") {
+        const btn = el as ButtonElement;
+        if (btn.drawnShape?.hasDrawnShape && btn.drawnShape.width) {
+            return {
+                width: btn.drawnShape.width,
+                height: btn.drawnShape.height,
+                scale: (btn.size ?? 100) / 100 || 1,
+                origin: "top-left",
+            };
+        }
+        if (btn.theme === "button-1" || btn.theme === "gamepad-3d") {
+            return {
+                width: 200,
+                height: 200,
+                scale: (btn.size ?? 100) / 100 || 1,
+                origin: "top-left",
+            };
+        }
+        if (btn.theme === "button-7" || btn.theme === "jelly-pill") {
+            return {
+                width: 160,
+                height: 60,
+                scale: (btn.size ?? 100) / 100 || 1,
+                origin: "top-left",
+            };
+        }
+        const textLen = (btn.text || "Button").length;
+        const estTextW = textLen * btn.fontSize * 0.7;
+        const width = Math.max(120, Math.round(estTextW + btn.paddingX * 2 + 30));
+        const height = Math.max(42, Math.round(btn.fontSize * 1.5 + btn.paddingY * 2));
+        return {
+            width,
+            height,
+            scale: (btn.size ?? 100) / 100 || 1,
             origin: "top-left",
         };
     }

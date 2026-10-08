@@ -11,6 +11,7 @@ import {
     CanvasClockElement,
     CanvasTimelineElement,
     CanvasCardElement,
+    CanvasButtonElement,
 } from "./elements";
 
 import type {
@@ -162,7 +163,8 @@ export default function DesignCanvas({
                                 el.type === "table" ||
                                 el.type === "clock" ||
                                 el.type === "timeline" ||
-                                el.type === "card"
+                                el.type === "card" ||
+                                el.type === "button"
                                     ? el.size
                                     : 100,
                         },
@@ -510,6 +512,24 @@ export default function DesignCanvas({
                         if (element.type === "card") {
                             return (
                                 <CanvasCardElement
+                                    key={element.id}
+                                    element={element}
+                                    isSelected={isSelected}
+                                    isEraserMode={isEraserMode}
+                                    isErasing={isErasing}
+                                    currentEraserPoints={currentEraserPoints}
+                                    eraserSettings={eraserSettings}
+                                    handlePointerDown={handlePointerDown}
+                                    deleteElement={deleteElement}
+                                    updateElement={updateElement}
+                                />
+                            );
+                        }
+
+                        // ── Button / Link Element ──
+                        if (element.type === "button") {
+                            return (
+                                <CanvasButtonElement
                                     key={element.id}
                                     element={element}
                                     isSelected={isSelected}

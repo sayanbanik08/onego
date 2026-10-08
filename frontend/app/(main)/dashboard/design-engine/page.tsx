@@ -27,6 +27,7 @@ export type {
 } from "./types";
 export type { TimelineElement } from "./types/timeline";
 export type { CardElement } from "./types/card";
+export type { ButtonElement } from "./types/button";
 
 import type {
     CanvasElement,
@@ -45,6 +46,7 @@ import {
     createClockElement,
     createTimelineElement,
     createCardElement,
+    createButtonElement,
 } from "./constants/defaults";
 
 export default function DesignEnginePage() {
@@ -183,6 +185,14 @@ export default function DesignEnginePage() {
         setSelectedElementId(newCardElement.id);
     };
 
+    const addButtonElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newButtonElement = createButtonElement(elements.length + 1);
+        setElements((prev) => [...prev, newButtonElement]);
+        setSelectedElementId(newButtonElement.id);
+    };
+
     const selectedElement =
         elements.find((element) => element.id === selectedElementId) ?? null;
 
@@ -285,6 +295,7 @@ export default function DesignEnginePage() {
                     onAddClock={addClockElement}
                     onAddTimeline={addTimelineElement}
                     onAddCard={addCardElement}
+                    onAddButton={addButtonElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />

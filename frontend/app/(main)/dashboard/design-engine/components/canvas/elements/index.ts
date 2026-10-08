@@ -5,4 +5,5 @@ export { CanvasTableElement } from "./table";
 export { CanvasClockElement } from "./clock";
 export { CanvasTimelineElement } from "./timeline";
 export { CanvasCardElement } from "./card";
+export { CanvasButtonElement } from "./button";
 export { CanvasDashboardBackground } from "./dashboard-background";
