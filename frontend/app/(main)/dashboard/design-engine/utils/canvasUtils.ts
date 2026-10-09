@@ -7,6 +7,7 @@ import type {
 import type { TimelineElement } from "../types/timeline";
 import type { CardElement } from "../types/card";
 import type { ButtonElement } from "../types/button";
+import type { IconElement } from "../types/icon";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -221,6 +222,24 @@ export function getElementDimensions(el: CanvasElement): {
             width,
             height,
             scale: (btn.size ?? 100) / 100 || 1,
+            origin: "top-left",
+        };
+    }
+
+    if (el.type === "icon") {
+        const icon = el as IconElement;
+        const width =
+            icon.widthUnit === "%"
+                ? Math.max(20, Math.round(((icon.width ?? 64) / 100) * 100))
+                : (icon.width ?? 64);
+        const height =
+            icon.heightUnit === "%"
+                ? Math.max(20, Math.round(((icon.height ?? 64) / 100) * 100))
+                : (icon.height ?? 64);
+        return {
+            width,
+            height,
+            scale: (icon.size ?? 100) / 100 || 1,
             origin: "top-left",
         };
     }

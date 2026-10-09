@@ -1,0 +1,10 @@
+export { default as IconProperties } from "./IconProperties";
+export { default as IconTypeSection } from "./IconTypeSection";
+export { default as IconLibrariesSection } from "./IconLibrariesSection";
+export { default as IconMoveAndScaleModal } from "./IconMoveAndScaleModal";
+export { default as IconLinkSection } from "./IconLinkSection";
+export { default as IconThemesSection } from "./IconThemesSection";
+export { default as IconStylingSection } from "./IconStylingSection";
+export { default as IconDimensionsSection } from "./IconDimensionsSection";
+export { default as IconTransformSection } from "./IconTransformSection";
+export { default as IconShadowSection } from "./IconShadowSection";

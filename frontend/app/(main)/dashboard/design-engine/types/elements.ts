@@ -1,8 +1,9 @@
 import type { CardElement } from "./card";
 import type { TimelineElement } from "./timeline";
 import type { ButtonElement } from "./button";
+import type { IconElement } from "./icon";
 import type { EraserPath } from "./common";
-export type { EraserPath, ButtonElement };
+export type { EraserPath, ButtonElement, IconElement };
 
 export type TextElement = {
     id: string;
@@ -148,7 +149,8 @@ export type CanvasElement =
     | ClockElement
     | TimelineElement
     | CardElement
-    | ButtonElement;
+    | ButtonElement
+    | IconElement;
 
 export type PencilSettings = {
     strokeWidth: number;

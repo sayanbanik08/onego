@@ -28,6 +28,7 @@ export type {
 export type { TimelineElement } from "./types/timeline";
 export type { CardElement } from "./types/card";
 export type { ButtonElement } from "./types/button";
+export type { IconElement } from "./types/icon";
 
 import type {
     CanvasElement,
@@ -47,6 +48,7 @@ import {
     createTimelineElement,
     createCardElement,
     createButtonElement,
+    createIconElement,
 } from "./constants/defaults";
 
 export default function DesignEnginePage() {
@@ -193,6 +195,14 @@ export default function DesignEnginePage() {
         setSelectedElementId(newButtonElement.id);
     };
 
+    const addIconElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newIconElement = createIconElement(elements.length + 1);
+        setElements((prev) => [...prev, newIconElement]);
+        setSelectedElementId(newIconElement.id);
+    };
+
     const selectedElement =
         elements.find((element) => element.id === selectedElementId) ?? null;
 
@@ -296,6 +306,7 @@ export default function DesignEnginePage() {
                     onAddTimeline={addTimelineElement}
                     onAddCard={addCardElement}
                     onAddButton={addButtonElement}
+                    onAddIcon={addIconElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />

@@ -24,6 +24,7 @@ type ElementListProps = {
     onAddTimeline?: () => void;
     onAddCard?: () => void;
     onAddButton?: () => void;
+    onAddIcon?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -39,6 +40,7 @@ export default function ElementList({
     onAddTimeline,
     onAddCard,
     onAddButton,
+    onAddIcon,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementListProps) {
@@ -180,12 +182,16 @@ export default function ElementList({
             {/* Icon */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onAddIcon}
+                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm text-gray-300 transition hover:border-gray-500 hover:bg-gray-900 active:scale-[0.99]"
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 text-yellow-400">
                     ★
                 </span>
-                <span>Icon</span>
+                <span className="flex-1">Icon</span>
+                <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                    + Add
+                </span>
             </button>
 
             {/* Dashboard Background */}

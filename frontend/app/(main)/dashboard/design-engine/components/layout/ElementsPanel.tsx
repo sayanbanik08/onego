@@ -36,6 +36,7 @@ type ElementsPanelProps = {
     onAddTimeline?: () => void;
     onAddCard?: () => void;
     onAddButton?: () => void;
+    onAddIcon?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -59,6 +60,7 @@ export default function ElementsPanel({
     onAddTimeline,
     onAddCard,
     onAddButton,
+    onAddIcon,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementsPanelProps) {
@@ -166,6 +168,7 @@ export default function ElementsPanel({
                                 onAddTimeline={onAddTimeline}
                                 onAddCard={onAddCard}
                                 onAddButton={onAddButton}
+                                onAddIcon={onAddIcon}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />
@@ -226,6 +229,7 @@ export default function ElementsPanel({
                                 onAddTimeline={onAddTimeline}
                                 onAddCard={onAddCard}
                                 onAddButton={onAddButton}
+                                onAddIcon={onAddIcon}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />
