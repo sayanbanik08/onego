@@ -15,6 +15,8 @@ import type { IconElement } from "../../types/icon";
 import IconProperties from "../properties/icon/IconProperties";
 import type { ImageElement } from "../../types/image";
 import ImageProperties from "../properties/image/ImageProperties";
+import FormProperties from "../properties/form/FormProperties";
+import type { FormElement } from "../../types/form";
 import type {
     CanvasElement,
     TextElement,
@@ -223,6 +225,15 @@ export default function PropertiesPanel({
                 <ImageProperties
                     selectedElement={selectedElement as ImageElement}
                     updateElement={updateElement as any}
+                />
+            );
+        }
+
+        if (selectedElement?.type === "form") {
+            return (
+                <FormProperties
+                    element={selectedElement as FormElement}
+                    updateElement={updateElement as (id: string, u: Partial<FormElement>) => void}
                 />
             );
         }

@@ -14,6 +14,7 @@ import {
     CanvasButtonElement,
     CanvasIconElement,
     CanvasImageElement,
+    CanvasFormElement,
 } from "./elements";
 
 import type {
@@ -74,6 +75,7 @@ export default function DesignCanvas({
     onSelectBackground,
 }: DesignCanvasProps) {
     const designAreaRef = useRef<HTMLDivElement | null>(null);
+        const [canvasSize, setCanvasSize] = useState({ width: 1200, height: 1120 });
     const [currentPoints, setCurrentPoints] = useState<
         { x: number; y: number }[] | null
     >(null);
@@ -97,6 +99,20 @@ export default function DesignCanvas({
     useEffect(() => {
         const id = setInterval(() => setClockTick((t) => t + 1), 1000);
         return () => clearInterval(id);
+    }, []);
+
+    useEffect(() => {
+        const canvas = designAreaRef.current;
+        if (!canvas) return;
+
+        const observer = new ResizeObserver(([entry]) => {
+            setCanvasSize({
+                width: entry.contentRect.width,
+                height: entry.contentRect.height,
+            });
+        });
+        observer.observe(canvas);
+        return () => observer.disconnect();
     }, []);
 
     const handleEraserPointerDown = (
@@ -147,7 +163,10 @@ export default function DesignCanvas({
                         height: elH,
                         scale,
                         origin,
-                    } = getElementDimensions(el);
+                    } = getElementDimensions(el, {
+                        width: designAreaRef.current?.clientWidth ?? 1200,
+                        height: designAreaRef.current?.clientHeight ?? 1120,
+                    });
 
                     const eraserRadiusLocal =
                         eraserSettings.size / scale / 2;
@@ -167,6 +186,7 @@ export default function DesignCanvas({
                                 el.type === "timeline" ||
                                 el.type === "card" ||
                                 el.type === "button"
+                                    || el.type === "form"
                                     ? el.size
                                     : 100,
                         },
@@ -222,6 +242,13 @@ export default function DesignCanvas({
 
         event.stopPropagation();
         setSelectedElementId(element.id);
+
+        if (
+            element.type === "form" &&
+            (event.target as HTMLElement).closest("input, textarea, select, button")
+        ) {
+            return;
+        }
 
         const startX = event.clientX;
         const startY = event.clientY;
@@ -422,6 +449,25 @@ export default function DesignCanvas({
                         const isSelected = selectedElementId === element.id;
 
                         // ── Text Element ──
+                                                if (element.type === "form") {
+                                                    return (
+                                                        <CanvasFormElement
+                                                            key={element.id}
+                                                            element={element}
+                                                            isSelected={isSelected}
+                                                            isEraserMode={isEraserMode}
+                                                            isErasing={isErasing}
+                                                            currentEraserPoints={currentEraserPoints}
+                                                            eraserSettings={eraserSettings}
+                                                            canvasWidth={canvasSize.width}
+                                                            canvasHeight={canvasSize.height}
+                                                            handlePointerDown={handlePointerDown}
+                                                            deleteElement={deleteElement}
+                                                        />
+                                                    );
+                                                }
+
+                                                // ── Text Element ──
                         if (element.type === "text") {
                             return (
                                 <CanvasTextElement

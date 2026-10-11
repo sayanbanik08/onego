@@ -51,6 +51,7 @@ import {
     createButtonElement,
     createIconElement,
     createImageElement,
+    createFormElement,
 } from "./constants/defaults";
 
 export default function DesignEnginePage() {
@@ -213,6 +214,14 @@ export default function DesignEnginePage() {
         setSelectedElementId(newImageElement.id);
     };
 
+    const addFormElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newFormElement = createFormElement(elements.length + 1);
+        setElements((prev) => [...prev, newFormElement]);
+        setSelectedElementId(newFormElement.id);
+    };
+
     const selectedElement =
         elements.find((element) => element.id === selectedElementId) ?? null;
 
@@ -318,6 +327,7 @@ export default function DesignEnginePage() {
                     onAddButton={addButtonElement}
                     onAddIcon={addIconElement}
                     onAddImage={addImageElement}
+                                        onAddForm={addFormElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />

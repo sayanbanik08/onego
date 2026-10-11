@@ -9,6 +9,7 @@ import type { CardElement } from "../types/card";
 import type { ButtonElement } from "../types/button";
 import type { IconElement } from "../types/icon";
 import type { ImageElement } from "../types/image";
+import type { FormElement } from "../types/form";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -98,12 +99,29 @@ export function doesStrokeIntersectElement(
     );
 }
 
-export function getElementDimensions(el: CanvasElement): {
+export function getElementDimensions(
+    el: CanvasElement,
+    canvasSize?: { width: number; height: number }
+): {
     width: number;
     height: number;
     scale: number;
     origin: "center" | "top-left";
 } {
+        if (el.type === "form") {
+            const form = el as FormElement;
+            return {
+                width: form.widthUnit === "%"
+                    ? ((canvasSize?.width ?? 1200) * form.width) / 100
+                    : form.width,
+                height: form.heightUnit === "%"
+                    ? ((canvasSize?.height ?? 1120) * form.height) / 100
+                    : form.height,
+                scale: (form.size ?? 100) / 100 || 1,
+                origin: "top-left",
+            };
+        }
+
     if (el.type === "draw") {
         return {
             width: el.width,

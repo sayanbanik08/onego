@@ -10,6 +10,7 @@ import type {
     ButtonElement,
     IconElement,
     ImageElement,
+    FormElement,
 } from "../types";
 
 export const DEFAULT_PENCIL_SETTINGS: PencilSettings = {
@@ -372,5 +373,59 @@ export function createImageElement(serialNumber: number): ImageElement {
         size: 100,
         rotation: 0,
         opacity: 1,
+    };
+}
+
+export function createFormElement(serialNumber: number): FormElement {
+    return {
+        id: crypto.randomUUID(),
+        type: "form",
+        serialNumber,
+        x: 120,
+        y: 100,
+        title: "Say hello",
+        description: "Leave a note and we will get back to you.",
+            headingColor: "#f4f7f8",
+            descriptionColor: "#a9bbc0",
+            fieldLabelColor: "#f4f7f8",
+        receiverEmail: "",
+        fields: [
+            { id: crypto.randomUUID(), type: "text", label: "Name", placeholder: "Your name", required: true, locked: true },
+            { id: crypto.randomUUID(), type: "email", label: "Email address", placeholder: "you@example.com", required: true, locked: true },
+        ],
+        submitText: "Send message",
+        theme: "aurora-glass",
+        width: 42,
+        widthUnit: "%",
+        height: 540,
+        heightUnit: "px",
+        backgroundColor: "#102629",
+        borderColor: "#5eead4",
+        borderWidth: 1,
+        borderWidthUnit: "px",
+        borderStyle: "solid",
+        borderRadius: 24,
+        borderRadiusUnit: "px",
+        buttonTextColor: "#042f2e",
+        buttonBackgroundColor: "#14b8a6",
+        buttonBorderColor: "#14b8a6",
+        buttonWidth: 100,
+        buttonWidthUnit: "%",
+        buttonHeight: 48,
+        buttonHeightUnit: "px",
+        buttonBorderRadius: 12,
+        buttonBorderRadiusUnit: "px",
+        buttonBorderWidth: 1,
+        buttonBorderStyle: "solid",
+        buttonStyle: "solid",
+        size: 100,
+        rotation: 0,
+        opacity: 1,
+        shadow: "lg",
+        shadowColor: "#000000",
+        shadowBlur: 24,
+        shadowOffsetX: 0,
+        shadowOffsetY: 16,
+        shadowSpread: 0,
     };
 }

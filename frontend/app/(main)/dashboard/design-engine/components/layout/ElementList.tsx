@@ -26,6 +26,7 @@ type ElementListProps = {
     onAddButton?: () => void;
     onAddIcon?: () => void;
     onAddImage?: () => void;
+        onAddForm?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -43,6 +44,7 @@ export default function ElementList({
     onAddButton,
     onAddIcon,
     onAddImage,
+        onAddForm,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementListProps) {
@@ -336,6 +338,7 @@ export default function ElementList({
             {/* Form */}
             <button
                 type="button"
+                onClick={onAddForm}
                 className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
             >
                 <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
