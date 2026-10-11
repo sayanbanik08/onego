@@ -25,6 +25,7 @@ type ElementListProps = {
     onAddCard?: () => void;
     onAddButton?: () => void;
     onAddIcon?: () => void;
+    onAddImage?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -41,6 +42,7 @@ export default function ElementList({
     onAddCard,
     onAddButton,
     onAddIcon,
+    onAddImage,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementListProps) {
@@ -145,12 +147,16 @@ export default function ElementList({
             {/* Image */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onAddImage}
+                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm text-gray-300 transition hover:border-gray-500 hover:bg-gray-900 active:scale-[0.99]"
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 text-emerald-400">
                     🖼
                 </span>
-                <span>Image</span>
+                <span className="flex-1">Image</span>
+                <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                    + Add
+                </span>
             </button>
 
             {/* Button / Link */}

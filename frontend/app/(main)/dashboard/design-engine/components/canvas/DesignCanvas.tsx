@@ -13,6 +13,7 @@ import {
     CanvasCardElement,
     CanvasButtonElement,
     CanvasIconElement,
+    CanvasImageElement,
 } from "./elements";
 
 import type {
@@ -549,6 +550,24 @@ export default function DesignCanvas({
                         if (element.type === "icon") {
                             return (
                                 <CanvasIconElement
+                                    key={element.id}
+                                    element={element}
+                                    isSelected={isSelected}
+                                    isEraserMode={isEraserMode}
+                                    isErasing={isErasing}
+                                    currentEraserPoints={currentEraserPoints}
+                                    eraserSettings={eraserSettings}
+                                    handlePointerDown={handlePointerDown}
+                                    deleteElement={deleteElement}
+                                    updateElement={updateElement}
+                                />
+                            );
+                        }
+
+                        // ── Image Element ──
+                        if (element.type === "image") {
+                            return (
+                                <CanvasImageElement
                                     key={element.id}
                                     element={element}
                                     isSelected={isSelected}

@@ -9,6 +9,7 @@ import type {
     CardElement,
     ButtonElement,
     IconElement,
+    ImageElement,
 } from "../types";
 
 export const DEFAULT_PENCIL_SETTINGS: PencilSettings = {
@@ -323,6 +324,45 @@ export function createIconElement(serialNumber: number): IconElement {
         borderRadius: 50,
         borderRadiusUnit: "%",
         padding: 12,
+        shadow: "none",
+        shadowColor: "rgba(0, 0, 0, 0.35)",
+        shadowBlur: 12,
+        shadowOffsetX: 0,
+        shadowOffsetY: 4,
+        shadowSpread: 0,
+        size: 100,
+        rotation: 0,
+        opacity: 1,
+    };
+}
+
+export function createImageElement(serialNumber: number): ImageElement {
+    return {
+        id: crypto.randomUUID(),
+        type: "image",
+        serialNumber,
+        x: 200,
+        y: 180,
+        imageUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80",
+        imageCrop: {
+            x: 0,
+            y: 0,
+            scale: 1,
+        },
+        frameShape: "rounded",
+        theme: "minimal-clean",
+        enableLink: false,
+        linkUrl: "https://example.com",
+        width: 140,
+        widthUnit: "px",
+        height: 140,
+        heightUnit: "px",
+        frameColor: "#18181b",
+        borderColor: "#3f3f46",
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderRadius: 16,
+        borderRadiusUnit: "px",
         shadow: "none",
         shadowColor: "rgba(0, 0, 0, 0.35)",
         shadowBlur: 12,

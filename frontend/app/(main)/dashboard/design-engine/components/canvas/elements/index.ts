@@ -7,4 +7,5 @@ export { CanvasTimelineElement } from "./timeline";
 export { CanvasCardElement } from "./card";
 export { CanvasButtonElement } from "./button";
 export { CanvasIconElement } from "./icon";
+export { CanvasImageElement } from "./image";
 export { CanvasDashboardBackground } from "./dashboard-background";

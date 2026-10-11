@@ -13,6 +13,8 @@ import type { ButtonElement } from "../../types/button";
 import ButtonProperties from "../properties/button/ButtonProperties";
 import type { IconElement } from "../../types/icon";
 import IconProperties from "../properties/icon/IconProperties";
+import type { ImageElement } from "../../types/image";
+import ImageProperties from "../properties/image/ImageProperties";
 import type {
     CanvasElement,
     TextElement,
@@ -211,6 +213,15 @@ export default function PropertiesPanel({
             return (
                 <IconProperties
                     selectedElement={selectedElement as IconElement}
+                    updateElement={updateElement as any}
+                />
+            );
+        }
+
+        if (selectedElement?.type === "image") {
+            return (
+                <ImageProperties
+                    selectedElement={selectedElement as ImageElement}
                     updateElement={updateElement as any}
                 />
             );

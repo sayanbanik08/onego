@@ -8,6 +8,7 @@ import type { TimelineElement } from "../types/timeline";
 import type { CardElement } from "../types/card";
 import type { ButtonElement } from "../types/button";
 import type { IconElement } from "../types/icon";
+import type { ImageElement } from "../types/image";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -240,6 +241,24 @@ export function getElementDimensions(el: CanvasElement): {
             width,
             height,
             scale: (icon.size ?? 100) / 100 || 1,
+            origin: "top-left",
+        };
+    }
+
+    if (el.type === "image") {
+        const img = el as ImageElement;
+        const width =
+            img.widthUnit === "%"
+                ? Math.max(20, Math.round(((img.width ?? 140) / 100) * 140))
+                : (img.width ?? 140);
+        const height =
+            img.heightUnit === "%"
+                ? Math.max(20, Math.round(((img.height ?? 140) / 100) * 140))
+                : (img.height ?? 140);
+        return {
+            width,
+            height,
+            scale: (img.size ?? 100) / 100 || 1,
             origin: "top-left",
         };
     }
