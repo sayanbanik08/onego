@@ -11,6 +11,7 @@ import type { IconElement } from "../types/icon";
 import type { ImageElement } from "../types/image";
 import type { FormElement } from "../types/form";
 import type { GridElement } from "../types/grid";
+import type { ProgressElement } from "../types/progress";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -296,6 +297,24 @@ export function getElementDimensions(
             width,
             height,
             scale: (grid.size ?? 100) / 100 || 1,
+            origin: "top-left",
+        };
+    }
+
+    if (el.type === "progress") {
+        const progress = el as ProgressElement;
+        const width =
+            progress.widthUnit === "%"
+                ? Math.max(40, Math.round(((progress.width ?? 580) / 100) * (canvasSize?.width ?? 1200)))
+                : (progress.width ?? 580);
+        const height =
+            progress.heightUnit === "%"
+                ? Math.max(40, Math.round(((progress.height ?? 250) / 100) * (canvasSize?.height ?? 1120)))
+                : (progress.height ?? 250);
+        return {
+            width,
+            height,
+            scale: (progress.size ?? 100) / 100 || 1,
             origin: "top-left",
         };
     }

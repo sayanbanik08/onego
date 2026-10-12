@@ -31,6 +31,7 @@ export type { ButtonElement } from "./types/button";
 export type { IconElement } from "./types/icon";
 export type { ImageElement } from "./types/image";
 export type { GridElement } from "./types/grid";
+export type { ProgressElement } from "./types/progress";
 
 import type {
     CanvasElement,
@@ -54,6 +55,7 @@ import {
     createImageElement,
     createFormElement,
     createGridElement,
+    createProgressElement,
 } from "./constants/defaults";
 
 export default function DesignEnginePage() {
@@ -232,6 +234,14 @@ export default function DesignEnginePage() {
         setSelectedElementId(newGridElement.id);
     };
 
+    const addProgressElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newProgressElement = createProgressElement(elements.length + 1);
+        setElements((prev) => [...prev, newProgressElement]);
+        setSelectedElementId(newProgressElement.id);
+    };
+
     const selectedElement =
         elements.find((element) => element.id === selectedElementId) ?? null;
 
@@ -339,6 +349,7 @@ export default function DesignEnginePage() {
                     onAddImage={addImageElement}
                     onAddForm={addFormElement}
                     onAddGrid={addGridElement}
+                    onAddProgress={addProgressElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />

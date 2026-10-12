@@ -1,11 +1,8 @@
 import {
     Eraser,
-    MousePointerClick,
     SlidersHorizontal,
-    Minus,
     Grid3X3,
     CreditCard,
-    List,
     Gauge,
     Clock,
     GitBranch,
@@ -28,6 +25,7 @@ type ElementListProps = {
     onAddImage?: () => void;
     onAddForm?: () => void;
     onAddGrid?: () => void;
+    onAddProgress?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -47,6 +45,7 @@ export default function ElementList({
     onAddImage,
     onAddForm,
     onAddGrid,
+    onAddProgress,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementListProps) {
@@ -112,17 +111,6 @@ export default function ElementList({
                         Active
                     </span>
                 )}
-            </button>
-
-            {/* Clickable Element */}
-            <button
-                type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
-            >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
-                    <MousePointerClick size={17} />
-                </span>
-                <span>Clickable Element</span>
             </button>
 
             {/* Sliders */}
@@ -233,17 +221,6 @@ export default function ElementList({
                 )}
             </button>
 
-            {/* Divider / Line */}
-            <button
-                type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
-            >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
-                    <Minus size={17} />
-                </span>
-                <span>Divider Line</span>
-            </button>
-
             {/* Grid */}
             <button
                 type="button"
@@ -274,26 +251,19 @@ export default function ElementList({
                 </span>
             </button>
 
-            {/* List */}
-            <button
-                type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
-            >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
-                    <List size={17} />
-                </span>
-                <span>List</span>
-            </button>
-
             {/* Progress */}
             <button
                 type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
+                onClick={onAddProgress}
+                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm text-gray-300 transition hover:border-gray-500 hover:bg-gray-900 active:scale-[0.99]"
             >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 text-yellow-400">
                     <Gauge size={17} />
                 </span>
-                <span>Progress</span>
+                <span className="flex-1">Progress</span>
+                <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                    + Add
+                </span>
             </button>
 
             {/* Counter */}

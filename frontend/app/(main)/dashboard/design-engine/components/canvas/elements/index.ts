@@ -10,4 +10,5 @@ export { CanvasIconElement } from "./icon";
 export { CanvasImageElement } from "./image";
 export { CanvasFormElement } from "./form";
 export { CanvasGridElement } from "./grid";
+export { CanvasProgressElement } from "./progress";
 export { CanvasDashboardBackground } from "./dashboard-background";

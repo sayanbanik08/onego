@@ -16,6 +16,7 @@ import {
     CanvasImageElement,
     CanvasFormElement,
     CanvasGridElement,
+    CanvasProgressElement,
 } from "./elements";
 
 import type {
@@ -188,7 +189,8 @@ export default function DesignCanvas({
                                 el.type === "card" ||
                                 el.type === "button" ||
                                 el.type === "form" ||
-                                el.type === "grid"
+                                el.type === "grid" ||
+                                el.type === "progress"
                                     ? el.size
                                     : 100,
                         },
@@ -634,6 +636,24 @@ export default function DesignCanvas({
                         if (element.type === "grid") {
                             return (
                                 <CanvasGridElement
+                                    key={element.id}
+                                    element={element}
+                                    isSelected={isSelected}
+                                    isEraserMode={isEraserMode}
+                                    isErasing={isErasing}
+                                    currentEraserPoints={currentEraserPoints}
+                                    eraserSettings={eraserSettings}
+                                    handlePointerDown={handlePointerDown}
+                                    deleteElement={deleteElement}
+                                    updateElement={updateElement}
+                                />
+                            );
+                        }
+
+                        // ── Progress Element ──
+                        if (element.type === "progress") {
+                            return (
+                                <CanvasProgressElement
                                     key={element.id}
                                     element={element}
                                     isSelected={isSelected}

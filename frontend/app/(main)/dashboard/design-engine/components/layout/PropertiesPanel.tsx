@@ -19,6 +19,8 @@ import FormProperties from "../properties/form/FormProperties";
 import type { FormElement } from "../../types/form";
 import type { GridElement } from "../../types/grid";
 import GridProperties from "../properties/grid/GridProperties";
+import type { ProgressElement } from "../../types/progress";
+import ProgressProperties from "../properties/progress/ProgressProperties";
 import type {
     CanvasElement,
     TextElement,
@@ -244,6 +246,15 @@ export default function PropertiesPanel({
             return (
                 <GridProperties
                     selectedElement={selectedElement as GridElement}
+                    updateElement={updateElement as any}
+                />
+            );
+        }
+
+        if (selectedElement?.type === "progress") {
+            return (
+                <ProgressProperties
+                    selectedElement={selectedElement as ProgressElement}
                     updateElement={updateElement as any}
                 />
             );
