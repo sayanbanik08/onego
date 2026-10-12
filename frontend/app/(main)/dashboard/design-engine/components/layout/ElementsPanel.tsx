@@ -38,7 +38,8 @@ type ElementsPanelProps = {
     onAddButton?: () => void;
     onAddIcon?: () => void;
     onAddImage?: () => void;
-        onAddForm?: () => void;
+    onAddForm?: () => void;
+    onAddGrid?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -64,7 +65,8 @@ export default function ElementsPanel({
     onAddButton,
     onAddIcon,
     onAddImage,
-        onAddForm,
+    onAddForm,
+    onAddGrid,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementsPanelProps) {
@@ -174,7 +176,8 @@ export default function ElementsPanel({
                                 onAddButton={onAddButton}
                                 onAddIcon={onAddIcon}
                                 onAddImage={onAddImage}
-                                                                onAddForm={onAddForm}
+                                onAddForm={onAddForm}
+                                onAddGrid={onAddGrid}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />
@@ -237,6 +240,8 @@ export default function ElementsPanel({
                                 onAddButton={onAddButton}
                                 onAddIcon={onAddIcon}
                                 onAddImage={onAddImage}
+                                onAddForm={onAddForm}
+                                onAddGrid={onAddGrid}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />

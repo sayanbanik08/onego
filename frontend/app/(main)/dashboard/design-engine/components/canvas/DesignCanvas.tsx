@@ -15,6 +15,7 @@ import {
     CanvasIconElement,
     CanvasImageElement,
     CanvasFormElement,
+    CanvasGridElement,
 } from "./elements";
 
 import type {
@@ -185,8 +186,9 @@ export default function DesignCanvas({
                                 el.type === "clock" ||
                                 el.type === "timeline" ||
                                 el.type === "card" ||
-                                el.type === "button"
-                                    || el.type === "form"
+                                el.type === "button" ||
+                                el.type === "form" ||
+                                el.type === "grid"
                                     ? el.size
                                     : 100,
                         },
@@ -614,6 +616,24 @@ export default function DesignCanvas({
                         if (element.type === "image") {
                             return (
                                 <CanvasImageElement
+                                    key={element.id}
+                                    element={element}
+                                    isSelected={isSelected}
+                                    isEraserMode={isEraserMode}
+                                    isErasing={isErasing}
+                                    currentEraserPoints={currentEraserPoints}
+                                    eraserSettings={eraserSettings}
+                                    handlePointerDown={handlePointerDown}
+                                    deleteElement={deleteElement}
+                                    updateElement={updateElement}
+                                />
+                            );
+                        }
+
+                        // ── Grid Element ──
+                        if (element.type === "grid") {
+                            return (
+                                <CanvasGridElement
                                     key={element.id}
                                     element={element}
                                     isSelected={isSelected}

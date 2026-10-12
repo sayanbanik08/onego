@@ -11,6 +11,7 @@ import type {
     IconElement,
     ImageElement,
     FormElement,
+    GridElement,
 } from "../types";
 
 export const DEFAULT_PENCIL_SETTINGS: PencilSettings = {
@@ -429,3 +430,42 @@ export function createFormElement(serialNumber: number): FormElement {
         shadowSpread: 0,
     };
 }
+
+export function createGridElement(serialNumber: number): GridElement {
+    return {
+        id: crypto.randomUUID(),
+        type: "grid",
+        serialNumber,
+        x: 140,
+        y: 120,
+        layoutPreset: "pinterest-masonry",
+        columns: 3,
+        rows: 3,
+        gap: 14,
+        cellCount: 6,
+        width: 380,
+        widthUnit: "px",
+        height: 440,
+        heightUnit: "px",
+        cellHeight: 120,
+        cellBgColor: "#111111",
+        cellBorderColor: "rgba(255, 255, 255, 0.12)",
+        cellBorderWidth: 1,
+        cellBorderStyle: "solid",
+        cellBorderRadius: 16,
+        cellBorderRadiusUnit: "px",
+        showCellNumbers: true,
+        showPlusIcon: true,
+        skeletonPulse: false,
+        shadow: "none",
+        shadowColor: "rgba(0, 0, 0, 0.35)",
+        shadowBlur: 12,
+        shadowOffsetX: 0,
+        shadowOffsetY: 4,
+        shadowSpread: 0,
+        size: 100,
+        rotation: 0,
+        opacity: 1,
+    };
+}
+

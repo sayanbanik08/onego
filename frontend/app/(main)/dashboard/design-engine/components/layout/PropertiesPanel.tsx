@@ -17,6 +17,8 @@ import type { ImageElement } from "../../types/image";
 import ImageProperties from "../properties/image/ImageProperties";
 import FormProperties from "../properties/form/FormProperties";
 import type { FormElement } from "../../types/form";
+import type { GridElement } from "../../types/grid";
+import GridProperties from "../properties/grid/GridProperties";
 import type {
     CanvasElement,
     TextElement,
@@ -234,6 +236,15 @@ export default function PropertiesPanel({
                 <FormProperties
                     element={selectedElement as FormElement}
                     updateElement={updateElement as (id: string, u: Partial<FormElement>) => void}
+                />
+            );
+        }
+
+        if (selectedElement?.type === "grid") {
+            return (
+                <GridProperties
+                    selectedElement={selectedElement as GridElement}
+                    updateElement={updateElement as any}
                 />
             );
         }

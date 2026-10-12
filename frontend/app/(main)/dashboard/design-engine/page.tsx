@@ -30,6 +30,7 @@ export type { CardElement } from "./types/card";
 export type { ButtonElement } from "./types/button";
 export type { IconElement } from "./types/icon";
 export type { ImageElement } from "./types/image";
+export type { GridElement } from "./types/grid";
 
 import type {
     CanvasElement,
@@ -52,6 +53,7 @@ import {
     createIconElement,
     createImageElement,
     createFormElement,
+    createGridElement,
 } from "./constants/defaults";
 
 export default function DesignEnginePage() {
@@ -222,6 +224,14 @@ export default function DesignEnginePage() {
         setSelectedElementId(newFormElement.id);
     };
 
+    const addGridElement = () => {
+        setIsDrawMode(false);
+        setIsEraserMode(false);
+        const newGridElement = createGridElement(elements.length + 1);
+        setElements((prev) => [...prev, newGridElement]);
+        setSelectedElementId(newGridElement.id);
+    };
+
     const selectedElement =
         elements.find((element) => element.id === selectedElementId) ?? null;
 
@@ -327,7 +337,8 @@ export default function DesignEnginePage() {
                     onAddButton={addButtonElement}
                     onAddIcon={addIconElement}
                     onAddImage={addImageElement}
-                                        onAddForm={addFormElement}
+                    onAddForm={addFormElement}
+                    onAddGrid={addGridElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />

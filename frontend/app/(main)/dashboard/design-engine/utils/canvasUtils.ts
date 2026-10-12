@@ -10,6 +10,7 @@ import type { ButtonElement } from "../types/button";
 import type { IconElement } from "../types/icon";
 import type { ImageElement } from "../types/image";
 import type { FormElement } from "../types/form";
+import type { GridElement } from "../types/grid";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -277,6 +278,24 @@ export function getElementDimensions(
             width,
             height,
             scale: (img.size ?? 100) / 100 || 1,
+            origin: "top-left",
+        };
+    }
+
+    if (el.type === "grid") {
+        const grid = el as GridElement;
+        const width =
+            grid.widthUnit === "%"
+                ? Math.max(40, Math.round(((grid.width ?? 380) / 100) * (canvasSize?.width ?? 1200)))
+                : (grid.width ?? 380);
+        const height =
+            grid.heightUnit === "%"
+                ? Math.max(40, Math.round(((grid.height ?? 440) / 100) * (canvasSize?.height ?? 1120)))
+                : (grid.height ?? 440);
+        return {
+            width,
+            height,
+            scale: (grid.size ?? 100) / 100 || 1,
             origin: "top-left",
         };
     }
