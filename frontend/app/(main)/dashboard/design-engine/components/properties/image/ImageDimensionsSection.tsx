@@ -1,19 +1,32 @@
 "use client";
 
 import React from "react";
-import type { ImageElement, ImageDimensionUnit } from "../../../types/image";
+import type { ImageDimensionUnit } from "../../../types/image";
 
-type ImageDimensionsSectionProps = {
-    element: ImageElement;
-    updateElement: (updates: Partial<ImageElement>) => void;
+type DimensionsElement = {
+    width: number;
+    widthUnit: ImageDimensionUnit;
+    height: number;
+    heightUnit: ImageDimensionUnit;
 };
 
-export default function ImageDimensionsSection({
+type ImageDimensionsSectionProps<TElement extends DimensionsElement> = {
+    element: TElement;
+    updateElement: (updates: Partial<TElement>) => void;
+    defaultWidth?: number;
+    defaultHeight?: number;
+};
+
+export default function ImageDimensionsSection<TElement extends DimensionsElement>({
     element,
     updateElement,
-}: ImageDimensionsSectionProps) {
+    defaultWidth = 140,
+    defaultHeight = 140,
+}: ImageDimensionsSectionProps<TElement>) {
     const widthUnit: ImageDimensionUnit = element.widthUnit || "px";
     const heightUnit: ImageDimensionUnit = element.heightUnit || "px";
+    const width = element.width ?? defaultWidth;
+    const height = element.height ?? defaultHeight;
 
     const isWidthPx = widthUnit === "px";
     const isHeightPx = heightUnit === "px";
@@ -40,11 +53,11 @@ export default function ImageDimensionsSection({
                             type="number"
                             min={widthMin}
                             max={widthMax}
-                            value={element.width ?? 140}
+                            value={width}
                             onChange={(e) => {
                                 const val = Number(e.target.value);
                                 if (!isNaN(val)) {
-                                    updateElement({ width: Math.max(1, val) });
+                                    updateElement({ width: Math.max(1, val) } as Partial<TElement>);
                                 }
                             }}
                             className="w-14 rounded border border-gray-700 bg-gray-950 px-1.5 py-0.5 text-right font-mono text-xs text-white focus:border-blue-500 focus:outline-none"
@@ -58,8 +71,8 @@ export default function ImageDimensionsSection({
                                     if (widthUnit !== "px") {
                                         updateElement({
                                             widthUnit: "px",
-                                            width: Math.min(500, Math.max(20, Math.round((element.width / 100) * 140))),
-                                        });
+                                            width: Math.min(500, Math.max(20, Math.round((width / 100) * defaultWidth))),
+                                        } as Partial<TElement>);
                                     }
                                 }}
                                 className={`px-1.5 py-0.5 text-[10px] rounded ${
@@ -77,7 +90,7 @@ export default function ImageDimensionsSection({
                                         updateElement({
                                             widthUnit: "%",
                                             width: 100,
-                                        });
+                                        } as Partial<TElement>);
                                     }
                                 }}
                                 className={`px-1.5 py-0.5 text-[10px] rounded ${
@@ -98,9 +111,9 @@ export default function ImageDimensionsSection({
                     min={widthMin}
                     max={widthMax}
                     step={1}
-                    value={element.width ?? 140}
+                    value={width}
                     onChange={(e) =>
-                        updateElement({ width: Number(e.target.value) })
+                        updateElement({ width: Number(e.target.value) } as Partial<TElement>)
                     }
                     className="w-full cursor-pointer accent-blue-500"
                 />
@@ -116,11 +129,11 @@ export default function ImageDimensionsSection({
                             type="number"
                             min={heightMin}
                             max={heightMax}
-                            value={element.height ?? 140}
+                            value={height}
                             onChange={(e) => {
                                 const val = Number(e.target.value);
                                 if (!isNaN(val)) {
-                                    updateElement({ height: Math.max(1, val) });
+                                    updateElement({ height: Math.max(1, val) } as Partial<TElement>);
                                 }
                             }}
                             className="w-14 rounded border border-gray-700 bg-gray-950 px-1.5 py-0.5 text-right font-mono text-xs text-white focus:border-blue-500 focus:outline-none"
@@ -134,8 +147,8 @@ export default function ImageDimensionsSection({
                                     if (heightUnit !== "px") {
                                         updateElement({
                                             heightUnit: "px",
-                                            height: Math.min(500, Math.max(20, Math.round((element.height / 100) * 140))),
-                                        });
+                                            height: Math.min(500, Math.max(20, Math.round((height / 100) * defaultHeight))),
+                                        } as Partial<TElement>);
                                     }
                                 }}
                                 className={`px-1.5 py-0.5 text-[10px] rounded ${
@@ -153,7 +166,7 @@ export default function ImageDimensionsSection({
                                         updateElement({
                                             heightUnit: "%",
                                             height: 100,
-                                        });
+                                        } as Partial<TElement>);
                                     }
                                 }}
                                 className={`px-1.5 py-0.5 text-[10px] rounded ${
@@ -174,9 +187,9 @@ export default function ImageDimensionsSection({
                     min={heightMin}
                     max={heightMax}
                     step={1}
-                    value={element.height ?? 140}
+                    value={height}
                     onChange={(e) =>
-                        updateElement({ height: Number(e.target.value) })
+                        updateElement({ height: Number(e.target.value) } as Partial<TElement>)
                     }
                     className="w-full cursor-pointer accent-blue-500"
                 />

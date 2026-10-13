@@ -21,6 +21,9 @@ import type { GridElement } from "../../types/grid";
 import GridProperties from "../properties/grid/GridProperties";
 import type { ProgressElement } from "../../types/progress";
 import ProgressProperties from "../properties/progress/ProgressProperties";
+import NavigationProperties from "../properties/navigation/NavigationProperties";
+import type { NavigationElement } from "../../types/navigation";
+import type { CanvasDocument } from "../../types/workspace";
 import type {
     CanvasElement,
     TextElement,
@@ -56,6 +59,8 @@ type PropertiesPanelProps = {
 
     selectedElement: CanvasElement | null;
     updateElement: (id: string, updates: Partial<CanvasElement>) => void;
+    canvases: CanvasDocument[];
+    onCreateCanvas: (name: string) => void;
 
     isDrawMode: boolean;
     isFillMode: boolean;
@@ -85,6 +90,8 @@ export default function PropertiesPanel({
     setFloatingPosition,
     selectedElement,
     updateElement,
+    canvases,
+    onCreateCanvas,
     isDrawMode,
     isFillMode,
     onToggleFillMode,
@@ -222,6 +229,17 @@ export default function PropertiesPanel({
                 <ButtonProperties
                     selectedElement={selectedElement as ButtonElement}
                     updateElement={updateElement as any}
+                />
+            );
+        }
+
+        if (selectedElement?.type === "navigation") {
+            return (
+                <NavigationProperties
+                    element={selectedElement as NavigationElement}
+                    canvases={canvases}
+                    onCreateCanvas={onCreateCanvas}
+                    updateElement={updateElement as (id: string, updates: Partial<NavigationElement>) => void}
                 />
             );
         }

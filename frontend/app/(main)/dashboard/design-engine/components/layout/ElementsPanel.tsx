@@ -41,6 +41,7 @@ type ElementsPanelProps = {
     onAddForm?: () => void;
     onAddGrid?: () => void;
     onAddProgress?: () => void;
+    onAddNavigation?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -69,6 +70,7 @@ export default function ElementsPanel({
     onAddForm,
     onAddGrid,
     onAddProgress,
+    onAddNavigation,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementsPanelProps) {
@@ -181,6 +183,7 @@ export default function ElementsPanel({
                                 onAddForm={onAddForm}
                                 onAddGrid={onAddGrid}
                                 onAddProgress={onAddProgress}
+                                onAddNavigation={onAddNavigation}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />
@@ -246,6 +249,7 @@ export default function ElementsPanel({
                                 onAddForm={onAddForm}
                                 onAddGrid={onAddGrid}
                                 onAddProgress={onAddProgress}
+                                onAddNavigation={onAddNavigation}
                                 onSelectBackground={onSelectBackground}
                                 isBackgroundMode={isBackgroundMode}
                             />

@@ -1,12 +1,20 @@
 "use client";
 
 import React from "react";
-import type { ImageElement } from "../../../types/image";
 import type { ButtonShadowPreset } from "../../../types/button";
 
-type ImageShadowSectionProps = {
-    element: ImageElement;
-    updateElement: (updates: Partial<ImageElement>) => void;
+type ShadowElement = {
+    shadow: ButtonShadowPreset;
+    shadowColor: string;
+    shadowBlur: number;
+    shadowOffsetX: number;
+    shadowOffsetY: number;
+    shadowSpread: number;
+};
+
+type ImageShadowSectionProps<TElement extends ShadowElement> = {
+    element: TElement;
+    updateElement: (updates: Partial<TElement>) => void;
 };
 
 const SHADOW_PRESETS: { label: string; value: ButtonShadowPreset }[] = [
@@ -21,10 +29,10 @@ const SHADOW_PRESETS: { label: string; value: ButtonShadowPreset }[] = [
     { label: "Custom", value: "custom" },
 ];
 
-export default function ImageShadowSection({
+export default function ImageShadowSection<TElement extends ShadowElement>({
     element,
     updateElement,
-}: ImageShadowSectionProps) {
+}: ImageShadowSectionProps<TElement>) {
     const isCustom = element.shadow === "custom";
 
     const getValidHexColor = (colorStr?: string, defaultHex = "rgba(0, 0, 0, 0.35)") => {
@@ -50,7 +58,7 @@ export default function ImageShadowSection({
                         <button
                             key={preset.value}
                             type="button"
-                            onClick={() => updateElement({ shadow: preset.value })}
+                            onClick={() => updateElement({ shadow: preset.value } as Partial<TElement>)}
                             className={`rounded-lg border px-2 py-1.5 text-center text-xs transition ${
                                 isSelected
                                     ? "border-blue-500 bg-blue-600/30 text-blue-300 font-semibold"
@@ -74,7 +82,7 @@ export default function ImageShadowSection({
                                 type="color"
                                 value={getValidHexColor(element.shadowColor, "#000000")}
                                 onChange={(e) =>
-                                    updateElement({ shadowColor: e.target.value })
+                                    updateElement({ shadowColor: e.target.value } as Partial<TElement>)
                                 }
                                 className="h-7 w-9 cursor-pointer rounded border border-gray-700 bg-gray-900"
                             />
@@ -98,10 +106,11 @@ export default function ImageShadowSection({
                             max={50}
                             step={1}
                             value={element.shadowBlur ?? 12}
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 updateElement({
                                     shadowBlur: Number(e.target.value),
-                                })
+                                } as Partial<TElement>);
+                            }
                             }
                             className="w-full cursor-pointer accent-blue-500"
                         />
@@ -121,10 +130,11 @@ export default function ImageShadowSection({
                             max={30}
                             step={1}
                             value={element.shadowOffsetX ?? 0}
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 updateElement({
                                     shadowOffsetX: Number(e.target.value),
-                                })
+                                } as Partial<TElement>);
+                            }
                             }
                             className="w-full cursor-pointer accent-blue-500"
                         />
@@ -144,10 +154,11 @@ export default function ImageShadowSection({
                             max={30}
                             step={1}
                             value={element.shadowOffsetY ?? 4}
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 updateElement({
                                     shadowOffsetY: Number(e.target.value),
-                                })
+                                } as Partial<TElement>);
+                            }
                             }
                             className="w-full cursor-pointer accent-blue-500"
                         />
@@ -167,10 +178,11 @@ export default function ImageShadowSection({
                             max={30}
                             step={1}
                             value={element.shadowSpread ?? 0}
-                            onChange={(e) =>
+                            onChange={(e) => {
                                 updateElement({
                                     shadowSpread: Number(e.target.value),
-                                })
+                                } as Partial<TElement>);
+                            }
                             }
                             className="w-full cursor-pointer accent-blue-500"
                         />

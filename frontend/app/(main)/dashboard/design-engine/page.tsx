@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import DesignEngineHeader from "./components/layout/DesignEngineHeader";
 import ElementsPanel from "./components/layout/ElementsPanel";
@@ -46,6 +48,8 @@ import type {
     EraserSettings,
     DashboardBackgroundSettings,
 } from "./types";
+import type { CanvasDocument, DesignWorkspace } from "./types/workspace";
+import type { NavigationElement } from "./types/navigation";
 
 import {
     DEFAULT_PENCIL_SETTINGS,
@@ -62,9 +66,33 @@ import {
     createFormElement,
     createGridElement,
     createProgressElement,
+    createNavigationElement,
 } from "./constants/defaults";
+import {
+    DESIGN_WORKSPACE_STORAGE_KEY,
+    createCanvasDocument,
+    loadDesignWorkspace,
+    saveDesignWorkspace,
+} from "./utils/designWorkspace";
+
+const DESIGN_ENGINE_PATH = "/dashboard/design-engine";
+
+function getCanvasIdFromPath(pathname: string) {
+    const prefix = `${DESIGN_ENGINE_PATH}/`;
+    if (!pathname.startsWith(prefix)) return null;
+
+    try {
+        return decodeURIComponent(pathname.slice(prefix.length));
+    } catch {
+        return null;
+    }
+}
 
 export default function DesignEnginePage() {
+    const pathname = usePathname();
+    const router = useRouter();
+    const routeCanvasId = getCanvasIdFromPath(pathname);
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isElementsMinimised, setIsElementsMinimised] = useState(false);
     const [isElementsFloating, setIsElementsFloating] = useState(false);
@@ -85,7 +113,10 @@ export default function DesignEnginePage() {
             y: 80,
         });
 
-    const [elements, setElements] = useState<CanvasElement[]>([]);
+    const [workspace, setWorkspace] = useState<DesignWorkspace | null>(null);
+    const [hasLoadedWorkspace, setHasLoadedWorkspace] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<"saved" | "error">("saved");
+    const workspaceRef = useRef<DesignWorkspace | null>(null);
     const [selectedElementId, setSelectedElementId] = useState<string | null>(
         null
     );
@@ -99,10 +130,121 @@ export default function DesignEnginePage() {
     const [eraserSettings, setEraserSettings] =
         useState<EraserSettings>(DEFAULT_ERASER_SETTINGS);
 
-    // 🎨 Dashboard Background Settings
-    const [backgroundSettings, setBackgroundSettings] =
-        useState<DashboardBackgroundSettings>(DEFAULT_BACKGROUND_SETTINGS);
     const [isBackgroundMode, setIsBackgroundMode] = useState(false);
+
+    useEffect(() => {
+        const timeoutId = window.setTimeout(() => {
+            setWorkspace(loadDesignWorkspace());
+            setHasLoadedWorkspace(true);
+        }, 0);
+
+        return () => window.clearTimeout(timeoutId);
+    }, []);
+
+    useEffect(() => {
+        workspaceRef.current = workspace;
+    }, [workspace]);
+
+    useEffect(() => {
+        if (!hasLoadedWorkspace || !workspace) return;
+
+        const timeoutId = window.setTimeout(() => {
+            setSaveStatus(saveDesignWorkspace(workspace) ? "saved" : "error");
+        }, 300);
+
+        return () => window.clearTimeout(timeoutId);
+    }, [hasLoadedWorkspace, workspace]);
+
+    useEffect(() => {
+        const saveOnPageHide = () => {
+            if (workspaceRef.current) {
+                saveDesignWorkspace(workspaceRef.current);
+            }
+        };
+
+        window.addEventListener("pagehide", saveOnPageHide);
+        return () => window.removeEventListener("pagehide", saveOnPageHide);
+    }, []);
+
+    useEffect(() => {
+        const syncWorkspaceFromOtherTab = (event: StorageEvent) => {
+            if (event.key !== DESIGN_WORKSPACE_STORAGE_KEY) return;
+
+            const nextWorkspace = loadDesignWorkspace();
+            workspaceRef.current = nextWorkspace;
+            setWorkspace(nextWorkspace);
+        };
+
+        window.addEventListener("storage", syncWorkspaceFromOtherTab);
+        return () => window.removeEventListener("storage", syncWorkspaceFromOtherTab);
+    }, []);
+
+    useEffect(() => {
+        if (!hasLoadedWorkspace || !workspace) return;
+
+        const requestedCanvas = workspace.canvases.find(
+            (canvas) => canvas.id === routeCanvasId
+        );
+
+        if (requestedCanvas) {
+            if (workspace.activeCanvasId !== requestedCanvas.id) {
+                const timeoutId = window.setTimeout(() => {
+                    setWorkspace((current) => current &&
+                        current.activeCanvasId !== requestedCanvas.id
+                        ? { ...current, activeCanvasId: requestedCanvas.id }
+                        : current
+                    );
+                }, 0);
+
+                return () => window.clearTimeout(timeoutId);
+            }
+            return;
+        }
+
+        if (workspace.activeCanvasId) {
+            saveDesignWorkspace(workspace);
+            router.replace(
+                `${DESIGN_ENGINE_PATH}/${encodeURIComponent(workspace.activeCanvasId)}`
+            );
+        }
+    }, [hasLoadedWorkspace, routeCanvasId, router, workspace]);
+
+    const activeCanvas = workspace?.canvases.find(
+        (canvas) => canvas.id === routeCanvasId
+    ) ?? workspace?.canvases.find(
+        (canvas) => canvas.id === workspace.activeCanvasId
+    ) ?? workspace?.canvases[0] ?? null;
+    const elements = activeCanvas?.elements ?? [];
+    const backgroundSettings =
+        activeCanvas?.backgroundSettings ?? DEFAULT_BACKGROUND_SETTINGS;
+
+    const updateActiveCanvas = (
+        update: (canvas: CanvasDocument) => CanvasDocument
+    ) => {
+        setWorkspace((current) => {
+            if (!current) return current;
+            const targetCanvasId = current.canvases.find(
+                (canvas) => canvas.id === routeCanvasId
+            )?.id ?? current.activeCanvasId;
+
+            return {
+                ...current,
+                activeCanvasId: targetCanvasId,
+                canvases: current.canvases.map((canvas) =>
+                    canvas.id === targetCanvasId ? update(canvas) : canvas
+                ),
+            };
+        });
+    };
+
+    const setElements: Dispatch<SetStateAction<CanvasElement[]>> = (update) => {
+        updateActiveCanvas((canvas) => ({
+            ...canvas,
+            elements: typeof update === "function"
+                ? update(canvas.elements)
+                : update,
+        }));
+    };
 
     const selectBackgroundMode = () => {
         setIsBackgroundMode(true);
@@ -115,7 +257,10 @@ export default function DesignEnginePage() {
     const updateBackgroundSettings = (
         updates: Partial<DashboardBackgroundSettings>
     ) => {
-        setBackgroundSettings((prev) => ({ ...prev, ...updates }));
+        updateActiveCanvas((canvas) => ({
+            ...canvas,
+            backgroundSettings: { ...canvas.backgroundSettings, ...updates },
+        }));
     };
 
     const fillDashboard = (color: string) => {
@@ -284,6 +429,119 @@ export default function DesignEnginePage() {
         setSelectedElementId(newButtonElement.id);
     };
 
+    const addNavigationElement = () => {
+        setIsDrawMode(false);
+        setIsFillMode(false);
+        setIsEraserMode(false);
+        setIsBackgroundMode(false);
+        const navigation = workspace?.sharedNavigation ?? createNavigationElement(
+            1,
+            workspace?.canvases ?? []
+        );
+        setWorkspace((current) => current && !current.sharedNavigation
+            ? { ...current, sharedNavigation: navigation }
+            : current
+        );
+        setSelectedElementId(navigation.id);
+    };
+
+    const navigateToCanvas = (canvasId: string) => {
+        const current = workspaceRef.current;
+        if (!current?.canvases.some((canvas) => canvas.id === canvasId)) return;
+
+        const nextWorkspace = { ...current, activeCanvasId: canvasId };
+        workspaceRef.current = nextWorkspace;
+        saveDesignWorkspace(nextWorkspace);
+        setWorkspace(nextWorkspace);
+        setSelectedElementId(current.sharedNavigation?.id ?? null);
+        setIsDrawMode(false);
+        setIsFillMode(false);
+        setIsEraserMode(false);
+        setIsBackgroundMode(false);
+        router.push(`${DESIGN_ENGINE_PATH}/${encodeURIComponent(canvasId)}`);
+    };
+
+    const createCanvas = (name: string) => {
+        const current = workspaceRef.current;
+        if (!current) return;
+
+        const canvas = createCanvasDocument(name);
+        const navigation = current.sharedNavigation ?? createNavigationElement(
+            1,
+            current.canvases
+        );
+        const link = {
+            id: crypto.randomUUID(),
+            label: canvas.name,
+            href: "",
+            canvasId: canvas.id,
+        };
+        const nextWorkspace: DesignWorkspace = {
+            ...current,
+            activeCanvasId: canvas.id,
+            canvases: [...current.canvases, canvas],
+            sharedNavigation: {
+                ...navigation,
+                links: [...navigation.links, link],
+            },
+        };
+
+        workspaceRef.current = nextWorkspace;
+        saveDesignWorkspace(nextWorkspace);
+        setWorkspace(nextWorkspace);
+        setSelectedElementId(navigation.id);
+        setIsDrawMode(false);
+        setIsFillMode(false);
+        setIsEraserMode(false);
+        setIsBackgroundMode(false);
+        router.push(`${DESIGN_ENGINE_PATH}/${encodeURIComponent(canvas.id)}`);
+    };
+
+    const deleteActiveCanvas = () => {
+        const current = workspaceRef.current;
+        if (!current || current.canvases.length <= 1) return;
+        const deletingCanvasId = current.canvases.find(
+            (canvas) => canvas.id === routeCanvasId
+        )?.id ?? current.activeCanvasId;
+
+        const remainingCanvases = current.canvases.filter(
+            (canvas) => canvas.id !== deletingCanvasId
+        );
+        const nextCanvas = remainingCanvases[0];
+        const nextWorkspace: DesignWorkspace = {
+            ...current,
+            activeCanvasId: nextCanvas.id,
+            canvases: remainingCanvases,
+            sharedNavigation: current.sharedNavigation
+                ? {
+                    ...current.sharedNavigation,
+                    links: current.sharedNavigation.links.filter(
+                        (link) => link.canvasId !== deletingCanvasId
+                    ),
+                }
+                : null,
+        };
+
+        workspaceRef.current = nextWorkspace;
+        setWorkspace(nextWorkspace);
+        setSelectedElementId(nextWorkspace.sharedNavigation?.id ?? null);
+        setIsDrawMode(false);
+        setIsFillMode(false);
+        setIsEraserMode(false);
+        setIsBackgroundMode(false);
+        setSaveStatus(saveDesignWorkspace(nextWorkspace) ? "saved" : "error");
+        router.replace(
+            `${DESIGN_ENGINE_PATH}/${encodeURIComponent(nextCanvas.id)}`
+        );
+    };
+
+    const saveWorkspace = () => {
+        const current = workspaceRef.current;
+        if (current) {
+            setSaveStatus(saveDesignWorkspace(current) ? "saved" : "error");
+        }
+    };
+
     const addIconElement = () => {
         setIsDrawMode(false);
         setIsFillMode(false);
@@ -330,12 +588,28 @@ export default function DesignEnginePage() {
     };
 
     const selectedElement =
-        elements.find((element) => element.id === selectedElementId) ?? null;
+        workspace?.sharedNavigation?.id === selectedElementId
+            ? workspace.sharedNavigation
+            : elements.find((element) => element.id === selectedElementId) ?? null;
 
     const updateElement = (
         id: string,
         updates: Partial<CanvasElement>
     ) => {
+        if (workspace?.sharedNavigation?.id === id) {
+            setWorkspace((current) => current?.sharedNavigation
+                ? {
+                    ...current,
+                    sharedNavigation: {
+                        ...current.sharedNavigation,
+                        ...updates,
+                    } as NavigationElement,
+                }
+                : current
+            );
+            return;
+        }
+
         setElements((prev) =>
             prev.map((element) =>
                 element.id === id
@@ -346,6 +620,15 @@ export default function DesignEnginePage() {
     };
 
     const deleteElement = (id: string) => {
+        if (workspace?.sharedNavigation?.id === id) {
+            setWorkspace((current) => current
+                ? { ...current, sharedNavigation: null }
+                : current
+            );
+            setSelectedElementId(null);
+            return;
+        }
+
         setElements((prev) => {
             const remainingElements = prev.filter(
                 (element) => element.id !== id
@@ -365,6 +648,21 @@ export default function DesignEnginePage() {
         x: number,
         y: number
     ) => {
+        if (workspace?.sharedNavigation?.id === id) {
+            setWorkspace((current) => current?.sharedNavigation
+                ? {
+                    ...current,
+                    sharedNavigation: {
+                        ...current.sharedNavigation,
+                        x,
+                        y,
+                    },
+                }
+                : current
+            );
+            return;
+        }
+
         setElements((prev) =>
             prev.map((element) =>
                 element.id === id
@@ -405,10 +703,34 @@ export default function DesignEnginePage() {
         });
     };
 
+    const handleCanvasSelection = (canvasId: string) => {
+        navigateToCanvas(canvasId);
+    };
+
+    const canvasElements = workspace?.sharedNavigation
+        ? [workspace.sharedNavigation, ...elements]
+        : elements;
+
+    if (!hasLoadedWorkspace || !workspace || !activeCanvas) {
+        return (
+            <main className="flex h-screen items-center justify-center bg-black text-sm text-gray-400">
+                Loading Design Engine...
+            </main>
+        );
+    }
+
     return (
         <main className="relative h-screen overflow-hidden bg-black text-white">
             {/* Header */}
-            <DesignEngineHeader />
+            <DesignEngineHeader
+                canvasName={activeCanvas.name}
+                canvases={workspace.canvases}
+                activeCanvasId={activeCanvas.id}
+                onSelectCanvas={handleCanvasSelection}
+                onDeleteCanvas={deleteActiveCanvas}
+                onSave={saveWorkspace}
+                saveStatus={saveStatus}
+            />
 
             {/* Editor Area */}
             <div className="flex h-[calc(100vh-4rem)] min-h-0">
@@ -437,6 +759,7 @@ export default function DesignEnginePage() {
                     onAddForm={addFormElement}
                     onAddGrid={addGridElement}
                     onAddProgress={addProgressElement}
+                    onAddNavigation={addNavigationElement}
                     onSelectBackground={selectBackgroundMode}
                     isBackgroundMode={isBackgroundMode}
                 />
@@ -445,7 +768,7 @@ export default function DesignEnginePage() {
                 <div className="flex min-w-0 min-h-0 flex-1 flex-col">
                     {/* Canvas */}
                     <DesignCanvas
-                        elements={elements}
+                        elements={canvasElements}
                         selectedElementId={selectedElementId}
                         setSelectedElementId={handleSelectElementId}
                         deleteElement={deleteElement}
@@ -460,11 +783,12 @@ export default function DesignEnginePage() {
                         backgroundSettings={backgroundSettings}
                         onSelectBackground={selectBackgroundMode}
                         onFillDashboard={fillDashboard}
+                        onNavigateCanvas={navigateToCanvas}
                     />
 
                     {/* Bottom Layers Dock */}
                     <LayersPanel
-                        elements={elements}
+                        elements={canvasElements}
                         selectedElementId={selectedElementId}
                         setSelectedElementId={handleSelectElementId}
                         reorderElements={reorderElements}
@@ -485,6 +809,8 @@ export default function DesignEnginePage() {
                     setFloatingPosition={setPropertiesFloatingPosition}
                     selectedElement={selectedElement}
                     updateElement={updateElement}
+                    canvases={workspace.canvases}
+                    onCreateCanvas={createCanvas}
                     isDrawMode={isDrawMode}
                     isFillMode={isFillMode}
                     onToggleFillMode={toggleFillMode}

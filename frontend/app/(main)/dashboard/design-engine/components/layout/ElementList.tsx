@@ -8,6 +8,7 @@ import {
     GitBranch,
     Table,
     ClipboardPenLine,
+    PanelTop,
 } from "lucide-react";
 
 type ElementListProps = {
@@ -26,6 +27,7 @@ type ElementListProps = {
     onAddForm?: () => void;
     onAddGrid?: () => void;
     onAddProgress?: () => void;
+    onAddNavigation?: () => void;
     onSelectBackground?: () => void;
     isBackgroundMode?: boolean;
 };
@@ -46,6 +48,7 @@ export default function ElementList({
     onAddForm,
     onAddGrid,
     onAddProgress,
+    onAddNavigation,
     onSelectBackground,
     isBackgroundMode = false,
 }: ElementListProps) {
@@ -55,12 +58,16 @@ export default function ElementList({
             {/* Navigation */}
             <button
                 type="button"
+                onClick={onAddNavigation}
                 className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
             >
                 <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800 font-semibold">
-                    ⤹⤷
+                    <PanelTop size={17} />
                 </span>
-                <span>Navigation</span>
+                <span className="flex-1">Navigation</span>
+                <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
+                    + Add
+                </span>
             </button>
 
             {/* Draw */}

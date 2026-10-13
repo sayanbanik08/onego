@@ -6,8 +6,9 @@ import type { ImageElement } from "./image";
 import type { FormElement } from "./form";
 import type { GridElement } from "./grid";
 import type { ProgressElement } from "./progress";
+import type { NavigationElement } from "./navigation";
 import type { EraserPath } from "./common";
-export type { EraserPath, ButtonElement, IconElement, ImageElement, FormElement, GridElement, ProgressElement };
+export type { EraserPath, ButtonElement, IconElement, ImageElement, FormElement, GridElement, ProgressElement, NavigationElement };
 
 export type TextElement = {
     id: string;
@@ -181,7 +182,8 @@ export type CanvasElement =
     | ImageElement
     | FormElement
     | GridElement
-    | ProgressElement;
+    | ProgressElement
+    | NavigationElement;
 
 export type PencilSettings = {
     strokeWidth: number;

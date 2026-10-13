@@ -1,17 +1,22 @@
 "use client";
 
 import React from "react";
-import type { ImageElement } from "../../../types/image";
 
-type ImageTransformSectionProps = {
-    element: ImageElement;
-    updateElement: (updates: Partial<ImageElement>) => void;
+type TransformElement = {
+    size: number;
+    rotation: number;
+    opacity: number;
 };
 
-export default function ImageTransformSection({
+type ImageTransformSectionProps<TElement extends TransformElement> = {
+    element: TElement;
+    updateElement: (updates: Partial<TElement>) => void;
+};
+
+export default function ImageTransformSection<TElement extends TransformElement>({
     element,
     updateElement,
-}: ImageTransformSectionProps) {
+}: ImageTransformSectionProps<TElement>) {
     return (
         <div className="space-y-3 rounded-lg border border-gray-800 bg-gray-900/50 p-3 w-full min-w-0 max-w-full overflow-hidden">
             <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -33,7 +38,7 @@ export default function ImageTransformSection({
                     step={1}
                     value={element.size ?? 100}
                     onChange={(e) =>
-                        updateElement({ size: Number(e.target.value) })
+                        updateElement({ size: Number(e.target.value) } as Partial<TElement>)
                     }
                     className="w-full cursor-pointer accent-blue-500"
                 />
@@ -48,7 +53,7 @@ export default function ImageTransformSection({
                         {element.rotation !== 0 && (
                             <button
                                 type="button"
-                                onClick={() => updateElement({ rotation: 0 })}
+                                onClick={() => updateElement({ rotation: 0 } as Partial<TElement>)}
                                 className="text-[10px] text-blue-400 hover:underline"
                             >
                                 Reset
@@ -63,7 +68,7 @@ export default function ImageTransformSection({
                     step={1}
                     value={element.rotation ?? 0}
                     onChange={(e) =>
-                        updateElement({ rotation: Number(e.target.value) })
+                        updateElement({ rotation: Number(e.target.value) } as Partial<TElement>)
                     }
                     className="w-full cursor-pointer accent-blue-500"
                 />
@@ -84,7 +89,7 @@ export default function ImageTransformSection({
                     step={0.01}
                     value={element.opacity ?? 1}
                     onChange={(e) =>
-                        updateElement({ opacity: Number(e.target.value) })
+                        updateElement({ opacity: Number(e.target.value) } as Partial<TElement>)
                     }
                     className="w-full cursor-pointer accent-blue-500"
                 />

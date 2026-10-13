@@ -17,6 +17,7 @@ import {
     CanvasFormElement,
     CanvasGridElement,
     CanvasProgressElement,
+    CanvasNavigationElement,
 } from "./elements";
 
 import type {
@@ -63,6 +64,7 @@ type DesignCanvasProps = {
     backgroundSettings?: DashboardBackgroundSettings;
     onSelectBackground?: () => void;
     onFillDashboard: (color: string) => void;
+    onNavigateCanvas: (canvasId: string) => void;
 };
 
 export default function DesignCanvas({
@@ -81,6 +83,7 @@ export default function DesignCanvas({
     backgroundSettings,
     onSelectBackground,
     onFillDashboard,
+    onNavigateCanvas,
 }: DesignCanvasProps) {
     const designAreaRef = useRef<HTMLDivElement | null>(null);
         const [canvasSize, setCanvasSize] = useState({ width: 1200, height: 1120 });
@@ -197,6 +200,7 @@ export default function DesignCanvas({
                                 el.type === "form" ||
                                 el.type === "grid" ||
                                 el.type === "progress"
+                                || el.type === "navigation"
                                     ? el.size
                                     : 100,
                         },
@@ -762,6 +766,20 @@ export default function DesignCanvas({
                                     handlePointerDown={handlePointerDown}
                                     deleteElement={deleteElement}
                                     updateElement={updateElement}
+                                />
+                            );
+                        }
+
+                        if (element.type === "navigation") {
+                            return (
+                                <CanvasNavigationElement
+                                    key={element.id}
+                                    element={element}
+                                    isSelected={isSelected}
+                                    isEraserMode={isEraserMode}
+                                    handlePointerDown={handlePointerDown}
+                                    deleteElement={deleteElement}
+                                    onNavigateCanvas={onNavigateCanvas}
                                 />
                             );
                         }

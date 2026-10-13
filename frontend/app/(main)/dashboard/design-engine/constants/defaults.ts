@@ -13,6 +13,7 @@ import type {
     FormElement,
     GridElement,
     ProgressElement,
+    NavigationElement,
 } from "../types";
 
 export const DEFAULT_PENCIL_SETTINGS: PencilSettings = {
@@ -299,6 +300,41 @@ export function createButtonElement(serialNumber: number): ButtonElement {
         size: 100,
         rotation: 0,
         opacity: 1,
+    };
+}
+
+export function createNavigationElement(
+    serialNumber: number,
+    canvases: { id: string; name: string }[]
+): NavigationElement {
+    return {
+        id: crypto.randomUUID(),
+        type: "navigation",
+        serialNumber,
+        x: 120,
+        y: 120,
+        links: canvases.map((canvas) => ({
+            id: crypto.randomUUID(),
+            label: canvas.name,
+            href: "",
+            canvasId: canvas.id,
+        })),
+        backgroundColor: "#007aff",
+        textColor: "#ffffff",
+        accentColor: "#007aff",
+        width: 520,
+        widthUnit: "px",
+        height: 78,
+        heightUnit: "px",
+        size: 100,
+        rotation: 0,
+        opacity: 1,
+        shadow: "none",
+        shadowColor: "#000000",
+        shadowBlur: 12,
+        shadowOffsetX: 0,
+        shadowOffsetY: 4,
+        shadowSpread: 0,
     };
 }
 

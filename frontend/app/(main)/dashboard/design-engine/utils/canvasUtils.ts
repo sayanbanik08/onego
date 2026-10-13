@@ -13,6 +13,7 @@ import type { ImageElement } from "../types/image";
 import type { FormElement } from "../types/form";
 import type { GridElement } from "../types/grid";
 import type { ProgressElement } from "../types/progress";
+import type { NavigationElement } from "../types/navigation";
 
 export function pointsToSvgPath(
     points: { x: number; y: number }[]
@@ -447,6 +448,20 @@ export function getElementDimensions(
             width,
             height,
             scale: (btn.size ?? 100) / 100 || 1,
+            origin: "top-left",
+        };
+    }
+
+    if (el.type === "navigation") {
+        const navigation = el as NavigationElement;
+        return {
+            width: navigation.widthUnit === "%"
+                ? ((canvasSize?.width ?? 1200) * (navigation.width ?? 520)) / 100
+                : navigation.width ?? 520,
+            height: navigation.heightUnit === "%"
+                ? ((canvasSize?.height ?? 1120) * (navigation.height ?? 78)) / 100
+                : navigation.height ?? 78,
+            scale: (navigation.size ?? 100) / 100 || 1,
             origin: "top-left",
         };
     }

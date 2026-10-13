@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { ImageElement } from "../../../../types/image";
-import { getImageShadow } from "./imageHelpers";
+import { getElementShadow } from "./imageHelpers";
 
 type ImageRendererProps = {
     element: ImageElement;
@@ -113,7 +113,7 @@ export function ImageRenderer({
         themeExtraShadow = "0 14px 28px -4px rgba(0, 0, 0, 0.28), 0 6px 12px -2px rgba(0, 0, 0, 0.16)";
     }
 
-    const baseShadow = getImageShadow(element);
+    const baseShadow = getElementShadow(element);
     const combinedShadow =
         baseShadow !== "none" && themeExtraShadow
             ? `${baseShadow}, ${themeExtraShadow}`

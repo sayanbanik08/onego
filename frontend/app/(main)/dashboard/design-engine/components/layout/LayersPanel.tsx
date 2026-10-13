@@ -97,11 +97,13 @@ export default function LayersPanel({
                                     const isSelected =
                                         selectedElementId ===
                                         element.id;
+                                    const isBaseLayer =
+                                        element.type === "navigation";
 
                                     return (
                                         <div
                                             key={element.id}
-                                            draggable
+                                            draggable={!isBaseLayer}
                                             onDragStart={(event) =>
                                                 handleDragStart(
                                                     event,
@@ -120,20 +122,22 @@ export default function LayersPanel({
                                                     element.id
                                                 )
                                             }
-                                            className={`flex cursor-grab items-center rounded-md px-2 py-2 text-sm transition active:cursor-grabbing ${isSelected
+                                            className={`flex ${isBaseLayer ? "cursor-default" : "cursor-grab active:cursor-grabbing"} items-center rounded-md px-2 py-2 text-sm transition ${isSelected
                                                     ? "bg-neutral-800 text-white"
                                                     : "text-neutral-400 hover:bg-neutral-900 hover:text-white"
                                                 }`}
                                         >
-                                            <GripVertical
-                                                size={15}
-                                                className="mr-2 shrink-0 text-neutral-500"
-                                            />
+                                            {!isBaseLayer && (
+                                                <GripVertical
+                                                    size={15}
+                                                    className="mr-2 shrink-0 text-neutral-500"
+                                                />
+                                            )}
 
                                             <div className="min-w-0">
                                                 <div className="truncate font-medium">
                                                     Element{" "}
-                                                    {element.serialNumber}
+                                                    {isBaseLayer ? 0 : element.serialNumber}
                                                 </div>
 
                                                 <div className="text-xs text-neutral-500">

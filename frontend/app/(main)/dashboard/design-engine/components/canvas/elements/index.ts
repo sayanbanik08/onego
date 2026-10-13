@@ -12,3 +12,4 @@ export { CanvasFormElement } from "./form";
 export { CanvasGridElement } from "./grid";
 export { CanvasProgressElement } from "./progress";
 export { CanvasDashboardBackground } from "./dashboard-background";
+export { CanvasNavigationElement } from "./navigation";
