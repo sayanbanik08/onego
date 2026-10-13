@@ -6,15 +6,17 @@ import type {
     DrawElement,
     EraserSettings,
 } from "../../../../types/elements";
+import type { ButtonShadowPreset } from "../../../../types/button";
 import {
     pointsToSvgPath,
-    canvasPointsToElementLocal,
+    canvasPointsToDrawLocal,
 } from "../../../../utils/canvasUtils";
 
 type CanvasDrawElementProps = {
     element: DrawElement;
     isSelected: boolean;
     isEraserMode: boolean;
+    isFillMode: boolean;
     isErasing: boolean;
     currentEraserPoints: { x: number; y: number }[] | null;
     eraserSettings: EraserSettings;
@@ -22,41 +24,116 @@ type CanvasDrawElementProps = {
         event: ReactPointerEvent,
         element: CanvasElement
     ) => void;
+    onFill: (event: ReactPointerEvent, element: DrawElement) => void;
     deleteElement: (id: string) => void;
 };
+
+type DrawShadowLayer = {
+    color: string;
+    opacity: number;
+    blur: number;
+    offsetX: number;
+    offsetY: number;
+    spread: number;
+};
+
+function getDrawShadowLayers(element: DrawElement): DrawShadowLayer[] {
+    const preset: ButtonShadowPreset = element.shadow ?? "none";
+    const black = "#000000";
+
+    if (preset === "none") return [];
+    if (preset === "sm") {
+        return [{ color: black, opacity: 0.25, blur: 6, offsetX: 0, offsetY: 2, spread: 0 }];
+    }
+    if (preset === "md") {
+        return [{ color: black, opacity: 0.35, blur: 16, offsetX: 0, offsetY: 6, spread: 0 }];
+    }
+    if (preset === "lg") {
+        return [{ color: black, opacity: 0.45, blur: 28, offsetX: 0, offsetY: 12, spread: 0 }];
+    }
+    if (preset === "xl") {
+        return [{ color: black, opacity: 0.55, blur: 48, offsetX: 0, offsetY: 20, spread: 0 }];
+    }
+    if (preset === "neon") {
+        return [
+            { color: element.color, opacity: 0.67, blur: 16, offsetX: 0, offsetY: 0, spread: 0 },
+            { color: element.color, opacity: 0.33, blur: 32, offsetX: 0, offsetY: 0, spread: 0 },
+        ];
+    }
+    if (preset === "3d-offset") {
+        return [{ color: black, opacity: 0.85, blur: 0, offsetX: 4, offsetY: 4, spread: 0 }];
+    }
+    if (preset === "layered-steps") {
+        return Array.from({ length: 7 }, (_, index) => ({
+            color: "#ffffff",
+            opacity: 0.9 - index * 0.12,
+            blur: 0,
+            offsetX: (index + 1) * 2,
+            offsetY: (index + 1) * 2,
+            spread: 0,
+        }));
+    }
+
+    return [
+        {
+            color: element.shadowColor ?? black,
+            opacity: 0.35,
+            blur: element.shadowBlur ?? 12,
+            offsetX: element.shadowOffsetX ?? 0,
+            offsetY: element.shadowOffsetY ?? 4,
+            spread: element.shadowSpread ?? 0,
+        },
+    ];
+}
 
 export function CanvasDrawElement({
     element,
     isSelected,
     isEraserMode,
+    isFillMode,
     isErasing,
     currentEraserPoints,
     eraserSettings,
     handlePointerDown,
+    onFill,
     deleteElement,
 }: CanvasDrawElementProps) {
     const liveDrawEraserPath =
         isEraserMode && isErasing && currentEraserPoints
             ? pointsToSvgPath(
-                  canvasPointsToElementLocal(currentEraserPoints, {
-                      x: element.x,
-                      y: element.y,
-                      width: element.width,
-                      height: element.height,
-                      rotation: element.rotation,
-                      size: element.size,
-                  })
+                  canvasPointsToDrawLocal(currentEraserPoints, element)
               )
             : null;
+    const shadowLayers = getDrawShadowLayers(element);
+    const shadowPadding = shadowLayers.reduce(
+        (padding, layer) =>
+            Math.max(
+                padding,
+                Math.abs(layer.offsetX) + layer.blur * 2 + Math.abs(layer.spread) + 8,
+                Math.abs(layer.offsetY) + layer.blur * 2 + Math.abs(layer.spread) + 8
+            ),
+        0
+    );
+    const pathWidth = element.pathWidth ?? element.width;
+    const pathHeight = element.pathHeight ?? element.height;
 
     return (
         <div
             key={element.id}
             data-element-id={element.id}
-            onPointerDown={(event) => handlePointerDown(event, element)}
+            onPointerDown={(event) => {
+                if (isFillMode) {
+                    event.stopPropagation();
+                    if (event.button === 0) onFill(event, element);
+                    return;
+                }
+                handlePointerDown(event, element);
+            }}
             className={`absolute select-none ${
                 isEraserMode
                     ? "pointer-events-none cursor-none"
+                    : isFillMode
+                    ? "cursor-crosshair"
                     : isSelected
                     ? "cursor-move outline outline-2 outline-blue-500"
                     : "cursor-move"
@@ -94,9 +171,63 @@ export function CanvasDrawElement({
             {/* SVG Drawing with Eraser Mask */}
             <svg
                 className="pointer-events-none h-full w-full overflow-visible"
-                viewBox={`0 0 ${element.width} ${element.height}`}
+                viewBox={`0 0 ${pathWidth} ${pathHeight}`}
+                preserveAspectRatio="none"
             >
                 <defs>
+                    {shadowLayers.length > 0 && (
+                        <filter
+                            id={`draw-shadow-${element.id}`}
+                            filterUnits="userSpaceOnUse"
+                            x={-shadowPadding}
+                            y={-shadowPadding}
+                            width={pathWidth + shadowPadding * 2}
+                            height={pathHeight + shadowPadding * 2}
+                            colorInterpolationFilters="sRGB"
+                        >
+                            {shadowLayers.map((layer, index) => (
+                                <React.Fragment key={index}>
+                                    <feMorphology
+                                        in="SourceAlpha"
+                                        operator={layer.spread < 0 ? "erode" : "dilate"}
+                                        radius={Math.abs(layer.spread)}
+                                        result={`shadow-shape-${index}`}
+                                    />
+                                    <feGaussianBlur
+                                        in={`shadow-shape-${index}`}
+                                        stdDeviation={layer.blur / 2}
+                                        result={`shadow-blur-${index}`}
+                                    />
+                                    <feOffset
+                                        in={`shadow-blur-${index}`}
+                                        dx={layer.offsetX}
+                                        dy={layer.offsetY}
+                                        result={`shadow-offset-${index}`}
+                                    />
+                                    <feFlood
+                                        floodColor={layer.color}
+                                        floodOpacity={layer.opacity}
+                                        result={`shadow-color-${index}`}
+                                    />
+                                    <feComposite
+                                        in={`shadow-color-${index}`}
+                                        in2={`shadow-offset-${index}`}
+                                        operator="in"
+                                        result={`shadow-layer-${index}`}
+                                    />
+                                </React.Fragment>
+                            ))}
+                            <feMerge>
+                                {shadowLayers.map((_, index) => (
+                                    <feMergeNode
+                                        key={index}
+                                        in={`shadow-layer-${index}`}
+                                    />
+                                ))}
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    )}
                     <mask
                         id={`eraser-mask-${element.id}`}
                         maskUnits="userSpaceOnUse"
@@ -126,7 +257,11 @@ export function CanvasDrawElement({
                                 stroke="black"
                                 strokeWidth={
                                     eraserSettings.size /
-                                    ((element.size ?? 100) / 100 || 1)
+                                    ((element.size ?? 100) / 100 || 1) /
+                                    Math.sqrt(
+                                        (element.width / (element.pathWidth ?? element.width)) *
+                                            (element.height / (element.pathHeight ?? element.height))
+                                    )
                                 }
                                 strokeOpacity={eraserSettings.opacity}
                                 strokeLinecap="round"
@@ -136,7 +271,25 @@ export function CanvasDrawElement({
                         )}
                     </mask>
                 </defs>
-                <g mask={`url(#eraser-mask-${element.id})`}>
+                <g
+                    mask={`url(#eraser-mask-${element.id})`}
+                    filter={
+                        shadowLayers.length > 0
+                            ? `url(#draw-shadow-${element.id})`
+                            : undefined
+                    }
+                >
+                    {element.fillLayers?.map((fillLayer, index) => (
+                        <image
+                            key={index}
+                            href={fillLayer}
+                            x="0"
+                            y="0"
+                            width={pathWidth}
+                            height={pathHeight}
+                            preserveAspectRatio="none"
+                        />
+                    ))}
                     <path
                         d={element.pathData}
                         fill="none"

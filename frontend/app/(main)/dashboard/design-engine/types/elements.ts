@@ -1,6 +1,6 @@
 import type { CardElement } from "./card";
 import type { TimelineElement } from "./timeline";
-import type { ButtonElement } from "./button";
+import type { ButtonElement, ButtonShadowPreset } from "./button";
 import type { IconElement } from "./icon";
 import type { ImageElement } from "./image";
 import type { FormElement } from "./form";
@@ -28,6 +28,17 @@ export type TextElement = {
     eraserPaths?: EraserPath[];
 };
 
+export type DrawShapeCategory =
+    | "lines"
+    | "basic"
+    | "polygons"
+    | "stars"
+    | "arrows"
+    | "callouts"
+    | "symbols";
+
+export type DrawShapeType = string;
+
 export type DrawElement = {
     id: string;
     type: "draw";
@@ -36,6 +47,8 @@ export type DrawElement = {
     y: number;
     width: number;
     height: number;
+    pathWidth?: number;
+    pathHeight?: number;
     pathData: string;
     strokeWidth: number;
     opacity: number;
@@ -43,6 +56,16 @@ export type DrawElement = {
     rotation: number;
     size?: number;
     eraserPaths?: EraserPath[];
+    fillColor?: string;
+    fillLayers?: string[];
+    shadow?: ButtonShadowPreset;
+    shadowColor?: string;
+    shadowBlur?: number;
+    shadowOffsetX?: number;
+    shadowOffsetY?: number;
+    shadowSpread?: number;
+    shapeType?: DrawShapeType;
+    shapeClosed?: boolean;
 };
 
 export type TablePreset =
@@ -164,6 +187,15 @@ export type PencilSettings = {
     strokeWidth: number;
     opacity: number;
     color: string;
+    fillColor?: string;
+    widthScale?: number;
+    heightScale?: number;
+    shadow?: ButtonShadowPreset;
+    shadowColor?: string;
+    shadowBlur?: number;
+    shadowOffsetX?: number;
+    shadowOffsetY?: number;
+    shadowSpread?: number;
     rotation?: number;
     size?: number;
 };

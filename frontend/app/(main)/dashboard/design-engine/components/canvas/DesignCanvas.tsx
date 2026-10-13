@@ -31,6 +31,8 @@ import type {
 
 import {
     pointsToSvgPath,
+    createDrawFillLayer,
+    canvasPointsToDrawLocal,
     canvasPointsToElementLocal,
     doesStrokeIntersectElement,
     getElementDimensions,
@@ -57,8 +59,10 @@ type DesignCanvasProps = {
     onAddDrawElement: (element: DrawElement) => void;
     isEraserMode: boolean;
     eraserSettings: EraserSettings;
+    isFillMode: boolean;
     backgroundSettings?: DashboardBackgroundSettings;
     onSelectBackground?: () => void;
+    onFillDashboard: (color: string) => void;
 };
 
 export default function DesignCanvas({
@@ -73,8 +77,10 @@ export default function DesignCanvas({
     onAddDrawElement,
     isEraserMode,
     eraserSettings,
+    isFillMode,
     backgroundSettings,
     onSelectBackground,
+    onFillDashboard,
 }: DesignCanvasProps) {
     const designAreaRef = useRef<HTMLDivElement | null>(null);
         const [canvasSize, setCanvasSize] = useState({ width: 1200, height: 1120 });
@@ -196,6 +202,17 @@ export default function DesignCanvas({
                         },
                         origin
                     );
+                    const pathPoints =
+                        el.type === "draw"
+                            ? canvasPointsToDrawLocal(points, el)
+                            : localPoints;
+                    const intrinsicScale =
+                        el.type === "draw"
+                            ? Math.sqrt(
+                                  (el.width / (el.pathWidth ?? el.width)) *
+                                      (el.height / (el.pathHeight ?? el.height))
+                              )
+                            : 1;
 
                     if (
                         doesStrokeIntersectElement(
@@ -205,10 +222,11 @@ export default function DesignCanvas({
                             eraserRadiusLocal
                         )
                     ) {
-                        const localPathData = pointsToSvgPath(localPoints);
+                        const localPathData = pointsToSvgPath(pathPoints);
                         const newEraserPath: EraserPath = {
                             d: localPathData,
-                            strokeWidth: eraserSettings.size / scale,
+                            strokeWidth:
+                                eraserSettings.size / scale / intrinsicScale,
                             opacity: eraserSettings.opacity,
                         };
                         const existingPaths = el.eraserPaths || [];
@@ -278,6 +296,137 @@ export default function DesignCanvas({
         window.addEventListener("pointerup", handlePointerUp);
     };
 
+    const handleFillDrawElement = (
+        event: ReactPointerEvent,
+        element: DrawElement
+    ) => {
+        const rect = designAreaRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const canvasPoint = {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top,
+        };
+        const drawBoundaries = elements.filter(
+            (candidate): candidate is DrawElement => candidate.type === "draw"
+        );
+        const selectedDraw = drawBoundaries.find(
+            (candidate) => candidate.id === selectedElementId
+        );
+        const fillColor =
+            selectedDraw?.fillColor ?? element.fillColor ?? "#ff0000";
+        let openRegion: {
+            element: DrawElement;
+            fill: { dataUrl: string; reachesBounds: boolean };
+        } | null = null;
+
+        const candidatesInDrawOrder = [...drawBoundaries].reverse();
+        const enclosedTargets = candidatesInDrawOrder
+            .flatMap((candidate) => {
+                const [localPoint] = canvasPointsToDrawLocal(
+                    [canvasPoint],
+                    candidate
+                );
+                const isolatedFill = createDrawFillLayer(
+                    candidate,
+                    localPoint,
+                    fillColor,
+                    [candidate]
+                );
+                if (!isolatedFill || isolatedFill.reachesBounds) return [];
+
+                return [{
+                    candidate,
+                    localPoint,
+                    area:
+                        candidate.width *
+                        candidate.height *
+                        ((candidate.size ?? 100) / 100) ** 2,
+                }];
+            })
+            .sort((a, b) => a.area - b.area);
+        const fillTargets = enclosedTargets.length > 0
+            ? enclosedTargets
+            : candidatesInDrawOrder.map((candidate) => {
+                  const [localPoint] = canvasPointsToDrawLocal(
+                      [canvasPoint],
+                      candidate
+                  );
+                  return { candidate, localPoint };
+              });
+
+        for (const { candidate, localPoint } of fillTargets) {
+            const fillResult = createDrawFillLayer(
+                candidate,
+                localPoint,
+                fillColor,
+                drawBoundaries
+            );
+            if (!fillResult) continue;
+
+            if (fillResult.reachesBounds) {
+                openRegion ??= { element: candidate, fill: fillResult };
+                continue;
+            }
+
+            setSelectedElementId(candidate.id);
+            updateElement(candidate.id, {
+                fillLayers: [
+                    ...(candidate.fillLayers ?? []),
+                    fillResult.dataUrl,
+                ],
+            });
+            return;
+        }
+
+        if (openRegion) {
+            const elementArea =
+                openRegion.element.width *
+                openRegion.element.height *
+                ((openRegion.element.size ?? 100) / 100) ** 2;
+            const parentCandidates = [...drawBoundaries]
+                .filter(
+                    (candidate) =>
+                        candidate.id !== openRegion?.element.id &&
+                        candidate.width *
+                            candidate.height *
+                            ((candidate.size ?? 100) / 100) ** 2 >
+                            elementArea
+                )
+                .sort(
+                    (a, b) =>
+                        a.width * a.height * ((a.size ?? 100) / 100) ** 2 -
+                        b.width * b.height * ((b.size ?? 100) / 100) ** 2
+                );
+
+            for (const parent of parentCandidates) {
+                const [parentLocalPoint] = canvasPointsToDrawLocal(
+                    [canvasPoint],
+                    parent
+                );
+                const parentFill = createDrawFillLayer(
+                    parent,
+                    parentLocalPoint,
+                    fillColor,
+                    drawBoundaries
+                );
+                if (parentFill && !parentFill.reachesBounds) {
+                    setSelectedElementId(parent.id);
+                    updateElement(parent.id, {
+                        fillLayers: [
+                            ...(parent.fillLayers ?? []),
+                            parentFill.dataUrl,
+                        ],
+                    });
+                    return;
+                }
+            }
+
+            onFillDashboard(fillColor);
+            updateElement(openRegion.element.id, { fillLayers: [] });
+        }
+    };
+
     // ── Freehand draw on canvas ──
     const handleDrawPointerDown = (
         event: ReactPointerEvent<HTMLDivElement>
@@ -332,8 +481,18 @@ export default function DesignCanvas({
                 const pad = Math.max(12, pencilSettings.strokeWidth);
                 const elementX = Math.max(0, Math.round(minX - pad));
                 const elementY = Math.max(0, Math.round(minY - pad));
-                const width = Math.max(24, Math.round(maxX - minX + pad * 2));
-                const height = Math.max(24, Math.round(maxY - minY + pad * 2));
+                const pathWidth = Math.max(24, Math.round(maxX - minX + pad * 2));
+                const pathHeight = Math.max(24, Math.round(maxY - minY + pad * 2));
+                const width = Math.max(
+                    24,
+                    Math.round(pathWidth * ((pencilSettings.widthScale ?? 100) / 100))
+                );
+                const height = Math.max(
+                    24,
+                    Math.round(pathHeight * ((pencilSettings.heightScale ?? 100) / 100))
+                );
+                const x = Math.max(0, elementX + Math.round((pathWidth - width) / 2));
+                const y = Math.max(0, elementY + Math.round((pathHeight - height) / 2));
 
                 const relativePoints = points.map((p) => ({
                     x: p.x - elementX,
@@ -346,16 +505,25 @@ export default function DesignCanvas({
                     id: crypto.randomUUID(),
                     type: "draw",
                     serialNumber: elements.length + 1,
-                    x: elementX,
-                    y: elementY,
+                    x,
+                    y,
                     width,
                     height,
+                    pathWidth,
+                    pathHeight,
                     pathData,
                     strokeWidth: pencilSettings.strokeWidth,
                     opacity: pencilSettings.opacity,
                     color: pencilSettings.color,
+                    fillColor: pencilSettings.fillColor ?? "#ff0000",
                     rotation: pencilSettings.rotation ?? 0,
                     size: pencilSettings.size ?? 100,
+                    shadow: pencilSettings.shadow ?? "none",
+                    shadowColor: pencilSettings.shadowColor ?? "#000000",
+                    shadowBlur: pencilSettings.shadowBlur ?? 12,
+                    shadowOffsetX: pencilSettings.shadowOffsetX ?? 0,
+                    shadowOffsetY: pencilSettings.shadowOffsetY ?? 4,
+                    shadowSpread: pencilSettings.shadowSpread ?? 0,
                 };
 
                 onAddDrawElement(newDrawElement);
@@ -496,10 +664,12 @@ export default function DesignCanvas({
                                     element={element}
                                     isSelected={isSelected}
                                     isEraserMode={isEraserMode}
+                                    isFillMode={isFillMode}
                                     isErasing={isErasing}
                                     currentEraserPoints={currentEraserPoints}
                                     eraserSettings={eraserSettings}
                                     handlePointerDown={handlePointerDown}
+                                    onFill={handleFillDrawElement}
                                     deleteElement={deleteElement}
                                 />
                             );

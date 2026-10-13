@@ -25,6 +25,7 @@ import type {
     CanvasElement,
     TextElement,
     DrawElement,
+    DrawShapeType,
     TableElement,
     ClockElement,
     PencilSettings,
@@ -57,6 +58,9 @@ type PropertiesPanelProps = {
     updateElement: (id: string, updates: Partial<CanvasElement>) => void;
 
     isDrawMode: boolean;
+    isFillMode: boolean;
+    onToggleFillMode: () => void;
+    onAddShape: (shape: DrawShapeType) => void;
     pencilSettings: PencilSettings;
     updatePencilSettings: (updates: Partial<PencilSettings>) => void;
     elementsCount?: number;
@@ -82,6 +86,9 @@ export default function PropertiesPanel({
     selectedElement,
     updateElement,
     isDrawMode,
+    isFillMode,
+    onToggleFillMode,
+    onAddShape,
     pencilSettings,
     updatePencilSettings,
     elementsCount = 0,
@@ -156,6 +163,7 @@ export default function PropertiesPanel({
                     elementsCount={elementsCount}
                     pencilSettings={pencilSettings}
                     updatePencilSettings={updatePencilSettings}
+                    onAddShape={onAddShape}
                 />
             );
         }
@@ -166,6 +174,9 @@ export default function PropertiesPanel({
                     element={selectedElement as DrawElement}
                     updateElement={updateElement as (id: string, u: Partial<DrawElement>) => void}
                     updatePencilSettings={updatePencilSettings}
+                    isFillMode={isFillMode}
+                    onToggleFillMode={onToggleFillMode}
+                    onAddShape={onAddShape}
                 />
             );
         }

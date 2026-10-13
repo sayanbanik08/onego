@@ -13,6 +13,7 @@ export type {
     EraserPath,
     TextElement,
     DrawElement,
+    DrawShapeType,
     TablePreset,
     TableElement,
     ClockDesign,
@@ -25,6 +26,10 @@ export type {
     BackgroundType,
     DashboardBackgroundSettings,
 } from "./types";
+import {
+    createDrawShapePath,
+    isClosedDrawShape,
+} from "./utils/drawShapes";
 export type { TimelineElement } from "./types/timeline";
 export type { CardElement } from "./types/card";
 export type { ButtonElement } from "./types/button";
@@ -36,6 +41,7 @@ export type { ProgressElement } from "./types/progress";
 import type {
     CanvasElement,
     DrawElement,
+    DrawShapeType,
     PencilSettings,
     EraserSettings,
     DashboardBackgroundSettings,
@@ -85,6 +91,7 @@ export default function DesignEnginePage() {
     );
 
     const [isDrawMode, setIsDrawMode] = useState(false);
+    const [isFillMode, setIsFillMode] = useState(false);
     const [pencilSettings, setPencilSettings] =
         useState<PencilSettings>(DEFAULT_PENCIL_SETTINGS);
 
@@ -100,6 +107,7 @@ export default function DesignEnginePage() {
     const selectBackgroundMode = () => {
         setIsBackgroundMode(true);
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         setSelectedElementId(null);
     };
@@ -110,10 +118,17 @@ export default function DesignEnginePage() {
         setBackgroundSettings((prev) => ({ ...prev, ...updates }));
     };
 
+    const fillDashboard = (color: string) => {
+        updateBackgroundSettings({ type: "solid", color, showGridDots: false });
+    };
+
     const handleSelectElementId = (id: string | null) => {
         setSelectedElementId(id);
         if (id !== null) {
             setIsBackgroundMode(false);
+            if (elements.find((element) => element.id === id)?.type !== "draw") {
+                setIsFillMode(false);
+            }
         }
     };
 
@@ -121,6 +136,7 @@ export default function DesignEnginePage() {
         setIsDrawMode((prev) => {
             const next = !prev;
             if (next) {
+                setIsFillMode(false);
                 setIsEraserMode(false);
                 setIsBackgroundMode(false);
                 setSelectedElementId(null);
@@ -133,9 +149,22 @@ export default function DesignEnginePage() {
         setIsEraserMode((prev) => {
             const next = !prev;
             if (next) {
+                setIsFillMode(false);
                 setIsDrawMode(false);
                 setIsBackgroundMode(false);
                 setSelectedElementId(null);
+            }
+            return next;
+        });
+    };
+
+    const toggleFillMode = () => {
+        setIsFillMode((prev) => {
+            const next = !prev;
+            if (next) {
+                setIsDrawMode(false);
+                setIsEraserMode(false);
+                setIsBackgroundMode(false);
             }
             return next;
         });
@@ -151,6 +180,7 @@ export default function DesignEnginePage() {
 
     const addTextElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newTextElement = createTextElement(elements.length + 1);
         setElements((prev) => [...prev, newTextElement]);
@@ -162,8 +192,56 @@ export default function DesignEnginePage() {
         setSelectedElementId(newDrawElement.id);
     };
 
+    const addDrawShape = (shapeType: DrawShapeType) => {
+        const pathWidth = 180;
+        const pathHeight = 140;
+        const width = Math.max(
+            24,
+            Math.round(pathWidth * ((pencilSettings.widthScale ?? 100) / 100))
+        );
+        const height = Math.max(
+            24,
+            Math.round(pathHeight * ((pencilSettings.heightScale ?? 100) / 100))
+        );
+        const offset = (elements.length % 6) * 24;
+        const newShape: DrawElement = {
+            id: crypto.randomUUID(),
+            type: "draw",
+            serialNumber: elements.length + 1,
+            x: 100 + offset,
+            y: 120 + offset,
+            width,
+            height,
+            pathWidth,
+            pathHeight,
+            pathData: createDrawShapePath(shapeType, pathWidth, pathHeight),
+            strokeWidth: pencilSettings.strokeWidth,
+            opacity: pencilSettings.opacity,
+            color: pencilSettings.color,
+            fillColor: pencilSettings.fillColor ?? "#ff0000",
+            rotation: pencilSettings.rotation ?? 0,
+            size: pencilSettings.size ?? 100,
+            shadow: pencilSettings.shadow ?? "none",
+            shadowColor: pencilSettings.shadowColor ?? "#000000",
+            shadowBlur: pencilSettings.shadowBlur ?? 12,
+            shadowOffsetX: pencilSettings.shadowOffsetX ?? 0,
+            shadowOffsetY: pencilSettings.shadowOffsetY ?? 4,
+            shadowSpread: pencilSettings.shadowSpread ?? 0,
+            shapeType,
+            shapeClosed: isClosedDrawShape(shapeType),
+        };
+
+        setElements((prev) => [...prev, newShape]);
+        setSelectedElementId(newShape.id);
+        setIsDrawMode(false);
+        setIsFillMode(false);
+        setIsEraserMode(false);
+        setIsBackgroundMode(false);
+    };
+
     const addTableElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newTableElement = createTableElement(elements.length + 1);
         setElements((prev) => [...prev, newTableElement]);
@@ -172,6 +250,7 @@ export default function DesignEnginePage() {
 
     const addClockElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newClockElement = createClockElement(elements.length + 1);
         setElements((prev) => [...prev, newClockElement]);
@@ -180,6 +259,7 @@ export default function DesignEnginePage() {
 
     const addTimelineElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newTimelineElement = createTimelineElement(elements.length + 1);
         setElements((prev) => [...prev, newTimelineElement]);
@@ -188,6 +268,7 @@ export default function DesignEnginePage() {
 
     const addCardElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newCardElement = createCardElement(elements.length + 1);
         setElements((prev) => [...prev, newCardElement]);
@@ -196,6 +277,7 @@ export default function DesignEnginePage() {
 
     const addButtonElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newButtonElement = createButtonElement(elements.length + 1);
         setElements((prev) => [...prev, newButtonElement]);
@@ -204,6 +286,7 @@ export default function DesignEnginePage() {
 
     const addIconElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newIconElement = createIconElement(elements.length + 1);
         setElements((prev) => [...prev, newIconElement]);
@@ -212,6 +295,7 @@ export default function DesignEnginePage() {
 
     const addImageElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newImageElement = createImageElement(elements.length + 1);
         setElements((prev) => [...prev, newImageElement]);
@@ -220,6 +304,7 @@ export default function DesignEnginePage() {
 
     const addFormElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newFormElement = createFormElement(elements.length + 1);
         setElements((prev) => [...prev, newFormElement]);
@@ -228,6 +313,7 @@ export default function DesignEnginePage() {
 
     const addGridElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newGridElement = createGridElement(elements.length + 1);
         setElements((prev) => [...prev, newGridElement]);
@@ -236,6 +322,7 @@ export default function DesignEnginePage() {
 
     const addProgressElement = () => {
         setIsDrawMode(false);
+        setIsFillMode(false);
         setIsEraserMode(false);
         const newProgressElement = createProgressElement(elements.length + 1);
         setElements((prev) => [...prev, newProgressElement]);
@@ -369,8 +456,10 @@ export default function DesignEnginePage() {
                         onAddDrawElement={addDrawElement}
                         isEraserMode={isEraserMode}
                         eraserSettings={eraserSettings}
+                        isFillMode={isFillMode}
                         backgroundSettings={backgroundSettings}
                         onSelectBackground={selectBackgroundMode}
+                        onFillDashboard={fillDashboard}
                     />
 
                     {/* Bottom Layers Dock */}
@@ -397,6 +486,9 @@ export default function DesignEnginePage() {
                     selectedElement={selectedElement}
                     updateElement={updateElement}
                     isDrawMode={isDrawMode}
+                    isFillMode={isFillMode}
+                    onToggleFillMode={toggleFillMode}
+                    onAddShape={addDrawShape}
                     pencilSettings={pencilSettings}
                     updatePencilSettings={updatePencilSettings}
                     elementsCount={elements.length}
