@@ -54,7 +54,7 @@ public class AccountRequestHandler {
             // Clerk token validation result check.
             if (!requestState.isSignedIn()) {
                 System.out.println("Clerk token validation failed.");
-                // System.out.println("Reason: " + requestState.reason());
+                System.out.println("Reason: " + requestState.reason());
                 return """
                         {"status":"error","httpStatus":401,"message":"Invalid or expired authentication token"}
                         """;
