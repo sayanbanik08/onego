@@ -48,7 +48,9 @@ export default async function Dashboard() {
 
     // Agar backend se response ok nhi aata to login page pr bhej dena.
     if (!response.ok) {
-        redirect("/login");
+        throw new Error(
+            `Account API failed: ${response.status} ${response.statusText}`
+        );
     }
 
     // Java backend ka response object
