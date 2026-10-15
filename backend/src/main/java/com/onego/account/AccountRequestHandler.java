@@ -44,6 +44,7 @@ public class AccountRequestHandler {
             Map<String, List<String>> requestHeaders = Map.of(
                     "Authorization",
                     List.of(authorizationHeader));
+            System.out.println("Starting Clerk token validation...");
 
             RequestState requestState = AuthenticateRequest.authenticateRequest(
                     requestHeaders,
@@ -51,6 +52,7 @@ public class AccountRequestHandler {
                             .secretKey(DatabaseConnection.getEnv("CLERK_SECRET_KEY"))
                             .authorizedParty(DatabaseConnection.getEnv("FRONTEND_URL"))
                             .build());
+            System.out.println("Clerk validation call completed.");
 
             // Clerk token validation result check.
             if (!requestState.isSignedIn()) {
