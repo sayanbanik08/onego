@@ -1,5 +1,5 @@
 import React from "react";
-import type { IconElement } from "../../../../types/icon";
+import type { IconElement } from "../../../../types/icon-types";
 
 export type SocialIconDef = {
     id: string;

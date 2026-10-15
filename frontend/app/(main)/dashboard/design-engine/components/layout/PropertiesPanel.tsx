@@ -11,7 +11,7 @@ import type { CardElement } from "../../types/card";
 import CardProperties from "../properties/card/CardProperties";
 import type { ButtonElement } from "../../types/button";
 import ButtonProperties from "../properties/button/ButtonProperties";
-import type { IconElement } from "../../types/icon";
+import type { IconElement } from "../../types/icon-types";
 import IconProperties from "../properties/icon/IconProperties";
 import type { ImageElement } from "../../types/image";
 import ImageProperties from "../properties/image/ImageProperties";

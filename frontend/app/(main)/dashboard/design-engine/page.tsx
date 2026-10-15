@@ -35,7 +35,7 @@ import {
 export type { TimelineElement } from "./types/timeline";
 export type { CardElement } from "./types/card";
 export type { ButtonElement } from "./types/button";
-export type { IconElement } from "./types/icon";
+export type { IconElement } from "./types/icon-types";
 export type { ImageElement } from "./types/image";
 export type { GridElement } from "./types/grid";
 export type { ProgressElement } from "./types/progress";

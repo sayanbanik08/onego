@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { IconElement } from "../../../../types/icon";
+import type { IconElement } from "../../../../types/icon-types";
 import {
     SOCIAL_MEDIA_ICONS,
     AVATAR_ICONS,

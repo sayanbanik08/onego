@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Share2, UserCircle2, Smile, UploadCloud } from "lucide-react";
-import type { IconElement, IconType } from "../../../types/icon";
+import type { IconElement, IconType } from "../../../types/icon-types";
 
 type IconTypeSectionProps = {
     element: IconElement;

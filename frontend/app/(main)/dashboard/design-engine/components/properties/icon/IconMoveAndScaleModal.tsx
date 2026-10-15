@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
-import type { IconCustomCrop } from "../../../types/icon";
+import type { IconCustomCrop } from "../../../types/icon-types";
 
 type IconMoveAndScaleModalProps = {
     isOpen: boolean;

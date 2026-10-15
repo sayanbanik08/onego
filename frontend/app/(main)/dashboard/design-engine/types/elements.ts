@@ -1,7 +1,7 @@
 import type { CardElement } from "./card";
 import type { TimelineElement } from "./timeline";
 import type { ButtonElement, ButtonShadowPreset } from "./button";
-import type { IconElement } from "./icon";
+import type { IconElement } from "./icon-types";
 import type { ImageElement } from "./image";
 import type { FormElement } from "./form";
 import type { GridElement } from "./grid";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { IconElement, IconTheme } from "../../../types/icon";
+import type { IconElement, IconTheme } from "../../../types/icon-types";
 
 type IconThemesSectionProps = {
     element: IconElement;

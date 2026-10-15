@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Link2, ExternalLink, AlertCircle, CheckCircle2 } from "lucide-react";
-import type { IconElement } from "../../../types/icon";
+import type { IconElement } from "../../../types/icon-types";
 
 type IconLinkSectionProps = {
     element: IconElement;

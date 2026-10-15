@@ -7,7 +7,7 @@ import type {
     CanvasElement,
     EraserSettings,
 } from "../../../../types/elements";
-import type { IconElement } from "../../../../types/icon";
+import type { IconElement } from "../../../../types/icon-types";
 import IconRenderer from "./IconRenderer";
 import { handleIconRedirect } from "./iconLibraries";
 import {

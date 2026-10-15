@@ -9,7 +9,7 @@ import {
     Sparkles,
     Trash2,
 } from "lucide-react";
-import type { IconElement, IconCustomCrop } from "../../../types/icon";
+import type { IconElement, IconCustomCrop } from "../../../types/icon-types";
 import {
     SOCIAL_MEDIA_ICONS,
     AVATAR_ICONS,
