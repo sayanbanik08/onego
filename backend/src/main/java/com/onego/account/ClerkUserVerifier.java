@@ -60,8 +60,8 @@ public class ClerkUserVerifier {
 
         } catch (Exception e) {
 
-            System.out.println(
-                    "Clerk user verification error: " + e.getMessage());
+            System.err.println(
+                "Clerk user verification error type: " + e.getClass().getSimpleName());
 
             return false;
         }

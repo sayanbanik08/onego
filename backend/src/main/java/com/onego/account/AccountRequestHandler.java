@@ -57,7 +57,6 @@ public class AccountRequestHandler {
             // Clerk token validation result check.
             if (!requestState.isSignedIn()) {
                 System.out.println("Clerk token validation failed.");
-                System.out.println("Reason: " + requestState.reason());
                 return """
                         {"status":"error","httpStatus":401,"message":"Invalid or expired authentication token"}
                         """;
@@ -69,6 +68,7 @@ public class AccountRequestHandler {
             Optional<Claims> claims = requestState.claims();
 
             if (claims.isEmpty()) {
+                System.out.println("Clerk token has no authentication claims.");
                 return """
                         {"status":"error","httpStatus":401,"message":"Authentication claims not found"}
                         """;
@@ -77,7 +77,7 @@ public class AccountRequestHandler {
             verifiedClerkUserId = claims.get().getSubject();
 
         } catch (Exception e) {
-            System.out.println("Clerk token validation error: " + e.getMessage());
+            System.err.println("Clerk token validation error type: " + e.getClass().getSimpleName());
             return """
                     {"status":"error","httpStatus":401,"message":"Authentication failed"}
                     """;
@@ -87,6 +87,7 @@ public class AccountRequestHandler {
         try {
             jsonObject = JsonParser.parseString(json).getAsJsonObject();
         } catch (Exception e) {
+            System.out.println("Account request JSON parsing failed.");
             return """
                     {"status":"error","httpStatus":400,"message":"Invalid JSON"}
                     """;
@@ -97,6 +98,7 @@ public class AccountRequestHandler {
         String fullName = getStringValue(jsonObject, "fullName");
         String emailId = getStringValue(jsonObject, "emailId");
         String provider = getNullableStringValue(jsonObject, "provider");
+        System.out.println("Account request parsed; providerPresent=" + (provider != null && !provider.isBlank()));
 
         if (clerkUserId == null || clerkUserId.isBlank()) {
             return """
@@ -128,21 +130,24 @@ public class AccountRequestHandler {
                     """;
         }
 
+        System.out.println("Starting Clerk account data verification.");
         boolean userDataVerified = clerkUserVerifier.verify(
                 clerkUserId,
                 photo,
                 fullName,
                 emailId,
                 provider);
-        // System.out.println("Clerk user data verification: " + userDataVerified);
 
         if (!userDataVerified) {
+            System.out.println("Clerk account data verification failed.");
             return """
                     {"status":"error","httpStatus":403,"message":"User data verification failed"}
                     """;
         }
+        System.out.println("Clerk account data verification succeeded.");
 
         try {
+            System.out.println("Starting account service operation.");
             Map<String, Object> result = accountService.createAccount(
                     clerkUserId,
                     photo,
@@ -150,9 +155,20 @@ public class AccountRequestHandler {
                     emailId,
                     provider);
 
+            System.out.println("Account service operation succeeded.");
             return mapToJson(result);
 
         } catch (SQLException e) {
+            System.err.printf(
+                "Account persistence failed: type=%s sqlState=%s vendorCode=%d%n",
+                e.getClass().getSimpleName(),
+                e.getSQLState(),
+                e.getErrorCode());
+            return """
+                {"status":"error","httpStatus":500,"message":"Internal server error"}
+                """;
+        } catch (RuntimeException e) {
+            System.err.println("Account service failed: type=" + e.getClass().getSimpleName());
             return """
                     {"status":"error","httpStatus":500,"message":"Internal server error"}
                     """;

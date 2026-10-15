@@ -185,9 +185,11 @@ public class AccountDetailsGetter {
                                         : 500;
                         responseObject.remove("httpStatus");
 
+                        System.out.println("Account API response status: " + statusCode);
                         sendResponse(exchange, statusCode, responseObject.toString());
 
                 } catch (Exception e) {
+                        System.err.println("Account HTTP handling failed: type=" + e.getClass().getSimpleName());
 
                         sendResponse(
                                         exchange,
