@@ -21,6 +21,16 @@ public class DatabaseInitializer {
 
     private static void createDatabase() throws SQLException {
 
+        String url = DatabaseConnection.getEnv("DB_URL");
+        String cleanUrl = url.split("\\?", 2)[0];
+        String databaseName = cleanUrl.substring(cleanUrl.lastIndexOf('/') + 1);
+
+        // Local database: create onego if it does not exist.
+        // Hosted database: Railway already provides the database.
+        if (!"onego".equalsIgnoreCase(databaseName)) {
+            return;
+        }
+
         try (
                 Connection connection = DatabaseConnection.getServerConnection();
                 Statement statement = connection.createStatement()) {

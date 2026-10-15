@@ -1,6 +1,5 @@
 import {
     Eraser,
-    SlidersHorizontal,
     Grid3X3,
     CreditCard,
     Gauge,
@@ -120,17 +119,6 @@ export default function ElementList({
                 )}
             </button>
 
-            {/* Sliders */}
-            <button
-                type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
-            >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
-                    <SlidersHorizontal size={17} />
-                </span>
-                <span>Sliders</span>
-            </button>
-
             {/* Text */}
             <button
                 type="button"
@@ -171,17 +159,6 @@ export default function ElementList({
                 <span className="rounded bg-gray-800/80 px-1.5 py-0.5 text-[10px] font-medium text-gray-400">
                     + Add
                 </span>
-            </button>
-
-            {/* Shape */}
-            <button
-                type="button"
-                className="flex w-full items-center gap-3 rounded-lg border border-gray-800 px-4 py-3 text-left text-sm transition hover:border-gray-500 hover:bg-gray-900"
-            >
-                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gray-800">
-                    □
-                </span>
-                <span>Shape</span>
             </button>
 
             {/* Icon */}

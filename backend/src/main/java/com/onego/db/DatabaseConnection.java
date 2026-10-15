@@ -74,46 +74,60 @@ public class DatabaseConnection {
 
         Map<String, String> env = new HashMap<>();
 
-        try {
-            for (String line : Files.readAllLines(Path.of(".env.local"))) {
+        // Local development: .env.local read karo, agar available ho.
+        Path envPath = Path.of(".env.local");
 
-                line = line.trim();
+        if (Files.exists(envPath)) {
+            try {
+                for (String line : Files.readAllLines(envPath)) {
 
-                if (line.isEmpty() || line.startsWith("#")) {
-                    continue;
+                    line = line.trim();
+
+                    if (line.isEmpty() || line.startsWith("#")) {
+                        continue;
+                    }
+
+                    String[] parts = line.split("=", 2);
+
+                    if (parts.length == 2) {
+                        env.put(parts[0].trim(), parts[1].trim());
+                    }
                 }
-
-                String[] parts = line.split("=", 2);
-
-                if (parts.length == 2) {
-                    env.put(parts[0].trim(), parts[1].trim());
-                }
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to load .env.local", e);
             }
-            // Required database configuration validate karo
-            String[] requiredKeys = {
-                    "DB_URL",
-                    "DB_USER",
-                    "DB_PASSWORD",
-                    "FRONTEND_URL",
-                    "CLERK_SECRET_KEY"
-            };
-
-            for (String key : requiredKeys) {
-
-                String value = env.get(key);
-
-                if (value == null || value.isBlank()) {
-                    throw new RuntimeException(
-                            "Missing required database configuration: " + key);
-                }
-            }
-
-            return env;
-
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to load .env.local", e);
         }
+
+        // Production: system environment variables ko priority do.
+        String[] keys = {
+                "DB_URL",
+                "DB_USER",
+                "DB_PASSWORD",
+                "FRONTEND_URL",
+                "CLERK_SECRET_KEY"
+        };
+
+        for (String key : keys) {
+            String value = System.getenv(key);
+
+            if (value != null && !value.isBlank()) {
+                env.put(key, value);
+            }
+        }
+
+        // Required configuration validate karo.
+        for (String key : keys) {
+            String value = env.get(key);
+
+            if (value == null || value.isBlank()) {
+                throw new RuntimeException(
+                        "Missing required configuration: " + key);
+            }
+        }
+
+        return env;
     }
+
 }
 
 // ye file mera mySql database ke saath connection

@@ -304,17 +304,10 @@ export default function SettingsMenu({ accountResult }: SettingsMenuProps) {
                                                     </button>
                                                 </div>
                                             )}
-
-                                            {/* SECTION SETTING */}
-                                            <button className="block w-full text-left p-3 rounded-lg hover:bg-gray-100 transition">
-                                                Section Setting
-                                            </button>
-
                                         </div>
                                     )}
                                 </div>
                             )}
-
                         </div>
                     </div>
                 </div>

@@ -39,8 +39,11 @@ public class AccountDetailsGetter {
 
                 this.accountRequestHandler = accountRequestHandler;
 
+                int port = Integer.parseInt(
+                                System.getenv().getOrDefault("PORT", "8080"));
+
                 server = HttpServer.create(
-                                new InetSocketAddress(8080),
+                                new InetSocketAddress(port),
                                 0);
 
                 server.createContext(
@@ -49,7 +52,7 @@ public class AccountDetailsGetter {
 
                 server.start();
 
-                System.out.println("Account server started on http://localhost:8080");
+                System.out.println("Account server started on port " + port);
         }
 
         private void handleAccount(HttpExchange exchange) throws IOException {
