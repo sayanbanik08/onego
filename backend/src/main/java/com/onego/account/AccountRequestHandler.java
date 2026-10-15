@@ -25,6 +25,7 @@ public class AccountRequestHandler {
     }
 
     public String handle(String json, String authorizationHeader) throws SQLException {
+        System.out.println("ACCOUNT API REQUEST RECEIVED");
 
         // Authorization header missing hone par request reject.
         if (authorizationHeader == null || authorizationHeader.isBlank()) {
