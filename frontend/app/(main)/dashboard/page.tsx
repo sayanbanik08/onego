@@ -31,7 +31,7 @@ export default async function Dashboard() {
     let response;
     try {
         response = await fetch(
-            "http://localhost:8080/api/account",
+            "https://onego-backend.onrender.com/api/account",
             {
                 method: "POST",
                 headers: {
