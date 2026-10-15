@@ -62,6 +62,7 @@ public class AccountRequestHandler {
                         {"status":"error","httpStatus":401,"message":"Invalid or expired authentication token"}
                         """;
             }
+            System.out.println("Clerk signed-in status: " + requestState.isSignedIn());
 
             // Valid Clerk token ke baad authentication successful.
             // System.out.println("Clerk token validation successful.");
