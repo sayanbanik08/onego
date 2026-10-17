@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #171717;
-  --foreground: #ededed;
+  --background: #E8DCC6;
+  --foreground: #B7A89A;
 }
 
 @theme inline {
@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #E8DCC6;
+    --foreground: #B7A89A;
   }
 }
 
@@ -23,6 +23,73 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+html.login-cursor-enabled,
+html.login-cursor-enabled body,
+html.login-cursor-enabled body * {
+  cursor: none !important;
+}
+
+html.login-cursor-enabled input,
+html.login-cursor-enabled textarea,
+html.login-cursor-enabled select,
+html.login-cursor-enabled [contenteditable="true"] {
+  cursor: text !important;
+}
+
+.login-custom-cursor {
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+
+.login-custom-cursor.is-following {
+  transition: opacity 150ms ease-out, transform 100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.login-custom-cursor[data-visible="true"] {
+  opacity: 1;
+}
+
+.login-custom-cursor__ring {
+  transform: scale(1);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@supports (animation-timeline: view()) {
+  .login-art-scroll {
+    animation: login-art-scroll linear both;
+    animation-timeline: view(block);
+    animation-range: exit 0% exit 100%;
+  }
+
+  .login-copy-scroll {
+    animation: login-copy-scroll linear both;
+    animation-timeline: view(block);
+    animation-range: exit 0% exit 100%;
+  }
+
+  @keyframes login-art-scroll {
+    to {
+      opacity: 0.35;
+      transform: translateY(-3rem) scale(0.94);
+    }
+  }
+
+  @keyframes login-copy-scroll {
+    to {
+      opacity: 0.45;
+      transform: translateY(-2rem);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-art-scroll,
+  .login-copy-scroll {
+    animation: none;
+  }
 }
 
 /* 

@@ -30,6 +30,7 @@ export default function ProfileVisibilityToggle() {
 
                 const response = await fetch(
                     "https://onego-backend.onrender.com/api/privacy",
+                    // "http://localhost:8080/api/privacy",
                     {
                         method: "GET",
                         headers: {
@@ -74,6 +75,7 @@ export default function ProfileVisibilityToggle() {
 
             const response = await fetch(
                 "https://onego-backend.onrender.com/api/privacy",
+                // "http://localhost:8080/api/privacy",
                 {
                     method: "POST",
                     headers: {
