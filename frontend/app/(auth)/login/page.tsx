@@ -143,10 +143,6 @@ export default async function Home() {
 
                 <div id="login-trust-badge" className="login-trust-badge mt-10 flex items-center gap-3 pt-4 text-xs sm:mt-12 origin-bottom">
                   <ShieldCheck size={18} />
-                  <div>
-                    <p className="font-semibold">Secure &amp; Trusted</p>
-                    <p className="mt-0.5 text-[#722F37]/65">Your data is safe with us.</p>
-                  </div>
                 </div>
               </div>
               {/* [ELEMENT 1: DESIGN CANVAS - END] */}
