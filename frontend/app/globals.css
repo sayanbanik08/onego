@@ -57,38 +57,26 @@ html.login-cursor-enabled [contenteditable="true"] {
   will-change: transform;
 }
 
-@supports (animation-timeline: view()) {
-  .login-art-scroll {
-    animation: login-art-scroll linear both;
-    animation-timeline: view(block);
-    animation-range: exit 0% exit 100%;
-  }
-
-  .login-copy-scroll {
-    animation: login-copy-scroll linear both;
-    animation-timeline: view(block);
-    animation-range: exit 0% exit 100%;
-  }
-
-  @keyframes login-art-scroll {
-    to {
-      opacity: 0.35;
-      transform: translateY(-3rem) scale(0.94);
-    }
-  }
-
-  @keyframes login-copy-scroll {
-    to {
-      opacity: 0.45;
-      transform: translateY(-2rem);
-    }
-  }
+/*
+  Login page elastic stretch on scroll:
+  - Transform-origin: 50% 100% (anchored at bottom, stretching upwards)
+  - Controlled dynamically with mathematical physics via LoginElasticPhysics (Lenis RAF)
+  - Hardware accelerated GPU composition with will-change: transform
+*/
+.login-art-scroll,
+.login-copy-scroll,
+.login-badge-scroll {
+  transform-origin: 50% 100%;
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .login-art-scroll,
-  .login-copy-scroll {
-    animation: none;
+  .login-copy-scroll,
+  .login-badge-scroll {
+    transform: none !important;
+    animation: none !important;
   }
 }
 
