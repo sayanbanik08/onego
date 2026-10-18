@@ -6,39 +6,33 @@ import { useEffect, useRef } from "react";
 /**
  * LoginElasticPhysics
  *
- * Harmonic Spring Physics Engine for Login Page:
- * 1. FIX FOR UP/DOWN SHIFT ON RELEASE:
- *    - Removed competing native scroll event listener (single source of truth via Lenis).
- *    - Replaced raw scroll-jump mapping with a unified 2nd-order damped harmonic spring solver.
- *    - When scrolling stops anywhere, the spring locks cleanly into target equilibrium with
- *      ZERO creeping, floating, or up/down resizing jitter.
+ * Dedicated Harmonic Spring Physics Engine for Login Page:
+ * 1. DESIGN PAD (#showcase):
+ *    - Preserved in original layout (lg:translate-y-20) without shifting upwards at rest.
+ *    - Anchored at bottom (origin: 50% 100%), stretches purely in HEIGHT (scaleY) on scroll.
  *
- * 2. SOFT SLOW NATURAL BOUNCE (niche se upar scroll karke chhorne par):
- *    - Underdamped harmonic oscillator (k=62, c=9.2, damping ratio ζ ≈ 0.58).
- *    - When scrolling up towards top and releasing, upward release momentum triggers a
- *      soft compressive dip (~0.95x) followed by a gentle rebound (~1.02x) that softly,
- *      slowly settles to 1.000x like natural elastic rubber.
+ * 2. SECURE & TRUSTED BADGE (#login-trust-badge):
+ *    - Laptop view: Anchored at base (origin: 50% 100%), stretches purely UPWARDS into the gap.
+ *      Never stretches downwards, completely preventing footer collisions.
+ *    - Mobile view: Does NOT move upwards (translateY = 0), stretches in place in HEIGHT (scaleY).
  *
- * 3. ANCHOR & STRETCH:
- *    - Anchored at bottom: transform-origin: 50% 100% (STRETCHES ONLY UPWARD, NEVER DOWNWARD).
- *    - Ultra-high stretch (up to 2.35x canvas, 2.30x copy) on all text, fonts, buttons & icons.
- *    - translateY: 0 (no upward translation).
- *    - opacity: 1 (no fading).
+ * 3. LOGIN MODULE (#login-module-content):
+ *    - Laptop view: Full elastic height stretch upwards.
+ *    - Mobile view: Increased, tactile elastic height stretch (up to 1.75x) with preserved clearance.
+ *
+ * 4. SPRING PHYSICS ENGINE:
+ *    - Underdamped harmonic oscillator (k=56, c=5.5) on flick/top arrival for organic rebound.
+ *    - Responsive scroll tracking (k=96, c=12).
+ *    - Sleeping RAF loop: 0% CPU/GPU overhead when at rest.
  */
 export default function LoginElasticPhysics() {
   const isReducedMotion = useRef(false);
 
-  // Physics state for 2nd-order damped harmonic system:
+  // Physics state for harmonic spring system:
   const state = useRef({
-    artStretch: 1.0,
-    artVelocity: 0,
-    copyStretch: 1.0,
-    copyVelocity: 0,
-    badgeStretch: 1.0,
-    badgeVelocity: 0,
-    targetArt: 1.0,
-    targetCopy: 1.0,
-    targetBadge: 1.0,
+    stretch: 1.0,
+    velocity: 0,
+    target: 1.0,
     lastScrollY: 0,
     isBouncing: false,
     bounceTimer: 0,
@@ -55,9 +49,10 @@ export default function LoginElasticPhysics() {
   const updateScrollTargets = (scrollY: number, velocity: number) => {
     const s = state.current;
     const clampedY = Math.max(0, scrollY);
+    const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
 
-    // Active scroll range over which stretch develops:
-    const activeRange = 520;
+    // Mobile has shorter scroll distance, so responsive active range makes height stretch responsive immediately:
+    const activeRange = isDesktop ? 500 : 360;
     const progress = Math.min(1, Math.max(0, clampedY / activeRange));
 
     // C² Perlin Smootherstep:
@@ -66,20 +61,18 @@ export default function LoginElasticPhysics() {
       15 * Math.pow(progress, 4) +
       10 * Math.pow(progress, 3);
 
-    s.targetArt = 1.0 + smoothFactor * 1.35;
-    s.targetCopy = 1.0 + smoothFactor * 1.30;
-    s.targetBadge = 1.0 + smoothFactor * 0.80;
+    // Enhanced height stretch on mobile (up to 2.45x peak height stretch):
+    const maxStretch = isDesktop ? 1.20 : 1.45;
+    s.target = 1.0 + smoothFactor * maxStretch;
 
-    // Detect when user scrolls from bottom to top or flicks upward at top:
+    // Detect when user arrives at top or flicks upward at top:
     const isArrivingAtTop = clampedY <= 50 && s.lastScrollY > 8 && velocity < -0.08;
     const isFlickingAtTop = clampedY <= 3 && velocity < -0.4;
 
     if ((isArrivingAtTop || isFlickingAtTop) && !s.isBouncing) {
       // Natural compressive momentum impulse for elastic rebound:
       const impulse = Math.min(1.4, Math.max(0.7, Math.abs(velocity) * 0.12 + 0.6));
-      s.artVelocity = -impulse;
-      s.copyVelocity = -impulse * 0.95;
-      s.badgeVelocity = -impulse * 0.75;
+      s.velocity = -impulse;
       s.isBouncing = true;
       s.bounceTimer = performance.now();
     }
@@ -92,30 +85,38 @@ export default function LoginElasticPhysics() {
     updateScrollTargets(lenis.scroll, lenis.velocity);
   });
 
-  // Dedicated High-Performance Harmonic Spring Simulation Loop:
+  // Dedicated High-Performance Simulation Loop:
   useEffect(() => {
     let animId: number = 0;
     let lastTime = performance.now();
 
-    const artElement = document.querySelector<HTMLElement>(".login-art-scroll");
-    const copyElement = document.querySelector<HTMLElement>(".login-copy-scroll");
-    const badgeElement = document.querySelector<HTMLElement>(".login-badge-scroll");
+    const showcaseElement = document.querySelector<HTMLElement>("#showcase");
+    const badgeElement = document.querySelector<HTMLElement>("#login-trust-badge");
+    const loginModuleElement = document.querySelector<HTMLElement>("#login-module-content");
+    const unifiedElement = document.querySelector<HTMLElement>(".login-unified-scroll");
 
-    // Enforce bottom-only anchor (50% 100%) so stretch anchors upward cleanly:
-    if (artElement) {
-      artElement.style.transformOrigin = "50% 100%";
-      artElement.style.willChange = "transform";
-    }
-    if (copyElement) {
-      copyElement.style.transformOrigin = "50% 100%";
-      copyElement.style.willChange = "transform";
+    // Anchor setup:
+    if (showcaseElement) {
+      showcaseElement.style.transformOrigin = "50% 100%";
+      showcaseElement.style.willChange = "transform";
     }
     if (badgeElement) {
       badgeElement.style.transformOrigin = "50% 100%";
       badgeElement.style.willChange = "transform";
     }
+    if (loginModuleElement) {
+      loginModuleElement.style.transformOrigin = "50% 100%";
+      loginModuleElement.style.willChange = "transform";
+    }
+    if (unifiedElement) {
+      unifiedElement.style.transformOrigin = "50% 100%";
+      unifiedElement.style.willChange = "transform";
+    }
 
-    const lastTransforms = { art: "", copy: "", badge: "" };
+    let lastShowcaseTransform = "";
+    let lastBadgeTransform = "";
+    let lastModuleTransform = "";
+    let lastUnifiedTransform = "";
 
     const physicsLoop = (time: number) => {
       if (isReducedMotion.current) {
@@ -128,76 +129,93 @@ export default function LoginElasticPhysics() {
 
       const s = state.current;
 
-      // When bouncing at top: softer spring for organic rebound.
-      // When scrolling normally: responsive spring (k=96, c=12) that tracks scroll in real-time without sluggish lag:
+      // Spring parameters:
+      // - Soft bounce at top (k=56, c=5.5)
+      // - Responsive scroll tracking (k=96, c=12)
       const k = s.isBouncing ? 56 : 96;
       const c = s.isBouncing ? 5.5 : 12;
 
-      // Allow bounce wave to settle naturally within ~800ms:
+      // Settle bounce wave within ~850ms:
       if (s.isBouncing && time - s.bounceTimer > 850) {
         s.isBouncing = false;
       }
 
-      // 1. Element 1: Design Canvas
-      const diffArt = s.artStretch - s.targetArt;
-      const accelArt = -k * diffArt - c * s.artVelocity;
-      s.artVelocity += accelArt * dt;
-      s.artStretch += s.artVelocity * dt;
-
-      // 2. Element 2: Login Module
-      const diffCopy = s.copyStretch - s.targetCopy;
-      const accelCopy = -k * diffCopy - c * s.copyVelocity;
-      s.copyVelocity += accelCopy * dt;
-      s.copyStretch += s.copyVelocity * dt;
-
-      // 3. Secure & Trusted Badge
-      const diffBadge = s.badgeStretch - s.targetBadge;
-      const accelBadge = -k * diffBadge - c * s.badgeVelocity;
-      s.badgeVelocity += accelBadge * dt;
-      s.badgeStretch += s.badgeVelocity * dt;
+      const diff = s.stretch - s.target;
+      const accel = -k * diff - c * s.velocity;
+      s.velocity += accel * dt;
+      s.stretch += s.velocity * dt;
 
       const isSettled =
         !s.isBouncing &&
-        Math.abs(diffArt) < 0.0004 &&
-        Math.abs(s.artVelocity) < 0.0004 &&
-        Math.abs(diffCopy) < 0.0004 &&
-        Math.abs(s.copyVelocity) < 0.0004 &&
-        Math.abs(diffBadge) < 0.0004 &&
-        Math.abs(s.badgeVelocity) < 0.0004;
+        Math.abs(diff) < 0.0004 &&
+        Math.abs(s.velocity) < 0.0004;
 
       if (isSettled) {
-        s.artStretch = s.targetArt;
-        s.artVelocity = 0;
-        s.copyStretch = s.targetCopy;
-        s.copyVelocity = 0;
-        s.badgeStretch = s.targetBadge;
-        s.badgeVelocity = 0;
+        s.stretch = s.target;
+        s.velocity = 0;
       }
 
-      // Hardware accelerated GPU compositing with translateZ(0):
-      if (artElement) {
-        const tArt = `scaleY(${s.artStretch.toFixed(4)}) translateZ(0)`;
-        if (tArt !== lastTransforms.art) {
-          artElement.style.transform = tArt;
-          lastTransforms.art = tArt;
+      const isDesktop = window.innerWidth >= 1024;
+      const stretchVal = s.stretch;
+
+      if (isDesktop) {
+        // Laptop view (2-column layout):
+        // Each column stretches individually with upward anchor
+        if (showcaseElement) {
+          const showcaseT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
+          if (showcaseT !== lastShowcaseTransform) {
+            showcaseElement.style.transform = showcaseT;
+            lastShowcaseTransform = showcaseT;
+          }
         }
-      }
-      if (copyElement) {
-        const tCopy = `scaleY(${s.copyStretch.toFixed(4)}) translateZ(0)`;
-        if (tCopy !== lastTransforms.copy) {
-          copyElement.style.transform = tCopy;
-          lastTransforms.copy = tCopy;
+
+        if (badgeElement) {
+          const badgeT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
+          if (badgeT !== lastBadgeTransform) {
+            badgeElement.style.transform = badgeT;
+            lastBadgeTransform = badgeT;
+          }
         }
-      }
-      if (badgeElement) {
-        const tBadge = `scaleY(${s.badgeStretch.toFixed(4)}) translateZ(0)`;
-        if (tBadge !== lastTransforms.badge) {
-          badgeElement.style.transform = tBadge;
-          lastTransforms.badge = tBadge;
+
+        if (loginModuleElement) {
+          const moduleT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
+          if (moduleT !== lastModuleTransform) {
+            loginModuleElement.style.transform = moduleT;
+            lastModuleTransform = moduleT;
+          }
+        }
+
+        if (unifiedElement && lastUnifiedTransform !== "") {
+          unifiedElement.style.transform = "";
+          lastUnifiedTransform = "";
+        }
+      } else {
+        // Mobile view (stacked layout):
+        // Stretch the 2 elements TOGETHER via their shared container (.login-unified-scroll)
+        // so that Element 2 (login module) never climbs over Element 1 (design canvas / badge).
+        if (showcaseElement && lastShowcaseTransform !== "") {
+          showcaseElement.style.transform = "";
+          lastShowcaseTransform = "";
+        }
+        if (badgeElement && lastBadgeTransform !== "") {
+          badgeElement.style.transform = "";
+          lastBadgeTransform = "";
+        }
+        if (loginModuleElement && lastModuleTransform !== "") {
+          loginModuleElement.style.transform = "";
+          lastModuleTransform = "";
+        }
+
+        if (unifiedElement) {
+          const unifiedT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
+          if (unifiedT !== lastUnifiedTransform) {
+            unifiedElement.style.transform = unifiedT;
+            lastUnifiedTransform = unifiedT;
+          }
         }
       }
 
-      // Sleep loop when resting to avoid unnecessary style invalidations & CPU usage:
+      // Sleep loop when resting:
       if (isSettled) {
         isLoopRunning.current = false;
         return;
@@ -217,7 +235,7 @@ export default function LoginElasticPhysics() {
     wakeLoopRef.current = wakeLoop;
     wakeLoop();
 
-    // Passive listener to also wake loop on native mobile scroll:
+    // Passive listener to also wake loop on native mobile touch scroll:
     const handleNativeScroll = () => {
       if (window.scrollY !== state.current.lastScrollY) {
         updateScrollTargets(window.scrollY, 0);
@@ -230,9 +248,10 @@ export default function LoginElasticPhysics() {
       isLoopRunning.current = false;
       wakeLoopRef.current = () => {};
       window.removeEventListener("scroll", handleNativeScroll);
-      if (artElement) artElement.style.transform = "";
-      if (copyElement) copyElement.style.transform = "";
+      if (showcaseElement) showcaseElement.style.transform = "";
       if (badgeElement) badgeElement.style.transform = "";
+      if (loginModuleElement) loginModuleElement.style.transform = "";
+      if (unifiedElement) unifiedElement.style.transform = "";
     };
   }, []);
 

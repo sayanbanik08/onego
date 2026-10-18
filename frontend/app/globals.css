@@ -63,18 +63,18 @@ html.login-cursor-enabled [contenteditable="true"] {
   - Controlled dynamically with mathematical physics via LoginElasticPhysics (Lenis RAF)
   - Hardware accelerated GPU composition with will-change: transform
 */
-.login-art-scroll,
-.login-copy-scroll,
-.login-badge-scroll {
+#showcase,
+.login-trust-badge,
+.login-module-content {
   transform-origin: 50% 100%;
   will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-  .login-art-scroll,
-  .login-copy-scroll,
-  .login-badge-scroll {
+  #showcase,
+  .login-unified-scroll,
+  .login-trust-badge,
+  .login-module-content {
     transform: none !important;
     animation: none !important;
   }
