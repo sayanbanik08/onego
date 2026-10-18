@@ -14,7 +14,6 @@ import {
   PanelsTopLeft,
   Search,
   Settings2,
-  ShieldCheck,
   Type,
   UserRound,
 } from "lucide-react";
@@ -67,14 +66,14 @@ export default async function Home() {
           </header>
 
           <section className="relative lg:sticky lg:top-8 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-4 sm:px-10 lg:px-14 lg:pt-0">
-            <div className="login-unified-scroll grid w-full min-w-0 items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+            <div className="login-unified-scroll grid w-full min-w-0 items-center gap-6 sm:gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
               {/* ========================================================================= */}
               {/* [ELEMENT 1: DESIGN CANVAS - START] */}
               {/* Yeh left side ka Design Canvas / Visual Showcase hai (id="build" & id="showcase"). */}
-              {/* Isme portfolio card mockup, floating icons (Type, Image, Colors) aur security badge hai. */}
+              {/* Isme portfolio card mockup aur floating icons (Type, Image, Colors) hain. */}
               {/* ========================================================================= */}
-              <div id="build" className="relative flex min-h-[430px] min-w-0 flex-col justify-center lg:min-h-[590px] lg:translate-y-20">
-                <div className="relative mx-auto mt-8 h-[290px] w-full max-w-[610px] sm:mt-5 sm:h-[390px]" id="showcase">
+              <div id="build" className="relative flex min-h-0 min-w-0 flex-col justify-center lg:min-h-[590px] lg:translate-y-10">
+                <div className="relative mx-auto mt-1 h-[290px] w-full max-w-[610px] sm:mt-3 sm:h-[390px] lg:mt-5" id="showcase">
                   <div className="pointer-events-none absolute inset-[-2%_0%_0%_-5%] rotate-[-8deg] rounded-[43%_57%_52%_48%/46%_41%_59%_54%] bg-[#B7AB9A]/30" />
                   <div className="pointer-events-none absolute left-[4%] top-[20%] h-[66%] w-[72%] rotate-[13deg] rounded-[48%_52%_58%_42%/55%_39%_61%_45%] bg-[#722F37]/[0.08] blur-xl" />
                   <div className="pointer-events-none absolute left-[1%] top-[35%] h-[48%] w-[43%] rotate-[14deg] rounded-[44%_56%_64%_36%/43%_55%_45%_57%] bg-[#B7AB9A]/30" />
@@ -140,10 +139,6 @@ export default async function Home() {
                     ))}
                   </div>
                 </div>
-
-                <div id="login-trust-badge" className="login-trust-badge mt-10 flex items-center gap-3 pt-4 text-xs sm:mt-12 origin-bottom">
-                  <ShieldCheck size={18} />
-                </div>
               </div>
               {/* [ELEMENT 1: DESIGN CANVAS - END] */}
 
@@ -153,7 +148,7 @@ export default async function Home() {
               {/* Isme 'Welcome to OneGo' title, tagline aur <LoginActions /> (Clerk login & guest button) hain. */}
               {/* ========================================================================= */}
               <div id="login-module-content" className="login-module-content flex min-w-0 justify-center lg:justify-end origin-bottom">
-                <div className="w-full min-w-0 max-w-[400px] py-10 text-center lg:py-0 lg:text-left">
+                <div className="w-full min-w-0 max-w-[400px] py-4 sm:py-6 text-center lg:py-0 lg:text-left">
                   <p className="text-xs font-semibold uppercase text-[#722F37]/60">Welcome to</p>
                   <h2 className="mt-2 text-6xl font-bold leading-none sm:text-7xl">
                     <span className="inline-block origin-center scale-x-[1.5] scale-y-[1.22] lg:origin-left">OneGo</span>

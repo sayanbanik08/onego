@@ -91,7 +91,6 @@ export default function LoginElasticPhysics() {
     let lastTime = performance.now();
 
     const showcaseElement = document.querySelector<HTMLElement>("#showcase");
-    const badgeElement = document.querySelector<HTMLElement>("#login-trust-badge");
     const loginModuleElement = document.querySelector<HTMLElement>("#login-module-content");
     const unifiedElement = document.querySelector<HTMLElement>(".login-unified-scroll");
 
@@ -99,10 +98,6 @@ export default function LoginElasticPhysics() {
     if (showcaseElement) {
       showcaseElement.style.transformOrigin = "50% 100%";
       showcaseElement.style.willChange = "transform";
-    }
-    if (badgeElement) {
-      badgeElement.style.transformOrigin = "50% 100%";
-      badgeElement.style.willChange = "transform";
     }
     if (loginModuleElement) {
       loginModuleElement.style.transformOrigin = "50% 100%";
@@ -114,7 +109,6 @@ export default function LoginElasticPhysics() {
     }
 
     let lastShowcaseTransform = "";
-    let lastBadgeTransform = "";
     let lastModuleTransform = "";
     let lastUnifiedTransform = "";
 
@@ -169,14 +163,6 @@ export default function LoginElasticPhysics() {
           }
         }
 
-        if (badgeElement) {
-          const badgeT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
-          if (badgeT !== lastBadgeTransform) {
-            badgeElement.style.transform = badgeT;
-            lastBadgeTransform = badgeT;
-          }
-        }
-
         if (loginModuleElement) {
           const moduleT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
           if (moduleT !== lastModuleTransform) {
@@ -192,14 +178,10 @@ export default function LoginElasticPhysics() {
       } else {
         // Mobile view (stacked layout):
         // Stretch the 2 elements TOGETHER via their shared container (.login-unified-scroll)
-        // so that Element 2 (login module) never climbs over Element 1 (design canvas / badge).
+        // so that Element 2 (login module) never climbs over Element 1 (design canvas).
         if (showcaseElement && lastShowcaseTransform !== "") {
           showcaseElement.style.transform = "";
           lastShowcaseTransform = "";
-        }
-        if (badgeElement && lastBadgeTransform !== "") {
-          badgeElement.style.transform = "";
-          lastBadgeTransform = "";
         }
         if (loginModuleElement && lastModuleTransform !== "") {
           loginModuleElement.style.transform = "";
@@ -249,7 +231,6 @@ export default function LoginElasticPhysics() {
       wakeLoopRef.current = () => {};
       window.removeEventListener("scroll", handleNativeScroll);
       if (showcaseElement) showcaseElement.style.transform = "";
-      if (badgeElement) badgeElement.style.transform = "";
       if (loginModuleElement) loginModuleElement.style.transform = "";
       if (unifiedElement) unifiedElement.style.transform = "";
     };
