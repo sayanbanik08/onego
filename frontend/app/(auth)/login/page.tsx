@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import LoginFooter from "@/components/LoginFooter";
+import LoginHeader3D from "@/components/LoginHeader3D";
 import LoginActions from "@/components/LoginActions";
 import LoginSmoothScroll from "@/components/LoginSmoothScroll";
 import LoginCursor from "@/components/LoginCursor";
@@ -29,15 +30,11 @@ export default async function Home() {
   return (
     <LoginSmoothScroll>
       <>
-        <main className="relative mx-auto min-h-screen w-full max-w-[1315px] overflow-x-clip bg-[#722F37] text-[#722F37]">
-          {/* The cream panel curves over the burgundy header like the footer. */}
+        <main className="relative mx-auto min-h-screen w-full max-w-[1315px] overflow-x-clip rounded-t-[1.5rem] bg-[#722F37] text-[#722F37]">
+          {/* Cream background panel spanning the card with subtle grid lines */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 z-0 h-9 bg-[#722F37]"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 bottom-0 top-9 z-[1] overflow-hidden rounded-t-[6rem] bg-[#E8DCC6]"
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-t-[1.5rem] bg-[#E8DCC6]"
           >
             <svg
               aria-hidden="true"
@@ -45,7 +42,7 @@ export default async function Home() {
               viewBox="0 0 1200 900"
               preserveAspectRatio="none"
             >
-              <g fill="none" stroke="#722F37" strokeLinecap="round" strokeOpacity="0.11" strokeWidth="1.25">
+              <g fill="none" stroke="#722F37" strokeLinecap="round" strokeOpacity="0.07" strokeWidth="1.25">
                 <path d="M-30 72 C180 67 360 79 585 70 S990 77 1230 68 M-30 170 C190 178 380 160 600 171 S1010 164 1230 176 M-30 269 C180 261 390 278 610 266 S1000 276 1230 263 M-30 369 C210 377 395 357 605 371 S990 361 1230 376 M-30 469 C190 460 380 479 590 465 S1010 478 1230 462 M-30 570 C200 578 400 558 610 572 S1000 560 1230 577 M-30 670 C190 661 390 680 600 667 S990 678 1230 664 M-30 770 C210 779 390 759 605 773 S1000 761 1230 778 M-30 870 C190 861 400 880 610 866 S1000 878 1230 863" />
                 <path d="M70 -30 C76 160 62 320 74 470 S65 730 78 930 M170 -30 C161 170 181 320 168 480 S178 730 165 930 M270 -30 C279 170 259 330 274 490 S262 740 278 930 M370 -30 C361 160 380 330 367 480 S378 730 364 930 M470 -30 C481 180 461 330 475 490 S464 730 480 930 M570 -30 C560 170 581 320 567 480 S579 740 564 930 M670 -30 C681 160 660 330 675 490 S663 730 680 930 M770 -30 C759 180 781 330 767 480 S779 740 764 930 M870 -30 C880 160 860 320 875 490 S862 730 879 930 M970 -30 C960 170 981 330 967 480 S979 740 964 930 M1070 -30 C1081 160 1060 330 1075 490 S1063 730 1080 930 M1170 -30 C1160 170 1181 320 1167 480 S1179 740 1164 930" />
               </g>
@@ -53,19 +50,10 @@ export default async function Home() {
           </div>
           <div className="pointer-events-none absolute -bottom-64 -right-40 z-[2] h-[34rem] w-[34rem] rounded-full border border-[#B7AB9A]/60" />
 
-          {/* py-1 keeps the header around 36px tall, aligned with the panel inset. */}
-          <header className="relative z-10 flex w-full items-center justify-between px-6 py-1 text-[#E8DCC6] sm:px-10 lg:px-14">
-            <div aria-hidden="true" className="flex items-center gap-2">
-              <span className="size-3 rounded-full border border-black/10 bg-[#FF5F57]" />
-              <span className="size-3 rounded-full border border-black/10 bg-[#FEBC2E]" />
-              <span className="size-3 rounded-full border border-black/10 bg-[#28C840]" />
-            </div>
-            <Link href="/" className="flex items-center gap-2.5" aria-label="OneGo home">
-              <span className="text-[1.35rem] font-bold tracking-tight">OneGo</span>
-            </Link>
-          </header>
+          {/* 3D Realistic Header Shelf */}
+          <LoginHeader3D />
 
-          <section className="relative lg:sticky lg:top-8 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-4 sm:px-10 lg:px-14 lg:pt-0">
+          <section className="relative lg:sticky lg:top-9 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-4 sm:px-10 lg:px-14 lg:pt-0">
             <div className="login-unified-scroll grid w-full min-w-0 items-center gap-6 sm:gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
               {/* ========================================================================= */}
               {/* [ELEMENT 1: DESIGN CANVAS - START] */}
