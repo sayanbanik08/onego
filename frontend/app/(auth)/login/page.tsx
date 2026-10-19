@@ -30,7 +30,7 @@ export default async function Home() {
   return (
     <LoginSmoothScroll>
       <>
-        <main className="relative mx-auto min-h-screen w-full max-w-[1315px] overflow-x-clip rounded-t-[1.5rem] bg-[#722F37] text-[#722F37]">
+        <main className="relative mx-auto min-h-screen w-full overflow-x-clip rounded-t-[1.5rem] bg-[#722F37] text-[#722F37]">
           {/* Cream background panel spanning the card with subtle grid lines */}
           <div
             aria-hidden="true"

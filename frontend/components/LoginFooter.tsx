@@ -82,7 +82,7 @@ export default function LoginFooter() {
 
   return (
     <footer
-      className="relative z-20 mx-auto isolate w-full max-w-[1315px] overflow-hidden rounded-t-[6rem] bg-[#722F37] text-[#E8DCC6]"
+      className="relative z-20 mx-auto isolate w-full overflow-hidden rounded-t-[6rem] bg-[#722F37] text-[#E8DCC6]"
     >
       <div
         aria-hidden="true"
