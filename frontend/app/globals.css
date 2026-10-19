@@ -23,6 +23,13 @@ html {
   overflow-x: hidden;
 }
 
+/* iOS Safari fix: rounded corners on main/footer reveal body's cream background.
+   When on auth pages (data-auth-bg marker), match the page's burgundy color. */
+html:has([data-auth-bg]),
+body:has([data-auth-bg]) {
+  background: #722F37;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
