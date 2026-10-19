@@ -151,7 +151,9 @@ export default async function Home() {
             </div>
           </section>
         </main>
-        <LoginFooter />
+        <div className="bg-[#E8DCC6]">
+          <LoginFooter />
+        </div>
         <LoginCursor />
       </>
     </LoginSmoothScroll>
