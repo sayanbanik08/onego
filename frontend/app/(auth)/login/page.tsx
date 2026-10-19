@@ -30,11 +30,14 @@ export default async function Home() {
   return (
     <LoginSmoothScroll>
       <>
-        <main className="relative mx-auto min-h-screen w-full overflow-x-clip rounded-t-[1.5rem] bg-[#722F37] text-[#722F37]">
+        {/* 3D Realistic Header Shelf */}
+        <LoginHeader3D />
+
+        <main className="relative -mt-9 mx-auto min-h-screen w-full overflow-x-clip bg-[#722F37] text-[#722F37]">
           {/* Cream background panel spanning the card with subtle grid lines */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-t-[1.5rem] bg-[#E8DCC6]"
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-[#E8DCC6]"
           >
             <svg
               aria-hidden="true"
@@ -49,9 +52,6 @@ export default async function Home() {
             </svg>
           </div>
           <div className="pointer-events-none absolute -bottom-64 -right-40 z-[2] h-[34rem] w-[34rem] rounded-full border border-[#B7AB9A]/60" />
-
-          {/* 3D Realistic Header Shelf */}
-          <LoginHeader3D />
 
           <section className="relative lg:sticky lg:top-9 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-4 sm:px-10 lg:px-14 lg:pt-0">
             <div className="login-unified-scroll grid w-full min-w-0 items-center gap-6 sm:gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
@@ -151,8 +151,6 @@ export default async function Home() {
             </div>
           </section>
         </main>
-        {/* Cream backdrop for footer rounded corners — z-10 sits behind footer's z-20 */}
-        <div className="relative z-10 h-24 -mb-24 bg-[#E8DCC6]" aria-hidden="true" />
         <LoginFooter />
         <LoginCursor />
       </>
