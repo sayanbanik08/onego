@@ -53,8 +53,8 @@ export default async function Home() {
           </div>
           <div className="pointer-events-none absolute -bottom-64 -right-40 z-[2] h-[34rem] w-[34rem] rounded-full border border-[#B7AB9A]/60" />
 
-          <section className="relative lg:sticky lg:top-9 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-4 sm:px-10 lg:px-14 lg:pt-0">
-            <div className="login-unified-scroll grid w-full min-w-0 items-center gap-6 sm:gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+          <section className="relative lg:sticky lg:top-9 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-28 sm:pt-32 lg:pt-0 sm:px-10 lg:px-14">
+            <div className="login-unified-scroll grid w-full min-w-0 items-center gap-28 sm:gap-32 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
               {/* ========================================================================= */}
               {/* [ELEMENT 1: DESIGN CANVAS - START] */}
               {/* Yeh left side ka Design Canvas / Visual Showcase hai (id="build" & id="showcase"). */}
