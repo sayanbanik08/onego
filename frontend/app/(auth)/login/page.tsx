@@ -151,9 +151,9 @@ export default async function Home() {
             </div>
           </section>
         </main>
-        <div className="bg-[#E8DCC6]">
-          <LoginFooter />
-        </div>
+        {/* Cream backdrop for footer rounded corners — z-10 sits behind footer's z-20 */}
+        <div className="relative z-10 h-24 -mb-24 bg-[#E8DCC6]" aria-hidden="true" />
+        <LoginFooter />
         <LoginCursor />
       </>
     </LoginSmoothScroll>
