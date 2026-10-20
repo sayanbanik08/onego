@@ -204,8 +204,11 @@ export default function LoginHeader3D() {
           className="flex items-center gap-2.5 text-[#E8DCC6] transition-opacity hover:opacity-85"
           aria-label="OneGo home"
         >
-          <span className="text-[1.35rem] font-bold leading-none tracking-tight">
-            OneGo
+          <span
+            style={{ fontFamily: "var(--font-comfortaa)", fontWeight: 300 }}
+            className="text-[1.25rem] leading-none tracking-wide"
+          >
+            onego
           </span>
         </Link>
       </div>
