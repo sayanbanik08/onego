@@ -30,7 +30,7 @@ export default function LoginHeader3D() {
   const H_bar = 36; // Front face bar height
   const D_bevel = 13; // 3D underside bevel thickness
   const H_bevel = H_bar + D_bevel; // Total shelf height = 49px
-  
+
   // Exact 6rem (96px) curve matching LoginFooter rounded-t-[6rem] pixel-perfect
   const R = 96; // 6rem = 96px radius
   const curveW = R; // 96px width
@@ -92,9 +92,10 @@ export default function LoginHeader3D() {
             {/* Front face velvet burgundy gradient */}
             <linearGradient id="header-front-grad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#6C2834" />
-              <stop offset="45%" stopColor="#682A35" />
-              <stop offset="100%" stopColor="#62232E" />
+              <stop offset="45%" stopColor="#722F37" />
+              <stop offset="100%" stopColor="#722F37" />
             </linearGradient>
+
 
             {/* 3D Underside bevel extrusion gradient (facing downward into shadow) */}
             <linearGradient id="header-bevel-grad" x1="0" y1="0" x2="0" y2="1">
