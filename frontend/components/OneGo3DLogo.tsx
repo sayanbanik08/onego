@@ -100,16 +100,26 @@ export default function OneGo3DLogo({
     const S = 1.153;
     const yCenter = 48 * S;
     const r = 18.5 * S;
-    const t = 12.0 * S;
+    const t = 10.0 * S;
+    const mainStroke = t * 0.55;
+    const letterGap = 12 * S;
+    const xg = 244 * S;
+    const rBowl = 14.0 * S;
+    const tBowl = 6.5 * S;
+    const gOuterRadius = rBowl + tBowl;
+    const eOuterRadius = r + mainStroke;
+    const nHalfWidth = 20 * S + mainStroke;
+    const xe = xg - gOuterRadius - letterGap - eOuterRadius;
+    const xnCenter = xe - eOuterRadius - letterGap - nHalfWidth;
 
     // 1. 'o' (First Lowercase Torus)
-    const xo1 = 44 * S;
-    logoGroup.add(createTorus(xo1, yCenter, r, t));
+    const xo1 = xnCenter - nHalfWidth - letterGap - eOuterRadius;
+    logoGroup.add(createTorus(xo1, yCenter, r, mainStroke));
 
     // 2. 'n' (Comfortaa Lowercase n)
-    const xnL = 94 * S;
-    const xnR = 134 * S;
-    const ynBot = 17.5 * S + t;
+    const xnL = xnCenter - 20 * S;
+    const xnR = xnCenter + 20 * S;
+    const ynBot = 29.5 * S;
     const ynArchBase = 48 * S;
     const nRad = (xnR - xnL) / 2;
     const nMidX = (xnL + xnR) / 2;
@@ -125,17 +135,17 @@ export default function OneGo3DLogo({
     nPts.push(new THREE.Vector3(xnR, ynArchBase, t));
     nPts.push(new THREE.Vector3(xnR, ynBot, t));
 
-    logoGroup.add(createTube(nPts, t, false));
-    logoGroup.add(createCap(new THREE.Vector3(xnL, ynBot, t), t));
-    logoGroup.add(createCap(new THREE.Vector3(xnR, ynBot, t), t));
+    logoGroup.add(createTube(nPts, mainStroke, false));
+    logoGroup.add(createCap(new THREE.Vector3(xnL, ynBot, t), mainStroke));
+    logoGroup.add(createCap(new THREE.Vector3(xnR, ynBot, t), mainStroke));
 
     // 3. 'e' (Comfortaa Lowercase e)
-    const xe = 180 * S;
     const barY = yCenter - 1 * S;
+    const eStroke = mainStroke;
     logoGroup.add(createTube([
       new THREE.Vector3(xe - r + 0.5 * S, barY, t),
       new THREE.Vector3(xe + r - 0.5 * S, barY, t),
-    ], t * 0.9, false));
+    ], eStroke, false));
 
     const ePts: THREE.Vector3[] = [];
     const eEndAngle = 1.74 * Math.PI;
@@ -143,14 +153,11 @@ export default function OneGo3DLogo({
       const ang = (i / 28) * eEndAngle;
       ePts.push(new THREE.Vector3(xe + Math.cos(ang) * r, yCenter + Math.sin(ang) * r, t));
     }
-    logoGroup.add(createTube(ePts, t, false));
-    logoGroup.add(createCap(new THREE.Vector3(xe + Math.cos(eEndAngle) * r, yCenter + Math.sin(eEndAngle) * r, t), t));
+    logoGroup.add(createTube(ePts, eStroke, false));
+    logoGroup.add(createCap(new THREE.Vector3(xe + Math.cos(eEndAngle) * r, yCenter + Math.sin(eEndAngle) * r, t), eStroke));
 
     // 4. 'g' (Level Comfortaa g: Upper Bowl + Hook)
-    const xg = 244 * S;
     const ygBowl = 57.0 * S;
-    const rBowl = 12.0 * S;
-    const tBowl = 9.5 * S;
     logoGroup.add(createTorus(xg, ygBowl, rBowl, tBowl));
 
     const gStemX = xg + rBowl;
@@ -171,8 +178,8 @@ export default function OneGo3DLogo({
     logoGroup.add(createCap(gLastPt, tBowl));
 
     // 5. 'o' (Second Lowercase Torus)
-    const xo2 = 308 * S;
-    logoGroup.add(createTorus(xo2, yCenter, r, t));
+    const xo2 = xg + gOuterRadius + letterGap + eOuterRadius;
+    logoGroup.add(createTorus(xo2, yCenter, r, mainStroke));
 
     // =========================================================================
     // STUDIO 3D CLAY LIGHTING
