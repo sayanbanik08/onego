@@ -32,6 +32,47 @@ html.login-page-scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
 
+.login-section-top-blur {
+  clip-path: polygon(
+    0 100%,
+    0 86%,
+    1% 62%,
+    4% 35%,
+    10% 12%,
+    18% 0,
+    82% 0,
+    90% 12%,
+    96% 35%,
+    99% 62%,
+    100% 86%,
+    100% 100%
+  );
+}
+
+@media (min-width: 1024px) {
+  .login-section-top-blur {
+    clip-path: polygon(
+      0 100%,
+      0 86%,
+      0.5% 62%,
+      1.5% 35%,
+      3% 12%,
+      6% 0,
+      94% 0,
+      97% 12%,
+      98.5% 35%,
+      99.5% 62%,
+      100% 86%,
+      100% 100%
+    );
+  }
+}
+
+.login-section-top-blur {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 82%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 82%);
+}
+
 
 body {
   background: var(--background);

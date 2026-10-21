@@ -20,13 +20,19 @@ import { useEffect, useRef } from "react";
  *    - Laptop view: Full elastic height stretch upwards.
  *    - Mobile view: Increased, tactile elastic height stretch (up to 1.75x) with preserved clearance.
  *
- * 4. SPRING PHYSICS ENGINE:
+ * 4. PAINTBRUSH (#login-paintbrush):
+ *    - Laptop view: Shares the same elastic height stretch as the design pad.
+ *    - Mobile view: Stretches with the unified layout container.
+ *
+ * 5. SPRING PHYSICS ENGINE:
  *    - Underdamped harmonic oscillator (k=56, c=5.5) on flick/top arrival for organic rebound.
  *    - Responsive scroll tracking (k=96, c=12).
  *    - Sleeping RAF loop: 0% CPU/GPU overhead when at rest.
  */
 export default function LoginElasticPhysics() {
   const isReducedMotion = useRef(false);
+  const topBlurElement = useRef<HTMLElement | null>(null);
+  const topBlurTimeout = useRef<number | null>(null);
 
   // Physics state for harmonic spring system:
   const state = useRef({
@@ -50,6 +56,22 @@ export default function LoginElasticPhysics() {
     const s = state.current;
     const clampedY = Math.max(0, scrollY);
     const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
+    const scrollDelta = clampedY - s.lastScrollY;
+
+    if (Math.abs(scrollDelta) > 0.1 || Math.abs(velocity) > 0.02) {
+      if (topBlurElement.current) {
+        topBlurElement.current.style.opacity = "1";
+      }
+      if (topBlurTimeout.current !== null) {
+        window.clearTimeout(topBlurTimeout.current);
+      }
+      topBlurTimeout.current = window.setTimeout(() => {
+        if (topBlurElement.current) {
+          topBlurElement.current.style.opacity = "0";
+        }
+        topBlurTimeout.current = null;
+      }, 220);
+    }
 
     // Mobile has shorter scroll distance, so responsive active range makes height stretch responsive immediately:
     const activeRange = isDesktop ? 500 : 360;
@@ -92,7 +114,9 @@ export default function LoginElasticPhysics() {
 
     const showcaseElement = document.querySelector<HTMLElement>("#showcase");
     const loginModuleElement = document.querySelector<HTMLElement>("#login-module-content");
+    const paintbrushElement = document.querySelector<HTMLElement>("#login-paintbrush");
     const unifiedElement = document.querySelector<HTMLElement>(".login-unified-scroll");
+    topBlurElement.current = document.querySelector<HTMLElement>("#login-section-top-blur");
 
     // Anchor setup:
     if (showcaseElement) {
@@ -103,6 +127,10 @@ export default function LoginElasticPhysics() {
       loginModuleElement.style.transformOrigin = "50% 100%";
       loginModuleElement.style.willChange = "transform";
     }
+    if (paintbrushElement) {
+      paintbrushElement.style.transformOrigin = "50% 100%";
+      paintbrushElement.style.willChange = "transform";
+    }
     if (unifiedElement) {
       unifiedElement.style.transformOrigin = "50% 100%";
       unifiedElement.style.willChange = "transform";
@@ -110,6 +138,7 @@ export default function LoginElasticPhysics() {
 
     let lastShowcaseTransform = "";
     let lastModuleTransform = "";
+    let lastPaintbrushTransform = "";
     let lastUnifiedTransform = "";
 
     const physicsLoop = (time: number) => {
@@ -171,6 +200,14 @@ export default function LoginElasticPhysics() {
           }
         }
 
+        if (paintbrushElement) {
+          const paintbrushT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
+          if (paintbrushT !== lastPaintbrushTransform) {
+            paintbrushElement.style.transform = paintbrushT;
+            lastPaintbrushTransform = paintbrushT;
+          }
+        }
+
         if (unifiedElement && lastUnifiedTransform !== "") {
           unifiedElement.style.transform = "";
           lastUnifiedTransform = "";
@@ -187,7 +224,10 @@ export default function LoginElasticPhysics() {
           loginModuleElement.style.transform = "";
           lastModuleTransform = "";
         }
-
+        if (paintbrushElement && lastPaintbrushTransform !== "") {
+          paintbrushElement.style.transform = "";
+          lastPaintbrushTransform = "";
+        }
         if (unifiedElement) {
           const unifiedT = `scaleY(${stretchVal.toFixed(4)}) translateZ(0)`;
           if (unifiedT !== lastUnifiedTransform) {
@@ -230,8 +270,14 @@ export default function LoginElasticPhysics() {
       isLoopRunning.current = false;
       wakeLoopRef.current = () => {};
       window.removeEventListener("scroll", handleNativeScroll);
+      if (topBlurTimeout.current !== null) {
+        window.clearTimeout(topBlurTimeout.current);
+        topBlurTimeout.current = null;
+      }
+      topBlurElement.current = null;
       if (showcaseElement) showcaseElement.style.transform = "";
       if (loginModuleElement) loginModuleElement.style.transform = "";
+      if (paintbrushElement) paintbrushElement.style.transform = "";
       if (unifiedElement) unifiedElement.style.transform = "";
     };
   }, []);
