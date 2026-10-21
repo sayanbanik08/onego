@@ -4,6 +4,7 @@ import Link from "next/link";
 import LoginFooter from "@/components/LoginFooter";
 import LoginHeader3D from "@/components/LoginHeader3D";
 import LoginActions from "@/components/LoginActions";
+import OneGo3DLogo from "@/components/OneGo3DLogo";
 import LoginSmoothScroll from "@/components/LoginSmoothScroll";
 import LoginCursor from "@/components/LoginCursor";
 import {
@@ -136,12 +137,15 @@ export default async function Home() {
               {/* Isme 'Welcome to OneGo' title, tagline aur <LoginActions /> (Clerk login & guest button) hain. */}
               {/* ========================================================================= */}
               <div id="login-module-content" className="login-module-content flex min-w-0 justify-center lg:justify-end origin-bottom">
-                <div className="w-full min-w-0 max-w-[400px] py-4 sm:py-6 text-center lg:py-0 lg:text-left">
-                  <p className="text-xs font-semibold uppercase text-[#722F37]/60">Welcome to</p>
-                  <h2 className="mt-2 text-6xl font-bold leading-none sm:text-7xl">
-                    <span className="inline-block origin-center scale-x-[1.5] scale-y-[1.22] lg:origin-left">OneGo</span>
-                  </h2>
-                  <p className="mx-auto mt-5 max-w-sm text-base leading-7 text-[#722F37]/70 sm:text-lg lg:mx-0">
+                <div className="w-full min-w-0 max-w-[390px] py-4 sm:py-6 text-left lg:py-0">
+                  <p className="text-[13px] font-bold uppercase tracking-[0.16em] text-[#5D1C28] text-center lg:text-left" style={{ fontFamily: "var(--font-comfortaa)" }}>
+                    WELCOME TO
+                  </p>
+                  {/* Dynamic 3D Clay Logo - Comfortaa Font (text="onego" ya koi bhi text change kar sakte hain) */}
+                  <div className="mt-1 -ml-1.5 w-full">
+                    <OneGo3DLogo text="onego" />
+                  </div>
+                  <p className="mt-2.5 text-[16.5px] leading-relaxed text-[#76615A] font-normal" style={{ fontFamily: "var(--font-comfortaa)" }}>
                     Create or log in to continue your journey.
                   </p>
                   <LoginActions />

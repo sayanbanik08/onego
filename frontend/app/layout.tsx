@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 const comfortaa = Comfortaa({
   variable: "--font-comfortaa",
   subsets: ["latin"],
-  weight: ["300", "400"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
