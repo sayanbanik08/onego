@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactLenis } from "lenis/react";
-import { useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 import LoginElasticPhysics from "./LoginElasticPhysics";
 
 const subscribeToReducedMotion = (onChange: () => void) => {
@@ -20,6 +20,14 @@ export default function LoginSmoothScroll({ children }: { children: ReactNode })
     prefersReducedMotion,
     () => true,
   );
+
+  useEffect(() => {
+    document.documentElement.classList.add("login-page-scrollbar-hidden");
+
+    return () => {
+      document.documentElement.classList.remove("login-page-scrollbar-hidden");
+    };
+  }, []);
 
   if (reduceMotion) return <>{children}</>;
 

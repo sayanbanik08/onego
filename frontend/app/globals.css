@@ -23,6 +23,15 @@ html {
   overflow-x: hidden;
 }
 
+html.login-page-scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html.login-page-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 
 body {
   background: var(--background);

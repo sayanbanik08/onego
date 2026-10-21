@@ -54,15 +54,15 @@ export default async function Home() {
           </div>
           <div className="pointer-events-none absolute -bottom-64 -right-40 z-[2] h-[34rem] w-[34rem] rounded-full border border-[#B7AB9A]/60" />
 
-          <section className="relative lg:sticky lg:top-9 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-28 sm:pt-32 lg:pt-0 sm:px-10 lg:px-14">
-            <div className="login-unified-scroll grid w-full min-w-0 items-center gap-28 sm:gap-32 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+          <section className="relative lg:sticky lg:top-9 z-10 mx-auto min-h-[calc(100vh-64px)] w-full min-w-0 max-w-7xl items-center px-6 pb-28 sm:pb-36 lg:pb-24 pt-20 sm:pt-32 lg:pt-0 sm:px-10 lg:px-14">
+            <div className="login-unified-scroll grid w-full min-w-0 items-center gap-10 sm:gap-32 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
               {/* ========================================================================= */}
               {/* [ELEMENT 1: DESIGN CANVAS - START] */}
               {/* Yeh left side ka Design Canvas / Visual Showcase hai (id="build" & id="showcase"). */}
               {/* Isme portfolio card mockup aur floating icons (Type, Image, Colors) hain. */}
               {/* ========================================================================= */}
               <div id="build" className="relative flex min-h-0 min-w-0 flex-col justify-center lg:min-h-[590px] lg:translate-y-10">
-                <div className="relative mx-auto mt-1 h-[290px] w-full max-w-[610px] sm:mt-3 sm:h-[390px] lg:mt-5" id="showcase">
+                <div className="relative mx-auto mt-1 h-[240px] w-full max-w-[610px] sm:mt-3 sm:h-[390px] lg:mt-5" id="showcase">
                   <div className="pointer-events-none absolute inset-[-2%_0%_0%_-5%] rotate-[-8deg] rounded-[43%_57%_52%_48%/46%_41%_59%_54%] bg-[#B7AB9A]/30" />
                   <div className="pointer-events-none absolute left-[4%] top-[20%] h-[66%] w-[72%] rotate-[13deg] rounded-[48%_52%_58%_42%/55%_39%_61%_45%] bg-[#722F37]/[0.08] blur-xl" />
                   <div className="pointer-events-none absolute left-[1%] top-[35%] h-[48%] w-[43%] rotate-[14deg] rounded-[44%_56%_64%_36%/43%_55%_45%_57%] bg-[#B7AB9A]/30" />
@@ -136,18 +136,20 @@ export default async function Home() {
               {/* Yeh right side ka Login Module / Actions section hai. */}
               {/* Isme 'Welcome to OneGo' title, tagline aur <LoginActions /> (Clerk login & guest button) hain. */}
               {/* ========================================================================= */}
-              <div id="login-module-content" className="login-module-content flex min-w-0 justify-center lg:justify-end origin-bottom">
+              <div id="login-module-content" className="login-module-content mt-20 flex min-w-0 justify-center lg:mt-10 lg:justify-end origin-bottom">
                 <div className="w-full min-w-0 max-w-[390px] py-4 sm:py-6 text-left lg:py-0">
-                  <p className="text-[13px] font-bold uppercase tracking-[0.16em] text-[#5D1C28] text-center lg:text-left" style={{ fontFamily: "var(--font-comfortaa)" }}>
+                  <p className="mx-auto w-full text-[13px] font-bold uppercase tracking-[0.16em] text-[#5D1C28] text-center lg:-ml-1.5 lg:text-left" style={{ fontFamily: "var(--font-comfortaa)" }}>
                     WELCOME TO
                   </p>
                   {/* Dynamic 3D Clay Logo - Comfortaa Font (text="onego" ya koi bhi text change kar sakte hain) */}
-                  <div className="mt-1 -ml-1.5 w-full">
-                    <OneGo3DLogo text="onego" />
+                  <div className="mx-auto -mt-2 w-full max-w-[490px] sm:mx-0 sm:-ml-15 sm:w-[560px]">
+                    <OneGo3DLogo text="onego" className="max-w-[490px]" />
                   </div>
-                  <p className="mt-2.5 text-[16.5px] leading-relaxed text-[#76615A] font-normal" style={{ fontFamily: "var(--font-comfortaa)" }}>
-                    Create or log in to continue your journey.
-                  </p>
+                  <div className="-mt-3 w-full max-w-[380px]">
+                    <p className="-ml-0.2 w-[calc(100%+100px)] whitespace-nowrap text-[clamp(12px,4.1vw,18px)] leading-relaxed text-[#76615A] font-normal sm:text-[clamp(10px,2.2vw,17.7px)]" style={{ fontFamily: "var(--font-comfortaa)" }}>
+                      Create or log in to continue your journey.
+                    </p>
+                  </div>
                   <LoginActions />
                 </div>
               </div>
@@ -163,4 +165,4 @@ export default async function Home() {
 }
 
 
-// app/(auth)/login/page.tsx ← Login/Create Account(login page ka sara code)
+// app/(auth)/login/page.tsx ← Login/Create Account(login page ka sara code0
