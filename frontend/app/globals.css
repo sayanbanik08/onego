@@ -26,52 +26,17 @@ html {
 html.login-page-scrollbar-hidden {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  background-color: #000000 !important;
+}
+
+html.login-page-scrollbar-hidden body {
+  background-color: #000000 !important;
 }
 
 html.login-page-scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
 
-.login-section-top-blur {
-  clip-path: polygon(
-    0 100%,
-    0 86%,
-    1% 62%,
-    4% 35%,
-    10% 12%,
-    18% 0,
-    82% 0,
-    90% 12%,
-    96% 35%,
-    99% 62%,
-    100% 86%,
-    100% 100%
-  );
-}
-
-@media (min-width: 1024px) {
-  .login-section-top-blur {
-    clip-path: polygon(
-      0 100%,
-      0 86%,
-      0.5% 62%,
-      1.5% 35%,
-      3% 12%,
-      6% 0,
-      94% 0,
-      97% 12%,
-      98.5% 35%,
-      99.5% 62%,
-      100% 86%,
-      100% 100%
-    );
-  }
-}
-
-.login-section-top-blur {
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 82%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 15%, transparent 82%);
-}
 
 
 body {
@@ -110,29 +75,6 @@ html.login-cursor-enabled [contenteditable="true"] {
   transform: scale(1);
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
-}
-
-/*
-  Login page elastic stretch on scroll:
-  - Transform-origin: 50% 100% (anchored at bottom, stretching upwards)
-  - Controlled dynamically with mathematical physics via LoginElasticPhysics (Lenis RAF)
-  - Hardware accelerated GPU composition with will-change: transform
-*/
-#showcase,
-.login-trust-badge,
-.login-module-content {
-  transform-origin: 50% 100%;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #showcase,
-  .login-unified-scroll,
-  .login-trust-badge,
-  .login-module-content {
-    transform: none !important;
-    animation: none !important;
-  }
 }
 
 /* 

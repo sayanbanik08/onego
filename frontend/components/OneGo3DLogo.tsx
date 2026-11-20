@@ -56,7 +56,7 @@ export default function OneGo3DLogo({
 
     // Clay Physical Material (Rich Burgundy with soft satin sheen)
     const clayMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color("#722F37"),
+      color: new THREE.Color("#1A1A1A"),
       roughness: 0.34,
       metalness: 0.02,
       clearcoat: 0.35,
@@ -215,7 +215,7 @@ export default function OneGo3DLogo({
       style={{
         aspectRatio: "415 / 110",
         // Shadow: offset-x 4px, offset-y 7px, tight 4px blur
-        filter: "drop-shadow(4px 7px 4px #750916)",
+        filter: "drop-shadow(4px 7px 4px #000000)",
       }}
     />
   );

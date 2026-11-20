@@ -2,7 +2,6 @@
 
 import { ReactLenis } from "lenis/react";
 import { useEffect, useSyncExternalStore, type ReactNode } from "react";
-import LoginElasticPhysics from "./LoginElasticPhysics";
 
 const subscribeToReducedMotion = (onChange: () => void) => {
   const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -41,7 +40,6 @@ export default function LoginSmoothScroll({ children }: { children: ReactNode })
         syncTouch: false,
       }}
     >
-      <LoginElasticPhysics />
       {children}
     </ReactLenis>
   );

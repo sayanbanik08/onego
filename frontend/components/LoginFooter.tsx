@@ -82,15 +82,15 @@ export default function LoginFooter() {
 
   return (
     <footer
-      className="relative z-20 mx-auto isolate w-full min-h-[calc(100dvh-36px)] overflow-hidden rounded-t-[6rem] bg-[#722F37] text-[#E8DCC6]"
+      className="relative z-20 mx-auto isolate w-full min-h-[calc(100dvh-36px)] overflow-hidden rounded-t-[6rem] bg-[#000000] text-white"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-44 -top-52 size-[32rem] rounded-full border border-[#B7AB9A]/25"
+        className="pointer-events-none absolute -right-44 -top-52 size-[32rem] rounded-full border border-white/10"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-20 -top-28 size-[21rem] rounded-full border border-[#B7AB9A]/20"
+        className="pointer-events-none absolute -right-20 -top-28 size-[21rem] rounded-full border border-white/8"
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 pb-8 pt-12 sm:px-10 sm:pt-16 lg:px-14 lg:pt-20">
@@ -104,7 +104,7 @@ export default function LoginFooter() {
             <br />
             its own place.
           </h2>
-          <p className="max-w-sm pb-2 text-base leading-7 text-[#E8DCC6]/75 sm:text-lg">
+          <p className="max-w-sm pb-2 text-base leading-7 text-white/70 sm:text-lg">
             A little space to show what you do, what you care about, and where
             you are headed next.
           </p>
@@ -124,7 +124,7 @@ export default function LoginFooter() {
             }
           }}
         >
-          <div className="relative overflow-hidden border-y border-[#B7AB9A]/35">
+          <div className="relative overflow-hidden border-y border-white/20">
             <div
               className={`flex w-[1800%] md:w-[900%] lg:w-[600%] ${transitionEnabled ? "transition-transform duration-500 ease-in-out" : ""} motion-reduce:transition-none`}
               style={{ transform: `translateX(-${activeSlideIndex * (100 / (footerPillars.length * 2))}%)` }}
@@ -143,11 +143,11 @@ export default function LoginFooter() {
                   aria-hidden={index >= footerPillars.length}
                 >
                   <div>
-                    <p className="text-xs font-medium text-[#B7AB9A]">{pillar.number}</p>
+                    <p className="text-xs font-medium text-white/60">{pillar.number}</p>
                     <h3 className="mt-5 text-xl font-semibold sm:text-2xl">
                       {pillar.title}
                     </h3>
-                    <p className="mt-3 max-w-xs text-sm leading-6 text-[#E8DCC6]/70 sm:text-base">
+                    <p className="mt-3 max-w-xs text-sm leading-6 text-white/60 sm:text-base">
                       {pillar.description}
                     </p>
                   </div>
@@ -155,12 +155,12 @@ export default function LoginFooter() {
                 );
               })}
             </div>
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 hidden border-l border-[#B7AB9A]/35 md:block lg:hidden" />
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/3 hidden border-l border-[#B7AB9A]/35 lg:block" />
-            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-2/3 hidden border-l border-[#B7AB9A]/35 lg:block" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 hidden border-l border-white/20 md:block lg:hidden" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/3 hidden border-l border-white/20 lg:block" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-2/3 hidden border-l border-white/20 lg:block" />
           </div>
           <div className="flex items-center justify-end gap-4 pt-4">
-            <p aria-live="polite" className="text-xs font-medium text-[#E8DCC6]/65">
+            <p aria-live="polite" className="text-xs font-medium text-white/60">
               {String((activeSlideIndex % footerPillars.length) + 1).padStart(2, "0")} / {String(footerPillars.length).padStart(2, "0")}
             </p>
             <div className="flex gap-2">
@@ -169,7 +169,7 @@ export default function LoginFooter() {
                 aria-label="Previous highlight"
                 disabled={activeSlideIndex === 0 || activeSlideIndex === footerPillars.length}
                 onClick={() => setActiveSlideIndex((index) => Math.max(0, index - 1))}
-                className="grid size-10 place-items-center border border-[#B7AB9A]/40 text-[#E8DCC6] transition-colors hover:bg-[#B7AB9A]/15 disabled:cursor-not-allowed disabled:opacity-35"
+                className="grid size-10 place-items-center border border-white/25 text-white transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -178,7 +178,7 @@ export default function LoginFooter() {
                 aria-label="Next highlight"
                 disabled={activeSlideIndex === footerPillars.length}
                 onClick={() => setActiveSlideIndex((index) => index + 1)}
-                className="grid size-10 place-items-center border border-[#B7AB9A]/40 text-[#E8DCC6] transition-colors hover:bg-[#B7AB9A]/15 disabled:cursor-not-allowed disabled:opacity-35"
+                className="grid size-10 place-items-center border border-white/25 text-white transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ChevronRight size={18} />
               </button>
@@ -189,11 +189,11 @@ export default function LoginFooter() {
         <div className="flex flex-col gap-5 pt-8 sm:flex-row sm:items-end sm:justify-between sm:pt-10">
           <div>
             <p className="text-3xl font-bold tracking-tight">OneGo</p>
-            <p className="mt-2 text-sm text-[#E8DCC6]/65">
+            <p className="mt-2 text-sm text-white/60">
               Your story, beautifully told.
             </p>
           </div>
-          <p className="flex items-center gap-2 text-sm text-[#E8DCC6]/65">
+          <p className="flex items-center gap-2 text-sm text-white/60">
             Made for what you make 
           </p>
         </div>
