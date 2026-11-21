@@ -6,53 +6,60 @@ import LoginActions from "./LoginActions";
 export default function LoginHeroSection() {
   return (
     <section
-      className="relative min-h-screen w-full overflow-hidden bg-black"
-      aria-label="Login section"
+      className="relative isolate flex w-full flex-col overflow-hidden bg-black px-4 pt-[2cm] pb-0 text-white sm:px-8"
+      aria-labelledby="login-section-title"
+      style={{ fontFamily: "var(--font-comfortaa)" }}
     >
+      {/* ── Massive Heading: Exactly identical to "About us" ── */}
+      <h2
+        id="login-section-title"
+        className="-mx-4 mt-0 w-[calc(100%+2rem)] whitespace-nowrap text-center text-[clamp(3rem,24vw,28rem)] font-light leading-[1.05] tracking-[-0.075em] sm:-mx-8 sm:w-[calc(100%+4rem)]"
+      >
+        Login us
+      </h2>
+
       {/*
        * ─────────────────────────────────────────────────────────
+       *  Split content area:
        *  MOBILE  → sticker image on top  / content on bottom
        *  DESKTOP → sticker image on left / content on right
        * ─────────────────────────────────────────────────────────
        */}
-      <div className="flex h-full min-h-screen flex-col lg:flex-row">
+      <div className="-mx-4 mt-[1.5cm] flex w-[calc(100%+2rem)] flex-col sm:-mx-8 sm:w-[calc(100%+4rem)] lg:flex-row">
 
-        {/* ── Sticker / Illustration panel ── */}
-        <div className="relative h-[52vw] min-h-[300px] w-full lg:h-screen lg:w-[55%] lg:min-h-screen">
+        {/* ── Sticker / 3D Characters panel ── */}
+        <div className="relative h-[56vw] min-h-[300px] w-full lg:h-[620px] lg:w-[54%]">
           <Image
             src="/login-sticker-bg.jpg"
-            alt="Colorful 3D creative stickers"
+            alt="Colorful 3D creative characters and tools"
             fill
             priority
             className="object-cover object-center"
-            sizes="(max-width: 1024px) 100vw, 55vw"
+            sizes="(max-width: 1024px) 100vw, 54vw"
           />
-          {/* Bottom fade into black — blends into content on mobile */}
+          {/* Bottom fade into black on mobile */}
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-black lg:hidden" />
-          {/* Right fade into black — blends into content on desktop */}
+          {/* Right fade into black on desktop */}
           <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-r from-transparent to-black hidden lg:block" />
         </div>
 
-        {/* ── Content panel ── */}
-        <div
-          className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-16 pt-6 text-center lg:items-start lg:justify-center lg:px-14 lg:pb-0 lg:pt-0 lg:text-left"
-          style={{ fontFamily: "var(--font-comfortaa)" }}
-        >
+        {/* ── Content & Controls panel ── */}
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-0 pt-6 text-center lg:items-start lg:justify-center lg:px-14 lg:py-0 lg:text-left">
           {/* Heading */}
-          <h1 className="text-[clamp(2.4rem,7vw,4.5rem)] font-bold leading-[1.08] tracking-tight text-white">
+          <h3 className="text-[clamp(2.4rem,5.5vw,4.5rem)] font-bold leading-[1.08] tracking-tight text-white">
             Log in to create
             <br />
             or continue
-          </h1>
+          </h3>
 
-          {/* Subtitle */}
-          <p className="max-w-[340px] text-[clamp(13px,2vw,15px)] leading-relaxed text-white/50">
-            Build a profile that feels like you — showcase your work, tell your
-            story, and connect with the people who matter.
+          {/* Subtitle from reference */}
+          <p className="max-w-[360px] text-[clamp(13px,1.8vw,15.5px)] leading-relaxed text-white/50">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor
           </p>
 
-          {/* Buttons */}
-          <div className="w-full max-w-[360px]">
+          {/* Slider button & guest */}
+          <div className="w-full max-w-[360px] pb-0">
             <LoginActions />
           </div>
         </div>

@@ -82,8 +82,10 @@ export default function LoginFooter() {
 
   return (
     <footer
-      className="relative z-20 mx-auto isolate w-full min-h-[calc(100dvh-36px)] overflow-hidden rounded-t-[6rem] bg-[#000000] text-white"
+      className="relative z-20 isolate w-full min-h-[calc(100dvh-36px)] overflow-hidden bg-[#000000] pt-[2cm] text-white"
+      style={{ fontFamily: "var(--font-comfortaa)" }}
     >
+      {/* Decorative ambient background rings */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-44 -top-52 size-[32rem] rounded-full border border-white/10"
@@ -93,23 +95,25 @@ export default function LoginFooter() {
         className="pointer-events-none absolute -right-20 -top-28 size-[21rem] rounded-full border border-white/8"
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pb-8 pt-12 sm:px-10 sm:pt-16 lg:px-14 lg:pt-20">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase">
+      {/* Full-width container touching left and right edges */}
+      <div className="relative z-10 w-full px-4 pb-8 pt-0 sm:px-8 lg:px-12">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white/70">
           <span>Your next chapter starts here</span>
         </div>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-end lg:gap-16">
-          <h2 className="max-w-4xl text-6xl font-bold leading-[0.98] sm:text-7xl lg:text-8xl">
+          <h2 className="max-w-4xl text-5xl font-light leading-[1.02] tracking-tight sm:text-7xl lg:text-8xl">
             Give your work
             <br />
             its own place.
           </h2>
-          <p className="max-w-sm pb-2 text-base leading-7 text-white/70 sm:text-lg">
+          <p className="max-w-md pb-2 text-base leading-relaxed text-white/70 sm:text-lg">
             A little space to show what you do, what you care about, and where
             you are headed next.
           </p>
         </div>
 
+        {/* Carousel touching full width edge-to-edge */}
         <div
           className="mt-16 sm:mt-24"
           role="region"
@@ -124,9 +128,10 @@ export default function LoginFooter() {
             }
           }}
         >
-          <div className="relative overflow-hidden border-y border-white/20">
+          <div className="relative -mx-4 overflow-hidden border-y border-white/20 sm:-mx-8 lg:-mx-12">
             <div
-              className={`flex w-[1800%] md:w-[900%] lg:w-[600%] ${transitionEnabled ? "transition-transform duration-500 ease-in-out" : ""} motion-reduce:transition-none`}
+              className={`flex w-[1800%] md:w-[900%] lg:w-[600%] ${transitionEnabled ? "transition-transform duration-500 ease-in-out" : ""
+                } motion-reduce:transition-none`}
               style={{ transform: `translateX(-${activeSlideIndex * (100 / (footerPillars.length * 2))}%)` }}
             >
               {[...footerPillars, ...footerPillars].map((pillar, index) => {
@@ -134,24 +139,25 @@ export default function LoginFooter() {
                 const columnIndex = (pillarIndex - activeSlideIndex + footerPillars.length) % footerPillars.length;
 
                 return (
-                <article
-                  key={`${pillar.number}-${index}`}
-                  className={`basis-[5.555556%] min-h-[220px] shrink-0 py-6 sm:min-h-[248px] sm:py-7 md:pr-8 ${columnIndex > 0 ? "md:pl-8" : ""}`}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`${pillarIndex + 1} of ${footerPillars.length}`}
-                  aria-hidden={index >= footerPillars.length}
-                >
-                  <div>
-                    <p className="text-xs font-medium text-white/60">{pillar.number}</p>
-                    <h3 className="mt-5 text-xl font-semibold sm:text-2xl">
-                      {pillar.title}
-                    </h3>
-                    <p className="mt-3 max-w-xs text-sm leading-6 text-white/60 sm:text-base">
-                      {pillar.description}
-                    </p>
-                  </div>
-                </article>
+                  <article
+                    key={`${pillar.number}-${index}`}
+                    className={`basis-[5.555556%] min-h-[220px] shrink-0 px-4 py-6 sm:min-h-[248px] sm:px-8 sm:py-7 md:pr-8 ${columnIndex > 0 ? "md:pl-8" : ""
+                      }`}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`${pillarIndex + 1} of ${footerPillars.length}`}
+                    aria-hidden={index >= footerPillars.length}
+                  >
+                    <div>
+                      <p className="font-mono text-xs font-medium text-white/60">{pillar.number}</p>
+                      <h3 className="mt-5 text-xl font-semibold sm:text-2xl">
+                        {pillar.title}
+                      </h3>
+                      <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60 sm:text-base">
+                        {pillar.description}
+                      </p>
+                    </div>
+                  </article>
                 );
               })}
             </div>
@@ -159,8 +165,9 @@ export default function LoginFooter() {
             <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/3 hidden border-l border-white/20 lg:block" />
             <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-2/3 hidden border-l border-white/20 lg:block" />
           </div>
+
           <div className="flex items-center justify-end gap-4 pt-4">
-            <p aria-live="polite" className="text-xs font-medium text-white/60">
+            <p aria-live="polite" className="font-mono text-xs font-medium text-white/60">
               {String((activeSlideIndex % footerPillars.length) + 1).padStart(2, "0")} / {String(footerPillars.length).padStart(2, "0")}
             </p>
             <div className="flex gap-2">
@@ -186,15 +193,16 @@ export default function LoginFooter() {
           </div>
         </div>
 
+        {/* Footer bottom bar touching left and right */}
         <div className="flex flex-col gap-5 pt-8 sm:flex-row sm:items-end sm:justify-between sm:pt-10">
           <div>
-            <p className="text-3xl font-bold tracking-tight">OneGo</p>
+            <p className="text-3xl font-bold tracking-tight">onego</p>
             <p className="mt-2 text-sm text-white/60">
               Your story, beautifully told.
             </p>
           </div>
           <p className="flex items-center gap-2 text-sm text-white/60">
-            Made for what you make 
+            Made for what you make
           </p>
         </div>
       </div>

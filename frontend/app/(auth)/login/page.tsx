@@ -7,6 +7,7 @@ import LoginCursor from "@/components/LoginCursor";
 import LoginCollageSlider from "@/components/LoginCollageSlider";
 import LoginAboutSection from "@/components/LoginAboutSection";
 import LoginHeroSection from "@/components/LoginHeroSection";
+import LoginToolsSection from "@/components/LoginToolsSection";
 
 export default async function Home() {
   const { isAuthenticated } = await auth();
@@ -26,6 +27,9 @@ export default async function Home() {
 
         {/* ── New sticker login hero — replaces old 3D logo + leather buttons ── */}
         <LoginHeroSection />
+
+        {/* ── Tools & Shortcuts Section ── */}
+        <LoginToolsSection />
 
         <LoginFooter />
         <LoginCursor />
