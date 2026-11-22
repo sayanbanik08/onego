@@ -1,11 +1,31 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import LoginActions from "./LoginActions";
 import { useFitHeading } from "./useFitHeading";
 
 export default function LoginHeroSection() {
   const headingRef = useFitHeading();
+  const firstLineRef = useRef<HTMLSpanElement>(null);
+  const [headingLineWidth, setHeadingLineWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const firstLine = firstLineRef.current;
+    if (!firstLine) return;
+
+    const updateWidth = () => {
+      setHeadingLineWidth(firstLine.getBoundingClientRect().width);
+    };
+
+    updateWidth();
+    void document.fonts?.ready.then(updateWidth);
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(firstLine);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -19,7 +39,7 @@ export default function LoginHeroSection() {
         className="-mx-4 mt-0 w-[calc(100%+2rem)] whitespace-nowrap text-center font-light leading-[1.05] tracking-normal sm:-mx-8 sm:w-[calc(100%+4rem)]"
       >
         <span ref={headingRef} className="inline-block whitespace-nowrap">
-          Login us
+          Login
         </span>
       </h2>
 
@@ -49,22 +69,29 @@ export default function LoginHeroSection() {
         </div>
 
         {/* ── Content & Controls panel ── */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 px-6 pb-0 pt-6 text-center lg:items-start lg:justify-center lg:px-14 lg:py-0 lg:text-left">
+        <div className="@container relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-6 px-6 pb-0 pt-6 text-center lg:-translate-x-[12px]">
           {/* Heading */}
-          <h3 className="text-[clamp(2.4rem,5.5vw,4.5rem)] font-bold leading-[1.08] tracking-tight text-white">
-            Log in to create
+          <h3 className="mb-2 w-full text-[clamp(1.75rem,11.5cqi,7rem)] font-bold leading-[1.08] tracking-tight text-white text-center lg:text-[clamp(1.75rem,13cqi,7rem)] lg:mb-5">
+            <span ref={firstLineRef} className="inline-block whitespace-nowrap">
+              Log in to create
+            </span>
             <br />
             or continue
           </h3>
 
           {/* Subtitle from reference */}
-          <p className="max-w-[360px] text-[clamp(13px,1.8vw,15.5px)] leading-relaxed text-white/50">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor
+          <p className="mb-2 w-full text-[clamp(0.25rem,3.1cqi,1.375rem)] leading-relaxed text-white/50 text-center lg:mb-5">
+            <span className="block whitespace-nowrap">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </span>
+            <span className="block whitespace-nowrap">Sed do eiusmod tempor</span>
           </p>
 
           {/* Slider button & guest */}
-          <div className="w-full max-w-[360px] pb-0">
+          <div
+            className="max-w-full pb-0 mx-auto"
+            style={{ width: headingLineWidth ?? "100%" }}
+          >
             <LoginActions />
           </div>
         </div>
