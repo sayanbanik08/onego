@@ -19,20 +19,22 @@ export default async function Home() {
 
   return (
     <LoginSmoothScroll>
-      <div className="min-h-screen w-full bg-[#000000] text-[#F5F5F5]">
-        {/* 3D Realistic Header Shelf */}
-        <LoginHeader3D />
-        <LoginCollageSlider />
-        <LoginAboutSection />
+      <div className="w-full bg-[#808080]">
+        <div className="mx-auto w-full max-w-[1831px] bg-[#000000] text-[#F5F5F5]">
+          {/* 3D Realistic Header Shelf */}
+          <LoginHeader3D />
+          <LoginCollageSlider />
+          <LoginAboutSection />
 
-        {/* ── New sticker login hero — replaces old 3D logo + leather buttons ── */}
-        <LoginHeroSection />
+          {/* ── New sticker login hero — replaces old 3D logo + leather buttons ── */}
+          <LoginHeroSection />
 
-        {/* ── Tools & Shortcuts Section ── */}
-        <LoginToolsSection />
+          {/* ── Tools & Shortcuts Section ── */}
+          <LoginToolsSection />
 
-        <LoginFooter />
-        <LoginCursor />
+          <LoginFooter />
+          <LoginCursor />
+        </div>
       </div>
     </LoginSmoothScroll>
   );

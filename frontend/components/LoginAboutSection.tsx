@@ -1,6 +1,10 @@
 "use client";
 
+import { useFitHeading } from "./useFitHeading";
+
 export default function LoginAboutSection() {
+  const headingRef = useFitHeading();
+
   return (
     <section
       className="relative isolate flex w-full flex-col overflow-hidden bg-black px-4 pb-0 text-white sm:px-8"
@@ -9,9 +13,11 @@ export default function LoginAboutSection() {
     >
       <h2
         id="login-about-title"
-        className="-mx-4 mt-[2cm] w-[calc(100%+2rem)] whitespace-nowrap text-center text-[clamp(3rem,24vw,28rem)] font-light leading-[1.05] tracking-[-0.075em] sm:-mx-8 sm:w-[calc(100%+4rem)]"
+        className="-mx-4 mt-[2cm] w-[calc(100%+2rem)] whitespace-nowrap text-center font-light leading-[1.05] tracking-normal sm:-mx-8 sm:w-[calc(100%+4rem)]"
       >
-        About us
+        <span ref={headingRef} className="inline-block whitespace-nowrap">
+          About us
+        </span>
       </h2>
 
       <div className="-mx-4 mt-[2cm] grid w-[calc(100%+2rem)] grid-cols-3 gap-2 text-justify text-[clamp(6px,1.6vw,12px)] leading-[1.35] text-white/90 min-[480px]:gap-5 sm:-mx-8 sm:w-[calc(100%+4rem)] sm:gap-10">

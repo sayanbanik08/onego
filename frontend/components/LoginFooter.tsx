@@ -82,7 +82,7 @@ export default function LoginFooter() {
 
   return (
     <footer
-      className="relative z-20 isolate w-full min-h-[calc(100dvh-36px)] overflow-hidden bg-[#000000] pt-[2cm] text-white"
+      className="relative z-20 isolate w-full overflow-hidden bg-[#000000] pt-[2cm] text-white"
       style={{ fontFamily: "var(--font-comfortaa)" }}
     >
       {/* Decorative ambient background rings */}

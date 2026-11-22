@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useFitHeading } from "./useFitHeading";
 
 interface ToolItem {
   id: number;
@@ -37,6 +38,7 @@ const toolsData: ToolItem[] = [
 
 export default function LoginToolsSection() {
   const [hoveredTool, setHoveredTool] = useState<ToolItem | null>(null);
+  const headingRef = useFitHeading();
 
   return (
     <section
@@ -47,9 +49,11 @@ export default function LoginToolsSection() {
       {/* ── Massive Heading (matches About us & Login) ── */}
       <h2
         id="tools-section-title"
-        className="w-full whitespace-nowrap text-center text-[clamp(3rem,24vw,28rem)] font-light leading-[1.05] tracking-[-0.075em]"
+        className="w-full whitespace-nowrap text-center font-light leading-[1.05] tracking-normal"
       >
-        Tools
+        <span ref={headingRef} className="inline-block whitespace-nowrap">
+          Tools
+        </span>
       </h2>
 
       {/* ── Subtitle: & shortcuts (from reference) ── */}
@@ -157,8 +161,9 @@ export default function LoginToolsSection() {
         reprehenderit.
       </p>
 
-      {/* ── Thin horizontal divider to separate footer ── */}
-      <hr className="mt-[2cm] w-full border-0 border-t border-white/20" />
+      {/* Fixed spacing before and after the footer divider */}
+      <div className="mt-[2cm] w-full border-t border-white/20" />
+
     </section>
   );
 }

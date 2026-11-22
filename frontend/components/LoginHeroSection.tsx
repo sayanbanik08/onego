@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import LoginActions from "./LoginActions";
+import { useFitHeading } from "./useFitHeading";
 
 export default function LoginHeroSection() {
+  const headingRef = useFitHeading();
+
   return (
     <section
       className="relative isolate flex w-full flex-col overflow-hidden bg-black px-4 pt-[2cm] pb-0 text-white sm:px-8"
@@ -13,9 +16,11 @@ export default function LoginHeroSection() {
       {/* ── Massive Heading: Exactly identical to "About us" ── */}
       <h2
         id="login-section-title"
-        className="-mx-4 mt-0 w-[calc(100%+2rem)] whitespace-nowrap text-center text-[clamp(3rem,24vw,28rem)] font-light leading-[1.05] tracking-[-0.075em] sm:-mx-8 sm:w-[calc(100%+4rem)]"
+        className="-mx-4 mt-0 w-[calc(100%+2rem)] whitespace-nowrap text-center font-light leading-[1.05] tracking-normal sm:-mx-8 sm:w-[calc(100%+4rem)]"
       >
-        Login us
+        <span ref={headingRef} className="inline-block whitespace-nowrap">
+          Login us
+        </span>
       </h2>
 
       {/*
@@ -25,7 +30,7 @@ export default function LoginHeroSection() {
        *  DESKTOP → sticker image on left / content on right
        * ─────────────────────────────────────────────────────────
        */}
-      <div className="-mx-4 mt-[1.5cm] flex w-[calc(100%+2rem)] flex-col sm:-mx-8 sm:w-[calc(100%+4rem)] lg:flex-row">
+      <div className="-mx-4 mt-[2cm] flex w-[calc(100%+2rem)] flex-col sm:-mx-8 sm:w-[calc(100%+4rem)] lg:flex-row">
 
         {/* ── Sticker / 3D Characters panel ── */}
         <div className="relative h-[56vw] min-h-[300px] w-full lg:h-[620px] lg:w-[54%]">
