@@ -69,9 +69,9 @@ export default function LoginHeroSection() {
         </div>
 
         {/* ── Content & Controls panel ── */}
-        <div className="@container relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-6 px-6 pb-0 pt-6 text-center lg:-translate-x-[12px]">
+        <div className="@container relative z-10 flex min-w-0 flex-1 flex-col items-center justify-center gap-6 px-4 pb-0 pt-6 text-center lg:px-6 lg:-translate-x-[12px]">
           {/* Heading */}
-          <h3 className="mb-2 w-full text-[clamp(1.75rem,11.5cqi,7rem)] font-bold leading-[1.08] tracking-tight text-white text-center lg:text-[clamp(1.75rem,13cqi,7rem)] lg:mb-5">
+          <h3 className="mb-2 w-full text-[clamp(1.75rem,11.5cqi,7rem)] max-lg:text-[clamp(1.75rem,12cqi,7rem)] font-bold leading-[1.08] tracking-tight text-white text-center lg:text-[clamp(1.75rem,13cqi,7rem)] lg:mb-5">
             <span ref={firstLineRef} className="inline-block whitespace-nowrap">
               Log in to create
             </span>
@@ -80,7 +80,7 @@ export default function LoginHeroSection() {
           </h3>
 
           {/* Subtitle from reference */}
-          <p className="mb-2 w-full text-[clamp(0.25rem,3.1cqi,1.375rem)] leading-relaxed text-white/50 text-center lg:mb-5">
+          <p className="mb-2 w-full text-[clamp(0.25rem,3.1cqi,1.375rem)] max-lg:text-[clamp(0.25rem,3.4cqi,1.375rem)] leading-relaxed text-white/50 text-center lg:mb-5">
             <span className="block whitespace-nowrap">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
             </span>

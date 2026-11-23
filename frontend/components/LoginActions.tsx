@@ -326,7 +326,7 @@ export default function LoginActions() {
 
           {/* "slide to login" text — fades out cleanly as track shrinks */}
           <span
-            className="pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center whitespace-nowrap text-[clamp(1rem,5.87vw,3.75rem)] font-light text-white/50 lg:text-[clamp(1.3rem,6.45cqi,2.35rem)] lg:pr-4 lg:pl-2"
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center whitespace-nowrap text-[clamp(1rem,5.87vw,3.75rem)] max-lg:text-[clamp(1rem,6.2vw,3.75rem)] font-light text-white/50 lg:text-[clamp(1.3rem,6.45cqi,2.35rem)] lg:pr-4 lg:pl-2"
             style={{
               left: `${handleInsideX + handleSize + 6}px`,
               opacity: Math.max(0, 1 - progress * 2.2),
@@ -342,7 +342,7 @@ export default function LoginActions() {
       <button
         type="button"
         onClick={() => router.push("/dashboard")}
-        className="text-[clamp(1rem,4.5cqi,1.375rem)] font-medium italic transition-opacity hover:opacity-75"
+        className="text-[clamp(1rem,4.5cqi,1.375rem)] max-lg:text-[clamp(1rem,4.8cqi,1.5rem)] font-medium italic transition-opacity hover:opacity-75"
         style={{ fontFamily: "var(--font-comfortaa)" }}
       >
         <span className="text-cyan-400">Continue</span>
