@@ -97,17 +97,17 @@ export default function LoginFooter() {
 
       {/* Full-width container touching left and right edges */}
       <div className="relative z-10 w-full px-4 pb-8 pt-0 sm:px-8 lg:px-12">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white/70">
+        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white/45">
           <span>Your next chapter starts here</span>
         </div>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-end lg:gap-16">
-          <h2 className="max-w-4xl text-5xl font-light leading-[1.02] tracking-tight sm:text-7xl lg:text-8xl">
+          <h2 className="max-w-4xl text-5xl font-light leading-[1.02] tracking-tight text-[#E8E1D6] sm:text-7xl lg:text-8xl">
             Give your work
             <br />
             its own place.
           </h2>
-          <p className="max-w-md pb-2 text-base leading-relaxed text-white/70 sm:text-lg">
+          <p className="max-w-md pb-2 text-base leading-relaxed text-white/45 sm:text-lg">
             A little space to show what you do, what you care about, and where
             you are headed next.
           </p>
@@ -149,11 +149,11 @@ export default function LoginFooter() {
                     aria-hidden={index >= footerPillars.length}
                   >
                     <div>
-                      <p className="font-mono text-xs font-medium text-white/60">{pillar.number}</p>
-                      <h3 className="mt-5 text-xl font-semibold sm:text-2xl">
+                      <p className="font-mono text-xs font-medium text-[#E8E1D6]">{pillar.number}</p>
+                      <h3 className="mt-5 text-xl font-semibold text-[#E8E1D6] sm:text-2xl">
                         {pillar.title}
                       </h3>
-                      <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60 sm:text-base">
+                      <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/45 sm:text-base">
                         {pillar.description}
                       </p>
                     </div>
@@ -167,7 +167,7 @@ export default function LoginFooter() {
           </div>
 
           <div className="flex items-center justify-end gap-4 pt-4">
-            <p aria-live="polite" className="font-mono text-xs font-medium text-white/60">
+            <p aria-live="polite" className="font-mono text-xs font-medium text-[#E8E1D6]">
               {String((activeSlideIndex % footerPillars.length) + 1).padStart(2, "0")} / {String(footerPillars.length).padStart(2, "0")}
             </p>
             <div className="flex gap-2">
@@ -176,7 +176,7 @@ export default function LoginFooter() {
                 aria-label="Previous highlight"
                 disabled={activeSlideIndex === 0 || activeSlideIndex === footerPillars.length}
                 onClick={() => setActiveSlideIndex((index) => Math.max(0, index - 1))}
-                className="grid size-10 place-items-center border border-white/25 text-white transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
+                className="grid size-10 place-items-center border border-white/25 text-[#E8E1D6] transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -185,7 +185,7 @@ export default function LoginFooter() {
                 aria-label="Next highlight"
                 disabled={activeSlideIndex === footerPillars.length}
                 onClick={() => setActiveSlideIndex((index) => index + 1)}
-                className="grid size-10 place-items-center border border-white/25 text-white transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
+                className="grid size-10 place-items-center border border-white/25 text-[#E8E1D6] transition-colors hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ChevronRight size={18} />
               </button>
@@ -196,7 +196,7 @@ export default function LoginFooter() {
         {/* Footer bottom bar touching left and right */}
         <div className="flex flex-col gap-5 pt-8 sm:flex-row sm:items-end sm:justify-between sm:pt-10">
           <div>
-            <p className="text-3xl font-bold tracking-tight">onego</p>
+            <p className="text-3xl font-bold tracking-tight text-[#E8E1D6]">onego</p>
             <p className="mt-2 text-sm text-white/60">
               Your story, beautifully told.
             </p>

@@ -49,7 +49,7 @@ export default function LoginToolsSection() {
       {/* ── Massive Heading (matches About us & Login) ── */}
       <h2
         id="tools-section-title"
-        className="w-full whitespace-nowrap text-center font-light leading-[1.05] tracking-normal"
+        className="w-full whitespace-nowrap text-center font-light leading-[1.05] tracking-normal text-[#E8E1D6]"
       >
         <span ref={headingRef} className="inline-block whitespace-nowrap">
           Tools
@@ -57,7 +57,7 @@ export default function LoginToolsSection() {
       </h2>
 
       {/* ── Subtitle: & shortcuts (from reference) ── */}
-      <p className="-mt-2 w-full text-center text-[clamp(1.2rem,3.8vw,2.4rem)] font-normal tracking-tight text-white/80 sm:-mt-4">
+      <p className="-mt-2 w-full text-center text-[clamp(1.2rem,3.8vw,2.4rem)] font-normal tracking-tight text-[#E8E1D6] sm:-mt-4">
         &amp; shortcuts
       </p>
 
@@ -121,17 +121,17 @@ export default function LoginToolsSection() {
                     />
                   </div>
 
-                  <span className="border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-[12px] font-semibold tracking-wider text-white/70 transition-colors group-hover:border-white/35 group-hover:text-white">
+                  <span className="border border-white/15 bg-white/5 px-2.5 py-1 font-mono text-[12px] font-semibold tracking-wider text-[#E8E1D6] transition-colors group-hover:border-white/35 group-hover:text-[#E8E1D6]">
                     {String(tool.id).padStart(2, "0")}
                   </span>
                 </div>
 
                 {/* Bottom row: Tool name + Description */}
                 <div className="relative z-10 mt-5">
-                  <p className="text-base font-semibold tracking-tight text-white transition-colors group-hover:text-white">
+                  <p className="text-base font-semibold tracking-tight text-[#E8E1D6] transition-colors group-hover:text-[#E8E1D6]">
                     {tool.name}
                   </p>
-                  <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-white/50">
+                  <p className="mt-1 line-clamp-1 text-xs leading-relaxed text-white/45">
                     {tool.desc}
                   </p>
                 </div>
@@ -142,23 +142,16 @@ export default function LoginToolsSection() {
       </div>
 
       {/* ── Justified content text below the grid (matches About us style) ── */}
-      <p className="mt-[2cm] w-full px-0 text-justify text-[clamp(6px,1.6vw,12px)] leading-[1.35] text-white/90">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. reprehenderit
-        reprehenderit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. reprehenderit
-        reprehenderit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. reprehenderit
-        reprehenderit.
+      <p className="mt-[2cm] w-full px-0 text-justify text-[clamp(6px,1.6vw,12px)] leading-[1.35] text-white/45">
+        Create and customize your portfolio with practical design tools that give you control over every detail. 
+        Add text to introduce yourself, place images to show your work, and use buttons, links, and icons to guide 
+        visitors through your content. Build clean layouts with cards, tables, and timelines, or present information 
+        through progress displays and visual elements. Choose a dashboard background, adjust the grid, and arrange 
+        each section to create a look that fits your style. Draw on the canvas when you want to add a personal touch, 
+        and use the eraser to make changes as your design takes shape. Add navigation and forms to make your portfolio 
+        easier to explore and use. Every tool is designed to work within one flexible editor, so you can build, refine, 
+        and organize your portfolio without writing code. Combine the elements in your way, preview your choices, and 
+        create a space that presents your skills, experience, and ideas clearly.
       </p>
 
       {/* Fixed spacing before and after the footer divider */}

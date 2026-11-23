@@ -18,7 +18,7 @@ export default function LoginHeader3D() {
 
         <Link
           href="/"
-          className="flex items-center text-white transition-opacity hover:opacity-70"
+          className="flex items-center text-[#E8E1D6] transition-opacity hover:opacity-70"
           aria-label="OneGo home"
         >
           <span
