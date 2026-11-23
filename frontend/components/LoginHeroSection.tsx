@@ -29,6 +29,7 @@ export default function LoginHeroSection() {
 
   return (
     <section
+      id="login-section"
       className="relative isolate flex w-full flex-col overflow-hidden bg-black px-4 pt-[2cm] pb-0 text-white sm:px-8"
       aria-labelledby="login-section-title"
       style={{ fontFamily: "var(--font-comfortaa)" }}

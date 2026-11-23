@@ -22,7 +22,7 @@ export default async function Home() {
     <>
       <LoginSmoothScroll>
         <div className="w-full bg-[#808080]">
-          <div className="mx-auto w-full max-w-[1831px] bg-[#000000] pb-[85px] text-[#F5F5F5] max-[249px]:pb-0 lg:pb-0">
+          <div id="top" className="mx-auto w-full max-w-[1831px] bg-[#000000] pb-[85px] text-[#F5F5F5] max-[249px]:pb-0 lg:pb-0">
             {/* 3D Realistic Header Shelf */}
             <LoginHeader3D />
             <LoginCollageSlider />

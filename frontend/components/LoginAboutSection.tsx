@@ -7,6 +7,7 @@ export default function LoginAboutSection() {
 
   return (
     <section
+      id="login-about"
       className="relative isolate flex w-full flex-col overflow-hidden bg-black px-4 pb-0 text-white sm:px-8"
       aria-labelledby="login-about-title"
       style={{ fontFamily: "var(--font-comfortaa)" }}

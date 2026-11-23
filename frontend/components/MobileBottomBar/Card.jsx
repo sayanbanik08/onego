@@ -269,8 +269,27 @@ const Card = () => {
     // Keep the drag transform valid until the dragging class is removed.
     if (!isIOS) indicatorRef.current.style.removeProperty('--drag-offset');
     menuRef.current?.style.removeProperty('--pill-position');
-    setActiveIndex(Math.round(drag.position));
+    const newIndex = Math.round(drag.position);
+    setActiveIndex(newIndex);
     setIsDragging(false);
+    const targetSections = ['#top', '#login-about', '#login-tools', '#login-section-title'];
+    if (targetSections[newIndex]) {
+      const el = document.querySelector(targetSections[newIndex]);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToSection = (targetId) => {
+    const el = document.querySelector(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleItemClick = (event, index, targetId) => {
+    event.preventDefault();
+    selectItem(index);
+    scrollToSection(targetId);
   };
 
   const selectItem = (index) => {
@@ -344,17 +363,17 @@ const Card = () => {
         onPointerUp={stopDragging}
         onPointerCancel={stopDragging}
       >
-        <a href="#" draggable="false" className={activeIndex === 0 ? 'active' : ''} data-index={0} onClick={(event) => { event.preventDefault(); selectItem(0); }}>
+        <a href="#top" draggable="false" className={activeIndex === 0 ? 'active' : ''} data-index={0} onClick={(event) => handleItemClick(event, 0, '#top')}>
           <Home />
           <span>Home</span>
         </a>
-        <a href="#" draggable="false" className={activeIndex === 1 ? 'active' : ''} data-index={1} onClick={(event) => { event.preventDefault(); selectItem(1); }}>
+        <a href="#login-about" draggable="false" className={activeIndex === 1 ? 'active' : ''} data-index={1} onClick={(event) => handleItemClick(event, 1, '#login-about')}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
             <path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z" />
           </svg>
           <span>About</span>
         </a>
-        <a href="#" draggable="false" className={activeIndex === 2 ? 'active' : ''} data-index={2} onClick={(event) => { event.preventDefault(); selectItem(2); }}>
+        <a href="#login-tools" draggable="false" className={activeIndex === 2 ? 'active' : ''} data-index={2} onClick={(event) => handleItemClick(event, 2, '#login-tools')}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-tools">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4" />
@@ -366,9 +385,9 @@ const Card = () => {
           </svg>
           <span>Tools</span>
         </a>
-        <a href="#" draggable="false" className={activeIndex === 3 ? 'active' : ''} data-index={3} onClick={(event) => { event.preventDefault(); selectItem(3); }}>
+        <a href="#login-section-title" draggable="false" className={activeIndex === 3 ? 'active' : ''} data-index={3} onClick={(event) => handleItemClick(event, 3, '#login-section-title')}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-user-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 10a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" /></svg>
-          <span>Account</span>
+          <span>Login</span>
         </a>
         <div
           ref={indicatorRef}

@@ -42,6 +42,7 @@ export default function LoginToolsSection() {
 
   return (
     <section
+      id="login-tools"
       className="relative isolate flex w-full flex-col overflow-hidden bg-black pt-[2cm] pb-0 text-white"
       aria-labelledby="tools-section-title"
       style={{ fontFamily: "var(--font-comfortaa)" }}
