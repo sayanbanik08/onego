@@ -8,6 +8,7 @@ import LoginCollageSlider from "@/components/LoginCollageSlider";
 import LoginAboutSection from "@/components/LoginAboutSection";
 import LoginHeroSection from "@/components/LoginHeroSection";
 import LoginToolsSection from "@/components/LoginToolsSection";
+import MobileBottomBar from "@/components/MobileBottomBar/App";
 
 export default async function Home() {
   const { isAuthenticated } = await auth();
@@ -18,25 +19,28 @@ export default async function Home() {
   }
 
   return (
-    <LoginSmoothScroll>
-      <div className="w-full bg-[#808080]">
-        <div className="mx-auto w-full max-w-[1831px] bg-[#000000] text-[#F5F5F5]">
-          {/* 3D Realistic Header Shelf */}
-          <LoginHeader3D />
-          <LoginCollageSlider />
-          <LoginAboutSection />
+    <>
+      <LoginSmoothScroll>
+        <div className="w-full bg-[#808080]">
+          <div className="mx-auto w-full max-w-[1831px] bg-[#000000] pb-[85px] text-[#F5F5F5] max-[249px]:pb-0 lg:pb-0">
+            {/* 3D Realistic Header Shelf */}
+            <LoginHeader3D />
+            <LoginCollageSlider />
+            <LoginAboutSection />
 
-          {/* ── New sticker login hero — replaces old 3D logo + leather buttons ── */}
-          <LoginHeroSection />
+            {/* ── New sticker login hero — replaces old 3D logo + leather buttons ── */}
+            <LoginHeroSection />
 
-          {/* ── Tools & Shortcuts Section ── */}
-          <LoginToolsSection />
+            {/* ── Tools & Shortcuts Section ── */}
+            <LoginToolsSection />
 
-          <LoginFooter />
-          <LoginCursor />
+            <LoginFooter />
+            <LoginCursor />
+          </div>
         </div>
-      </div>
-    </LoginSmoothScroll>
+      </LoginSmoothScroll>
+      <MobileBottomBar />
+    </>
   );
 }
 
