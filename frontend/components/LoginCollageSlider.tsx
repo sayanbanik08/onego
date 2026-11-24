@@ -12,34 +12,34 @@ interface CardItem {
 
 const baseCards: CardItem[] = [
   {
-    id: "dope",
-    type: "dope",
-    src: "/collage/card_dope.png",
-    alt: "DOPE Typography Artwork",
-  },
-  {
     id: "poster_a",
     type: "poster_a",
-    src: "/collage/card_a.png",
-    alt: "Restart Soft Aa Typography Poster",
-  },
-  {
-    id: "cyan_aero",
-    type: "cyan_aero",
-    src: "/collage/card_cyan.png",
-    alt: "Future Aero Cybernetic Concept with Cyan Neon",
-  },
-  {
-    id: "face_3d",
-    type: "face_3d",
-    src: "/collage/card_face.png",
-    alt: "Sculpture 3D Porcelain Head Art",
+    src: "/collage/create.png",
+    alt: "Create Typography Poster",
   },
   {
     id: "hands",
     type: "hands",
-    src: "/collage/card_hands.png",
-    alt: "Delicate Glowing Hands with Crystal Mirror",
+    src: "/collage/your.png",
+    alt: "Your Typography Poster",
+  },
+  {
+    id: "face_3d",
+    type: "face_3d",
+    src: "/collage/portfolio.png",
+    alt: "Portfolio Typography Poster",
+  },
+  {
+    id: "dope",
+    type: "dope",
+    src: "/collage/in.png",
+    alt: "In Typography Poster",
+  },
+  {
+    id: "cyan_aero",
+    type: "cyan_aero",
+    src: "/collage/onego.png",
+    alt: "OneGo Typography Poster",
   },
 ];
 
@@ -103,7 +103,7 @@ export default function LoginCollageSlider() {
       const singleSetWidth = cardStep * baseCards.length;
 
       // Base auto-scroll speed: 1 full cycle of 5 cards every 10 seconds (exact reference video timing)
-      const baseSpeed = singleSetWidth / 10.0; // ~211 px/sec
+      const baseSpeed = -singleSetWidth / 10.0; // ~211 px/sec right-to-left
 
       if (!isDraggingRef.current) {
         // Natural speed target (slows slightly on hover for smooth reading)
