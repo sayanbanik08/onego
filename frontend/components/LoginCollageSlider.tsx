@@ -14,31 +14,31 @@ const baseCards: CardItem[] = [
   {
     id: "poster_a",
     type: "poster_a",
-    src: "/collage/create.png",
+    src: "/collage/1.png",
     alt: "Create Typography Poster",
   },
   {
     id: "hands",
     type: "hands",
-    src: "/collage/your.png",
+    src: "/collage/2.png",
     alt: "Your Typography Poster",
   },
   {
     id: "face_3d",
     type: "face_3d",
-    src: "/collage/portfolio.png",
+    src: "/collage/3.png",
     alt: "Portfolio Typography Poster",
   },
   {
     id: "dope",
     type: "dope",
-    src: "/collage/in.png",
+    src: "/collage/4.png",
     alt: "In Typography Poster",
   },
   {
     id: "cyan_aero",
     type: "cyan_aero",
-    src: "/collage/onego.png",
+    src: "/collage/5.png",
     alt: "OneGo Typography Poster",
   },
 ];
@@ -103,7 +103,7 @@ export default function LoginCollageSlider() {
       const singleSetWidth = cardStep * baseCards.length;
 
       // Base auto-scroll speed: 1 full cycle of 5 cards every 10 seconds (exact reference video timing)
-      const baseSpeed = -singleSetWidth / 10.0; // ~211 px/sec right-to-left
+      const baseSpeed = singleSetWidth / 10.0; // ~211 px/sec 
 
       if (!isDraggingRef.current) {
         // Natural speed target (slows slightly on hover for smooth reading)
