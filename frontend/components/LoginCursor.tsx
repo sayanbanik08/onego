@@ -120,7 +120,7 @@ export default function LoginCursor() {
       aria-hidden="true"
       className="login-custom-cursor pointer-events-none fixed left-0 top-0 z-[100] [will-change:transform]"
     >
-      <span className="login-custom-cursor__ring block size-9 rounded-full border border-[#722F37]/90 bg-[#E8DCC6]/45 shadow-[0_0_0_2px_rgba(232,220,198,0.75)]" />
+      <span className="login-custom-cursor__ring block size-9 rounded-full border border-[#F5F5F5]/90 bg-[#F5F5F5]/45 shadow-[#F5F5F5]" />
     </div>
   );
 }
